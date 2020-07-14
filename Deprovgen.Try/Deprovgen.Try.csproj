@@ -6,6 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\Deprovgen.Annotations\Deprovgen.Annotations.csproj" />
 		<ProjectReference Include="..\Deprovgen\Deprovgen\Deprovgen.csproj">
 			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 			<OutputItemType>Analyzer</OutputItemType>

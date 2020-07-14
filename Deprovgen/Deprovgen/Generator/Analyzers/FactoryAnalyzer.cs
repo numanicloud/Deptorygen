@@ -29,11 +29,11 @@ namespace Deprovgen.Generator.Analyzers
 			};
 		}
 
-		public FactoryAnalyzer(Type type, Document document)
+		public FactoryAnalyzer(INamedTypeSymbol symbol, Document document)
 		{
 			_document = document;
 
-			_getSymbolFunc = ct => AnalyzeInterfaceAsync(type.Namespace, type.Name, ct);
+			_getSymbolFunc = async ct => symbol;
 		}
 
 		private async Task<INamedTypeSymbol> AnalyzeInterfaceAsync(string @namespace, string typeName, CancellationToken ct)
@@ -71,17 +71,51 @@ namespace Deprovgen.Generator.Analyzers
 		{
 			foreach (var attributeData in symbol.GetAttributes())
 			{
-				if (attributeData.AttributeClass.Name != "FactoryProviderAttribute")
+				await Logger.WriteLine(attributeData.ToString());
+				await Logger.WriteLine("ConstructorName:" + attributeData.AttributeClass.Name);
+				foreach (var argument in attributeData.ConstructorArguments)
+				{
+					await Logger.WriteLine("ArgumentType:" + argument.Type.Name);
+					await Logger.WriteLine(argument.Type.ContainingNamespace.Name);
+					await Logger.WriteLine(argument.Type.ToDisplayString());
+					await Logger.WriteLine(argument.Type.ContainingAssembly.Name);
+					await Logger.WriteLine((argument.Value is Type).ToString());
+					await Logger.WriteLine(argument.Value.ToString());
+					await Logger.WriteLine(argument.Value.GetType().ToString());
+					await Logger.WriteLine(argument.Value.GetType().Assembly.FullName);
+				}
+			}
+
+			foreach (var attributeData in symbol.GetAttributes())
+			{
+				if (attributeData.AttributeClass.Name != nameof(FactoryProviderAttribute))
 				{
 					continue;
 				}
 
-				if (attributeData.ConstructorArguments[0].Value is Type type
-				    && type.IsInterface
-				    && type.GetCustomAttributesData().Any(x => x.AttributeType.Name == nameof(FactoryAttribute)))
+				if (attributeData.ConstructorArguments[0].Value is INamedTypeSymbol type)
 				{
-					var analyzer = new FactoryAnalyzer(type, _document);
-					yield return await analyzer.GetFactoryDefinitionAsync(ct);
+					foreach (var @interface in type.Interfaces)
+					{
+						await Logger.WriteLine("Interface:" + @interface.Name.ToString());
+						foreach (var data in @interface.GetAttributes())
+						{
+							await Logger.WriteLine(data.AttributeClass.Name);
+						}
+					}
+
+					var childSymbol = type.Interfaces
+						.FirstOrDefault(x =>
+						{
+							var attributes = x.GetAttributes();
+							return attributes.Any(x => x.AttributeClass.Name == nameof(FactoryAttribute));
+						});
+
+					if (childSymbol is {})
+					{
+						var analyzer = new FactoryAnalyzer(childSymbol, _document);
+						yield return await analyzer.GetFactoryDefinitionAsync(ct);
+					}
 				}
 			}
 		}

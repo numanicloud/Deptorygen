@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace Deprovgen.Generator.Domains
 {
@@ -10,6 +11,7 @@ namespace Deprovgen.Generator.Domains
 		public VariableDefinition[] Parameters { get; }
 		public bool IsTransient { get; }
 		public string CacheVarName { get; }
+		public Accessibility Accessibility { get; set; }
 
 		public override string ToString()
 		{
@@ -17,12 +19,13 @@ namespace Deprovgen.Generator.Domains
 		}
 
 
-		public ResolverDefinition(string methodName, ServiceDefinition serviceType, VariableDefinition[] parameters, bool isTransient)
+		public ResolverDefinition(string methodName, ServiceDefinition serviceType, VariableDefinition[] parameters, bool isTransient, Accessibility accessibility)
 		{
 			MethodName = methodName;
 			ServiceType = serviceType;
 			Parameters = parameters;
 			IsTransient = isTransient;
+			Accessibility = accessibility;
 			CacheVarName = $"_{methodName[0].ToString().ToLower() + methodName.Substring(1)}Cache";
 		}
 

@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Microsoft.CodeAnalysis;
 
 namespace Deprovgen.Generator.Domains
 {
@@ -27,6 +29,33 @@ namespace Deprovgen.Generator.Domains
 			return $"{NameSpace}.{TypeName}; dependencies x{Dependencies.Length}, resolvers x{Resolvers.Length}, children x{Children.Length}";
 		}
 
+		public string GetAccessibility()
+		{
+			var max = Resolvers.Select(x => x.Accessibility)
+				.OrderByDescending(x => x switch
+				{
+					Accessibility.NotApplicable => 7,
+					Accessibility.Private => 10,
+					Accessibility.ProtectedAndInternal => 9,
+					Accessibility.Protected => 8,
+					Accessibility.Internal => 7,
+					Accessibility.ProtectedOrInternal => 6,
+					Accessibility.Public => 1,
+					_ => throw new ArgumentOutOfRangeException(nameof(x), x, null)
+				}).First();
+			return max switch
+			{
+				Accessibility.NotApplicable => "internal",
+				Accessibility.Private => "private",
+				Accessibility.ProtectedAndInternal => "private protected",
+				Accessibility.Protected => "protected",
+				Accessibility.Internal => "internal",
+				Accessibility.ProtectedOrInternal => "protected internal",
+				Accessibility.Public => "public",
+				_ => throw new ArgumentOutOfRangeException()
+			};
+		}
+
 		public string[] GetRequiredNamespaces()
 		{
 			var children = Children.Select(x => x.NameSpace);
@@ -39,6 +68,7 @@ namespace Deprovgen.Generator.Domains
 				.Concat(resolverParams)
 				.Distinct()
 				.Where(x => x != NameSpace)
+				.Where(x => x != "System")
 				.ToArray();
 		}
 
@@ -82,6 +112,11 @@ namespace Deprovgen.Generator.Domains
 				}
 			}
 			return args.Join(", ");
+		}
+
+		public string GetResolverArgListForExtension(FactoryDefinition parent)
+		{
+			return GetResolverParameters(parent).Select(x => x.VarName).Join(", ");
 		}
 
 		public string CalcArgForService(string typeName, VariableDefinition[] contextVariables)

@@ -4,13 +4,14 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
+using System;
 <#  foreach(var ns in Factory.GetRequiredNamespaces()) {  #>
 using <#= ns #>;
 <#  }  #>
 
 namespace <#= Factory.NameSpace #>
 {
-    class <#= Factory.TypeName #> : <#= Factory.InterfaceName #>
+    <#= Factory.GetAccessibility() #> class <#= Factory.TypeName #> : <#= Factory.InterfaceName #>
     {
 <#  foreach(var dependency in Factory.Dependencies) { #>
         private readonly <#= dependency.TypeName #> <#= dependency.FieldName #>;
@@ -45,4 +46,17 @@ namespace <#= Factory.NameSpace #>
         }
 <#  }  #>
     }
+
+<#  if(Factory.Children.Any()) { #>
+    <#= Factory.GetAccessibility() #> static class <#= Factory.TypeName #>Extensions
+    {
+<#      foreach(var child in Factory.Children) { #>
+        public static <#= child.TypeName #> Resolve<#= child.TypeName #>(this <#= Factory.InterfaceName #> self, <#= child.GetResolverParameterList(Factory) #>)
+        {
+            return self is <#= Factory.TypeName #> concrete ? concrete.Resolve<#= child.TypeName #>(<#= child.GetResolverArgListForExtension(Factory) #>)
+                : throw new NotImplementedException("このメソッドは <#= Factory.TypeName #> クラスに対してのみ呼び出せます。");
+        }
+<#      }  #>
+    }
+<#  } #>
 }

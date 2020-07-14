@@ -21,7 +21,11 @@ namespace Deprovgen.Generator.Analyzers
 				var service = new ServiceAnalyzer(named);
 				var parameters = GetParameters();
 				bool isTransient = _methodSymbol.Name.EndsWith("AsTransient");
-				return new ResolverDefinition(_methodSymbol.Name, service.GetServiceDefinition(), parameters, isTransient);
+				return new ResolverDefinition(_methodSymbol.Name,
+					service.GetServiceDefinition(),
+					parameters,
+					isTransient,
+					named.DeclaredAccessibility);
 			}
 			throw new Exception();
 		}

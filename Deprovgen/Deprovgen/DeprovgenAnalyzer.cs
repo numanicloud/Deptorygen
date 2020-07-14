@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Linq;
+using Deprovgen.Annotations;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -38,7 +39,7 @@ namespace Deprovgen
 				return;
 			}
 
-			if (namedTypeSymbol.GetAttributes().Any(a => a.AttributeClass.Name == "MyFactoryAttribute"))
+			if (namedTypeSymbol.GetAttributes().Any(a => a.AttributeClass.Name == nameof(FactoryAttribute)))
 			{
 				// For all such symbols, produce a diagnostic.
 				var diagnostic = Diagnostic.Create(Rule, namedTypeSymbol.Locations[0], namedTypeSymbol.Name);
