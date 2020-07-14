@@ -1,0 +1,48 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#  foreach(var ns in Factory.GetRequiredNamespaces()) {  #>
+using <#= ns #>;
+<#  }  #>
+
+namespace <#= Factory.NameSpace #>
+{
+    class <#= Factory.TypeName #> : <#= Factory.InterfaceName #>
+    {
+<#  foreach(var dependency in Factory.Dependencies) { #>
+        private readonly <#= dependency.TypeName #> <#= dependency.FieldName #>;
+<#  } #>
+
+<#  foreach(var resolver in Factory.Resolvers.Where(x => !x.IsTransient)) {  #>
+        private <#= resolver.ServiceType.TypeName #>? <#= resolver.CacheVarName #>;
+<#  } #>
+
+        public <#= Factory.TypeName #>(<#= Factory.GetConstructorParameterList() #>)
+        {
+<#  foreach(var dependency in Factory.Dependencies) { #>
+            <#= dependency.FieldName #> = <#= dependency.ParameterName #>;
+<#  } #>
+        }
+
+<#  foreach(var resolver in Factory.Resolvers){ #>
+        public <#= resolver.ServiceType.TypeName #> <#= resolver.MethodName #>(<#= resolver.GetParameterList() #>)
+        {
+<#      if(resolver.IsTransient) { #>
+            return new <#= resolver.ServiceType.TypeName #>(<#= resolver.ServiceType.GetConstructorArgList(resolver.Parameters, Factory) #>);
+<#      } else { #>
+            return <#= resolver.CacheVarName #> ??= new <#= resolver.ServiceType.TypeName #>(<#= resolver.ServiceType.GetConstructorArgList(resolver.Parameters, Factory) #>);
+<#      }  #>
+        }
+<#  } #>
+
+<#  foreach(var child in Factory.Children) { #>
+        public <#= child.TypeName #> Resolve<#= child.TypeName #>(<#= child.GetResolverParameterList(Factory) #>)
+        {
+            return new <#= child.TypeName #>(<#= child.GetResolverArgList(Factory) #>);
+        }
+<#  }  #>
+    }
+}

@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# Deprovgen: ファクトリークラスを生成する
+dotnet_diagnostic.Deprovgen.severity = suggestion
