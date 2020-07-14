@@ -11,9 +11,10 @@ namespace Deprovgen.Try
 	}
 
 	[Factory]
-	interface IServiceLocator
+	interface IServiceLocator : IServiceLocatorFuga
 	{
 		Hoge ResolveHoge();
+		Piyo ResolvePiyo();
 	}
 
 	public class Service
@@ -26,20 +27,27 @@ namespace Deprovgen.Try
 		public void Execute() => Console.WriteLine("It's Service2!");
 	}
 
+	public class Service3
+	{
+		public void Say() => Console.WriteLine("Yes its Service3.");
+	}
+
 	class Fuga
 	{
 		private readonly Service _service;
+		private readonly Service3 _service3;
 
-		public Fuga(Service service)
+		public Fuga(Service service, Service3 service3)
 		{
 			_service = service;
+			_service3 = service3;
 		}
 
 		public void Invoke()
 		{
 			Console.WriteLine("# Fuga");
 			_service.Run();
-			_service.Run();
+			_service3.Say();
 		}
 	}
 
@@ -62,11 +70,30 @@ namespace Deprovgen.Try
 		}
 	}
 
+	public class Piyo
+	{
+		private readonly Hoge _hoge;
+		private readonly Service _service;
+
+		public Piyo(Hoge hoge, Service service)
+		{
+			_hoge = hoge;
+			_service = service;
+		}
+
+		public void Do()
+		{
+			Console.WriteLine("# Piyo");
+			_service.Run();
+			_hoge.Show();
+		}
+	}
+
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			var serviceLocator = new ServiceLocatorFuga(new Service());
+			var serviceLocator = new ServiceLocatorFuga(new Service(), new Service3());
 			serviceLocator.ResolveFuga().Invoke();
 
 			var serviceLocator2 = serviceLocator.ResolveServiceLocator(new Service2());

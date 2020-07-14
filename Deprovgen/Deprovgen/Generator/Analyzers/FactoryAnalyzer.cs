@@ -62,6 +62,7 @@ namespace Deprovgen.Generator.Analyzers
 			return methods.Select(x => x.ServiceType)
 				.SelectMany(x => x.Dependencies)
 				.Distinct(x => $"{x.Namespace}.{x.TypeName}")
+				.Where(x => methods.All(y => y.ServiceType.TypeName != x.TypeName))
 				.ToArray();
 		}
 

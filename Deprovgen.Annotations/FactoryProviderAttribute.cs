@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Deprovgen.Annotations
 {
-	[AttributeUsage(AttributeTargets.Interface)]
+	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = true, Inherited = false)]
 	public class FactoryProviderAttribute : Attribute
 	{
 		public Type ChildType { get; }

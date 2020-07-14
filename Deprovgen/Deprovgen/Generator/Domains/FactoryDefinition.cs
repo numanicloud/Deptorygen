@@ -45,14 +45,8 @@ namespace Deprovgen.Generator.Domains
 				}).First();
 			return max switch
 			{
-				Accessibility.NotApplicable => "internal",
-				Accessibility.Private => "private",
-				Accessibility.ProtectedAndInternal => "private protected",
-				Accessibility.Protected => "protected",
-				Accessibility.Internal => "internal",
-				Accessibility.ProtectedOrInternal => "protected internal",
 				Accessibility.Public => "public",
-				_ => throw new ArgumentOutOfRangeException()
+				_ => "internal"
 			};
 		}
 

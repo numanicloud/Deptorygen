@@ -11,7 +11,7 @@
 	<PropertyGroup>
 		<PackageId>Deprovgen</PackageId>
 		<PackageVersion>1.0.0.0</PackageVersion>
-		<Authors>numan</Authors>
+		<Authors>NumAniCloud</Authors>
 		<PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
 		<PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
 		<PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
@@ -19,9 +19,10 @@
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<Description>Deprovgen</Description>
 		<PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
-		<Copyright>Copyright</Copyright>
+		<Copyright>Copyright Ⓒ 2020 NumAniCloud</Copyright>
 		<PackageTags>Deprovgen, analyzers</PackageTags>
 		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<Company>NumAniCloud</Company>
 	</PropertyGroup>
 
 	<ItemGroup>

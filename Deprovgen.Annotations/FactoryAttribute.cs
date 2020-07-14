@@ -2,7 +2,7 @@
 
 namespace Deprovgen.Annotations
 {
-	[AttributeUsage(AttributeTargets.Interface)]
+	[AttributeUsage(AttributeTargets.Interface, AllowMultiple = false, Inherited = false)]
 	public class FactoryAttribute : Attribute
 	{
 	}

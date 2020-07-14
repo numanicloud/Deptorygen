@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Deprovgen.Annotations;
 using Deprovgen.Generator.Domains;
 using Microsoft.CodeAnalysis;
 
@@ -39,8 +40,13 @@ namespace Deprovgen.Generator.Analyzers
 
 		public static ResolverDefinition[] GetResolverDefinitions(INamedTypeSymbol factorySymbol)
 		{
+			var baseInterfaces = factorySymbol.AllInterfaces
+				.SelectMany(x => x.GetMembers())
+				.OfType<IMethodSymbol>();
+
 			return factorySymbol.GetMembers()
 				.OfType<IMethodSymbol>()
+				.Concat(baseInterfaces)
 				.Select(x => new ResolverAnalyzer(x))
 				.Select(x => x.GetResolverDefinition())
 				.ToArray();
