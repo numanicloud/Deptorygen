@@ -32,7 +32,6 @@ namespace Deprovgen.Generator.Analyzers
 		public FactoryAnalyzer(INamedTypeSymbol symbol, Document document)
 		{
 			_document = document;
-
 			_getSymbolFunc = async ct => symbol;
 		}
 
@@ -71,23 +70,6 @@ namespace Deprovgen.Generator.Analyzers
 		{
 			foreach (var attributeData in symbol.GetAttributes())
 			{
-				await Logger.WriteLine(attributeData.ToString());
-				await Logger.WriteLine("ConstructorName:" + attributeData.AttributeClass.Name);
-				foreach (var argument in attributeData.ConstructorArguments)
-				{
-					await Logger.WriteLine("ArgumentType:" + argument.Type.Name);
-					await Logger.WriteLine(argument.Type.ContainingNamespace.Name);
-					await Logger.WriteLine(argument.Type.ToDisplayString());
-					await Logger.WriteLine(argument.Type.ContainingAssembly.Name);
-					await Logger.WriteLine((argument.Value is Type).ToString());
-					await Logger.WriteLine(argument.Value.ToString());
-					await Logger.WriteLine(argument.Value.GetType().ToString());
-					await Logger.WriteLine(argument.Value.GetType().Assembly.FullName);
-				}
-			}
-
-			foreach (var attributeData in symbol.GetAttributes())
-			{
 				if (attributeData.AttributeClass.Name != nameof(FactoryProviderAttribute))
 				{
 					continue;
@@ -95,15 +77,6 @@ namespace Deprovgen.Generator.Analyzers
 
 				if (attributeData.ConstructorArguments[0].Value is INamedTypeSymbol type)
 				{
-					foreach (var @interface in type.Interfaces)
-					{
-						await Logger.WriteLine("Interface:" + @interface.Name.ToString());
-						foreach (var data in @interface.GetAttributes())
-						{
-							await Logger.WriteLine(data.AttributeClass.Name);
-						}
-					}
-
 					var childSymbol = type.Interfaces
 						.FirstOrDefault(x =>
 						{

@@ -53,21 +53,5 @@ namespace Deprovgen.Generator
 
 			return newDocument.Project.Solution;
 		}
-
-		private static async Task Log(Document document, CancellationToken cancellationToken, IEnumerable<Document> docs)
-		{
-			foreach (var reference in document.Project.MetadataReferences)
-			{
-				await Logger.WriteLine(reference.Display);
-				await Logger.WriteLine(reference.Properties.ToString());
-			}
-
-			foreach (var doc in docs)
-			{
-				await Logger.WriteLine(doc.Name);
-				var sm = await doc.GetSemanticModelAsync(cancellationToken);
-				await Logger.WriteLine(sm.SyntaxTree.ToString());
-			}
-		}
 	}
 }

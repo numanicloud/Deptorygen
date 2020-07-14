@@ -17,15 +17,6 @@ namespace Deprovgen.Generator.Analyzers
 		{
 			var varName = _named.Name[0].ToString().ToLower() + _named.Name.Substring(1);
 
-			foreach (var constructor in _named.Constructors)
-			{
-				Logger.WriteLine(constructor.ToString()).Wait();
-				foreach (var p in constructor.Parameters)
-				{
-					Logger.WriteLine(p.Name).Wait();
-				}
-			}
-
 			var dependencies = _named.Constructors[0].Parameters
 				.Select(x => x.Type)
 				.OfType<INamedTypeSymbol>()
