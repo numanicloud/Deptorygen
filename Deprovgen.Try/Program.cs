@@ -33,7 +33,7 @@ namespace Deprovgen.Try
 	{
 		Service ResolveService();
 		[Implementation(typeof(ServiceLocator))]
-		IServiceLocator ResolveServiceLocator(Service2 service2);
+		IServiceLocator ResolveServiceLocatorAsTransient(Service2 service2);
 	}
 
 	[Factory]
@@ -50,7 +50,12 @@ namespace Deprovgen.Try
 	{
 	}
 
-	public class Service
+	public interface IService
+	{
+		void Run();
+	}
+
+	public class Service : IService
 	{
 		public void Run() => Console.WriteLine("I'm Service!");
 	}
@@ -138,24 +143,34 @@ namespace Deprovgen.Try
 		}
 	}
 
+	class CustomService : ICapturedFactory
+	{
+		public Service ResolveService()
+		{
+			Console.WriteLine("Custom ResolveService!");
+			return new Service();
+		}
+
+		public IServiceLocator ResolveServiceLocatorAsTransient(Service2 service2)
+		{
+			Console.WriteLine("Custom ResolveServiceLocatorAsTransient!");
+			return new ServiceLocator(service2, this);
+		}
+	}
+
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			var serviceLocator = new ServiceLocatorFuga(new Service(), new Service3());
-			serviceLocator.ResolveFuga().Invoke();
+			var captured = new CapturedFactory();
+			var capturing = captured.ResolveServiceLocatorAsTransient(new Service2());
 
-			var serviceLocator2 = serviceLocator.ResolveServiceLocator(new Service2());
-			serviceLocator2.ResolveHoge().Show();
+			capturing.ResolveHoge().Show();
+			capturing.ResolvePiyo().Do();
 
-			Console.WriteLine("## GenericHost");
-
-			var services = new ServiceCollection();
-			services.UseDeprovgenFactory(serviceLocator2);
-
-			var provider = services.BuildServiceProvider();
-			provider.GetService<Fuga>().Invoke();
-			provider.GetService<Piyo>().Do();
+			var manual = new ServiceLocator(new Service2(), new CustomService());
+			manual.ResolveHoge().Show();
+			manual.ResolvePiyo().Do();
 		}
 	}
 }

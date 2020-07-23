@@ -11,7 +11,6 @@ namespace Deprovgen.Generator.Domains
 			string typeName,
 			ServiceDefinition[] dependencies,
 			ResolverDefinition[] resolvers,
-			FactoryDefinition[] children,
 			string interfaceName,
 			bool doSupportGenericHost,
 			CaptureDefinition[] captures)
@@ -20,7 +19,6 @@ namespace Deprovgen.Generator.Domains
 			TypeName = typeName;
 			Dependencies = dependencies;
 			Resolvers = resolvers;
-			Children = children;
 			InterfaceName = interfaceName;
 			DoSupportGenericHost = doSupportGenericHost;
 			Captures = captures;
@@ -31,13 +29,12 @@ namespace Deprovgen.Generator.Domains
 		public string InterfaceName { get; }
 		public ServiceDefinition[] Dependencies { get; }
 		public ResolverDefinition[] Resolvers { get; }
-		public FactoryDefinition[] Children { get; }
 		public CaptureDefinition[] Captures { get; set; }
 		public bool DoSupportGenericHost { get; }
 
 		public override string ToString()
 		{
-			return $"{NameSpace}.{TypeName}; dependencies x{Dependencies.Length}, resolvers x{Resolvers.Length}, children x{Children.Length}";
+			return $"{NameSpace}.{TypeName}; dependencies x{Dependencies.Length}, resolvers x{Resolvers.Length}, captures x{Captures.Length}";
 		}
 
 		public string GetAccessibility()
@@ -68,7 +65,6 @@ namespace Deprovgen.Generator.Domains
 			{
 				yield return new[] { "System" };
 
-				yield return Children.Select(x => x.NameSpace);
 				yield return Dependencies.Select(x => x.Namespace);
 				yield return Resolvers.Select(x => x.ServiceType.Namespace);
 				yield return Resolvers.Select(x => x.ReturnType.GetFullNameSpace());
@@ -102,47 +98,6 @@ namespace Deprovgen.Generator.Domains
 			return deps.Concat(caps).Join(", ");
 		}
 
-		public VariableDefinition[] GetResolverParameters(FactoryDefinition parent)
-		{
-			return Dependencies.Where(x => parent.Dependencies.All(y => y.TypeName != x.TypeName))
-				.Where(x => parent.Resolvers.All(y => y.ServiceType.TypeName != x.TypeName))
-				.Select(x => new VariableDefinition(x.TypeNameInfo, x.ParameterName))
-				.ToArray();
-		}
-
-		public string GetResolverParameterList(FactoryDefinition parent)
-		{
-			return GetResolverParameters(parent).Select(x => x.Code).Join(", ");
-		}
-
-		public string GetResolverArgList(FactoryDefinition parent)
-		{
-			List<string> args = new List<string>();
-			var parameters = GetResolverParameters(parent);
-
-			foreach (var dependency in Dependencies)
-			{
-				if (parameters.FirstOrDefault(x => x.TypeName == dependency.TypeName) is { } p)
-				{
-					args.Add(p.VarName);
-				}
-				else if (parent.CalcArgForService(dependency.TypeName, parameters) is { } arg)
-				{
-					args.Add(arg);
-				}
-				else
-				{
-					args.Add(dependency.ParameterName);
-				}
-			}
-			return args.Join(", ");
-		}
-
-		public string GetResolverArgListForExtension(FactoryDefinition parent)
-		{
-			return GetResolverParameters(parent).Select(x => x.VarName).Join(", ");
-		}
-
 		public string CalcArgForService(string typeName, VariableDefinition[] contextVariables)
 		{
 			if (typeName == TypeName || typeName == InterfaceName)
@@ -154,7 +109,8 @@ namespace Deprovgen.Generator.Domains
 			{
 				return dep.FieldName;
 			}
-			else if(Resolvers.FirstOrDefault(x => x.ServiceType.TypeName == typeName) is { } resolver)
+
+			if(Resolvers.FirstOrDefault(x => x.ServiceType.TypeName == typeName) is { } resolver)
 			{
 				return $"{resolver.MethodName}({resolver.GetArgList(this, contextVariables)})";
 			}

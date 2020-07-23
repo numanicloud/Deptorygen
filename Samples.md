@@ -1601,6 +1601,8 @@ interface IDerivedFactory : IFactoryToMixin
 
 キャプチャは新規実装が必要。
 
+FactoryProvider機能は削減してよさそう。
+
 ## オーバーロード解決について
 
 今は戻り値だけで解決メソッドを区別しているが、他の基準が必要か？

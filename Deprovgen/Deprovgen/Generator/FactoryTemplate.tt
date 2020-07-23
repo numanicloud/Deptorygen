@@ -47,13 +47,6 @@ namespace <#= Factory.NameSpace #>
 <#      }  #>
         }
 <#  } #>
-<#  foreach(var child in Factory.Children) { #>
-
-        public <#= child.TypeName #> Resolve<#= child.TypeName #>(<#= child.GetResolverParameterList(Factory) #>)
-        {
-            return new <#= child.TypeName #>(<#= child.GetResolverArgList(Factory) #>);
-        }
-<#  }  #>
 <#  if(Factory.DoSupportGenericHost) {  #>
         public void ConfigureServices(IServiceCollection services)
         {
@@ -64,17 +57,4 @@ namespace <#= Factory.NameSpace #>
         }
 <#  }  #>
     }
-
-<#  if(Factory.Children.Any()) { #>
-    <#= Factory.GetAccessibility() #> static class <#= Factory.TypeName #>Extensions
-    {
-<#      foreach(var child in Factory.Children) { #>
-        public static <#= child.TypeName #> Resolve<#= child.TypeName #>(this <#= Factory.InterfaceName #> self, <#= child.GetResolverParameterList(Factory) #>)
-        {
-            return self is <#= Factory.TypeName #> concrete ? concrete.Resolve<#= child.TypeName #>(<#= child.GetResolverArgListForExtension(Factory) #>)
-                : throw new NotImplementedException("このメソッドは <#= Factory.TypeName #> クラスに対してのみ呼び出せます。");
-        }
-<#      }  #>
-    }
-<#  } #>
 }

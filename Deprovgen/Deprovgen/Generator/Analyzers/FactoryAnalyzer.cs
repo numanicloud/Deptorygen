@@ -30,12 +30,6 @@ namespace Deprovgen.Generator.Analyzers
 			};
 		}
 
-		public FactoryAnalyzer(INamedTypeSymbol symbol, Document document)
-		{
-			_document = document;
-			_getSymbolFunc = async ct => symbol;
-		}
-
 		private async Task<INamedTypeSymbol> AnalyzeInterfaceAsync(string @namespace, string typeName, CancellationToken ct)
 		{
 			var symbols = await SymbolFinder.FindSourceDeclarationsAsync(
@@ -55,8 +49,6 @@ namespace Deprovgen.Generator.Analyzers
 
 			var dependencies = GetDependencies(symbol, methods, captures);
 
-			var children = await GetChildrenAsync(symbol, ct).ToArrayAsync(ct);
-
 			var typeName = symbol.Name[0].ToString().Replace("I", "") + symbol.Name.Substring(1);
 
 			var genericHost = symbol.GetAttributes()
@@ -66,7 +58,6 @@ namespace Deprovgen.Generator.Analyzers
 				typeName,
 				dependencies,
 				methods,
-				children,
 				symbol.Name,
 				genericHost,
 				captures);
@@ -102,30 +93,6 @@ namespace Deprovgen.Generator.Analyzers
 				{
 					var analyzer = new CaptureAnalyzer(propertySymbol);
 					yield return analyzer.GetDefinition();
-				}
-			}
-		}
-
-		private async IAsyncEnumerable<FactoryDefinition> GetChildrenAsync(INamedTypeSymbol symbol,
-			[EnumeratorCancellation] CancellationToken ct = default)
-		{
-			foreach (var attributeData in symbol.GetAttributes())
-			{
-				if (attributeData.AttributeClass.Name != nameof(FactoryProviderAttribute))
-				{
-					continue;
-				}
-
-				if (attributeData.ConstructorArguments[0].Value is INamedTypeSymbol type)
-				{
-					var childSymbol = type.Interfaces
-						.FirstOrDefault(x => x.HasAttribute(nameof(FactoryAttribute)));
-
-					if (childSymbol is { })
-					{
-						var analyzer = new FactoryAnalyzer(childSymbol, _document);
-						yield return await analyzer.GetFactoryDefinitionAsync(ct);
-					}
 				}
 			}
 		}

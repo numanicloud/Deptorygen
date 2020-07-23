@@ -7,7 +7,6 @@ namespace Deprovgen.Try
     {
 
         private Service? _resolveServiceCache;
-        private ServiceLocator? _resolveServiceLocatorCache;
 
         public CapturedFactory()
         {
@@ -18,10 +17,9 @@ namespace Deprovgen.Try
             return _resolveServiceCache ??= new Service();
         }
 
-        public IServiceLocator ResolveServiceLocator(Service2 service2)
+        public IServiceLocator ResolveServiceLocatorAsTransient(Service2 service2)
         {
-            return _resolveServiceLocatorCache ??= new ServiceLocator(service2, this);
+            return new ServiceLocator(service2, this);
         }
     }
-
 }
