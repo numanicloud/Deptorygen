@@ -31,6 +31,7 @@ namespace Deprovgen.Try
         }
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<ServiceLocator>(provider => this);
             services.AddTransient<Hoge>(provider => ResolveHoge());
             services.AddTransient<Piyo>(provider => ResolvePiyo());
         }

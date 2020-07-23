@@ -57,6 +57,7 @@ namespace <#= Factory.NameSpace #>
 <#  if(Factory.DoSupportGenericHost) {  #>
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<<#= Factory.TypeName #>>(provider => this);
 <#      foreach(var resolver in Factory.Resolvers.Where(x => x.Parameters.Length == 0)) {  #>
             services.AddTransient<<#= resolver.ReturnType.Name #>>(provider => <#= resolver.MethodName #>());
 <#      }  #>

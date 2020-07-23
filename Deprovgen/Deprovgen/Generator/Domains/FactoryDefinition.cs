@@ -106,7 +106,7 @@ namespace Deprovgen.Generator.Domains
 		{
 			return Dependencies.Where(x => parent.Dependencies.All(y => y.TypeName != x.TypeName))
 				.Where(x => parent.Resolvers.All(y => y.ServiceType.TypeName != x.TypeName))
-				.Select(x => new VariableDefinition(x.TypeName, x.ParameterName, x.Namespace))
+				.Select(x => new VariableDefinition(x.TypeNameInfo, x.ParameterName))
 				.ToArray();
 		}
 
@@ -145,6 +145,11 @@ namespace Deprovgen.Generator.Domains
 
 		public string CalcArgForService(string typeName, VariableDefinition[] contextVariables)
 		{
+			if (typeName == TypeName || typeName == InterfaceName)
+			{
+				return "this";
+			}
+
 			if (Dependencies.FirstOrDefault(x => x.TypeName == typeName) is { } dep)
 			{
 				return dep.FieldName;

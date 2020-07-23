@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Deprovgen.Annotations;
 using Deprovgen.Generator.Domains;
+using Deprovgen.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.FindSymbols;
@@ -52,7 +53,7 @@ namespace Deprovgen.Generator.Analyzers
 
 			var captures = GetCaptures(symbol).ToArray();
 
-			var dependencies = GetDependencies(methods, captures);
+			var dependencies = GetDependencies(symbol, methods, captures);
 
 			var children = await GetChildrenAsync(symbol, ct).ToArrayAsync(ct);
 
@@ -71,16 +72,21 @@ namespace Deprovgen.Generator.Analyzers
 				captures);
 		}
 
-		private static ServiceDefinition[] GetDependencies(ResolverDefinition[] methods, CaptureDefinition[] captures)
+		private static ServiceDefinition[] GetDependencies(INamedTypeSymbol definition, ResolverDefinition[] methods, CaptureDefinition[] captures)
 		{
 			var satisfied = captures.SelectMany(x => x.Resolvers)
 				.Concat(methods)
+				.Select(x => x.ServiceType.TypeNameInfo)
+				.Append(TypeName.FromSymbol(definition))
 				.ToArray();
 
-			return methods.Select(x => x.ServiceType)
-				.SelectMany(x => x.Dependencies)
-				.Distinct(x => $"{x.Namespace}.{x.TypeName}")
-				.Where(x => satisfied.All(y => y.ServiceType.TypeName != x.TypeName))
+			var result = from resolver in methods
+						 from dependency in resolver.ServiceType.Dependencies
+						 let parameters = resolver.Parameters.Select(x => x.TypeNameInfo)
+						 where !parameters.Concat(satisfied).Contains(dependency.TypeNameInfo)
+						 select dependency;
+
+			return result.Distinct(x => x.TypeNameInfo)
 				.ToArray();
 		}
 
@@ -115,7 +121,7 @@ namespace Deprovgen.Generator.Analyzers
 					var childSymbol = type.Interfaces
 						.FirstOrDefault(x => x.HasAttribute(nameof(FactoryAttribute)));
 
-					if (childSymbol is {})
+					if (childSymbol is { })
 					{
 						var analyzer = new FactoryAnalyzer(childSymbol, _document);
 						yield return await analyzer.GetFactoryDefinitionAsync(ct);

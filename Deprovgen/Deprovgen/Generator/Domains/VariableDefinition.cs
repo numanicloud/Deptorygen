@@ -1,18 +1,19 @@
-﻿namespace Deprovgen.Generator.Domains
+﻿using Deprovgen.Utilities;
+
+namespace Deprovgen.Generator.Domains
 {
 	public class VariableDefinition
 	{
-		public string TypeName { get; }
+		public TypeName TypeNameInfo { get; set; }
+		public string TypeName => TypeNameInfo.Name;
 		public string VarName { get; }
-		public string TypeNamespace { get; }
-		public string Code { get; }
+		public string TypeNamespace => TypeNameInfo.FullNamespace;
+		public string Code => $"{TypeName} {VarName}";
 
-		public VariableDefinition(string typeName, string varName, string typeNamespace)
+		public VariableDefinition(TypeName typeNameInfo, string varName)
 		{
-			TypeName = typeName;
+			TypeNameInfo = typeNameInfo;
 			VarName = varName;
-			TypeNamespace = typeNamespace;
-			Code = $"{typeName} {varName}";
 		}
 	}
 }

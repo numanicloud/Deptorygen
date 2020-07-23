@@ -1,27 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Deprovgen.Utilities;
 
 namespace Deprovgen.Generator.Domains
 {
 	public class ServiceDefinition
 	{
-		public ServiceDefinition(string ns,
-			string typeName,
-			string fieldName,
-			string parameterName,
-			ServiceDefinition[] dependencies)
+		public ServiceDefinition(TypeName typeName, ServiceDefinition[] dependencies)
 		{
-			Namespace = ns;
-			TypeName = typeName;
-			FieldName = fieldName;
-			ParameterName = parameterName;
+			TypeNameInfo = typeName;
 			Dependencies = dependencies;
 		}
 
-		public string Namespace { get; }
-		public string TypeName { get; }
-		public string FieldName { get; }
-		public string ParameterName { get; }
+		public TypeName TypeNameInfo { get; }
+		public string Namespace => TypeNameInfo.FullNamespace;
+		public string TypeName => TypeNameInfo.Name;
+		public string FieldName => "_" + TypeNameInfo.LowerCamelCase;
+		public string ParameterName => TypeNameInfo.LowerCamelCase;
 		public ServiceDefinition[] Dependencies { get; }
 
 		public override string ToString()

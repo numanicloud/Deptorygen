@@ -2,6 +2,7 @@
 using System.Linq;
 using Deprovgen.Annotations;
 using Deprovgen.Generator.Domains;
+using Deprovgen.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace Deprovgen.Generator.Analyzers
@@ -50,7 +51,7 @@ namespace Deprovgen.Generator.Analyzers
 		private VariableDefinition[] GetParameters()
 		{
 			return _methodSymbol.Parameters
-				.Select(x => new VariableDefinition(x.Type.Name, x.Name, x.Type.GetFullNameSpace()))
+				.Select(x => new VariableDefinition(TypeName.FromSymbol(x.Type), x.Name))
 				.ToArray();
 		}
 

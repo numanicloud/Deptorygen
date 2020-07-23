@@ -32,6 +32,8 @@ namespace Deprovgen.Try
 	interface ICapturedFactory
 	{
 		Service ResolveService();
+		[Implementation(typeof(ServiceLocator))]
+		IServiceLocator ResolveServiceLocator(Service2 service2);
 	}
 
 	[Factory]
