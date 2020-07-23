@@ -4,12 +4,12 @@ using System.Text;
 
 namespace Deprovgen.Annotations
 {
-	[AttributeUsage(AttributeTargets.Interface)]
-	internal class InheritAttribute : Attribute
+	[AttributeUsage(AttributeTargets.Method)]
+	public class ImplementationAttribute : Attribute
 	{
 		public Type Type { get; }
 
-		public InheritAttribute(Type type)
+		public ImplementationAttribute(Type type)
 		{
 			Type = type;
 		}

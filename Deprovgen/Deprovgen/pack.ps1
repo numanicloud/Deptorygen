@@ -1,4 +1,4 @@
-$ver = cat nupkgs/version
+﻿$ver = cat nupkgs/version
 $ver = [System.Int32]::Parse($ver) + 1
 
 rm nupkgs/*.nupkg

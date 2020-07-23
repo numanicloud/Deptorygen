@@ -7,6 +7,7 @@ namespace Deprovgen.Generator.Domains
 	public class ResolverDefinition
 	{
 		public string MethodName { get; }
+		public ITypeSymbol ReturnType { get; set; }
 		public ServiceDefinition ServiceType { get; }
 		public VariableDefinition[] Parameters { get; }
 		public bool IsTransient { get; }
@@ -19,13 +20,19 @@ namespace Deprovgen.Generator.Domains
 		}
 
 
-		public ResolverDefinition(string methodName, ServiceDefinition serviceType, VariableDefinition[] parameters, bool isTransient, Accessibility accessibility)
+		public ResolverDefinition(string methodName,
+			ServiceDefinition serviceType,
+			VariableDefinition[] parameters,
+			bool isTransient,
+			Accessibility accessibility,
+			ITypeSymbol returnType)
 		{
 			MethodName = methodName;
 			ServiceType = serviceType;
 			Parameters = parameters;
 			IsTransient = isTransient;
 			Accessibility = accessibility;
+			ReturnType = returnType;
 			CacheVarName = $"_{methodName[0].ToString().ToLower() + methodName.Substring(1)}Cache";
 		}
 

@@ -7,7 +7,14 @@ namespace Deprovgen.Generator.Domains
 {
 	public class FactoryDefinition
 	{
-		public FactoryDefinition(string nameSpace, string typeName, ServiceDefinition[] dependencies, ResolverDefinition[] resolvers, FactoryDefinition[] children, string interfaceName)
+		public FactoryDefinition(string nameSpace,
+			string typeName,
+			ServiceDefinition[] dependencies,
+			ResolverDefinition[] resolvers,
+			FactoryDefinition[] children,
+			string interfaceName,
+			bool doSupportGenericHost,
+			CaptureDefinition[] captures)
 		{
 			NameSpace = nameSpace;
 			TypeName = typeName;
@@ -15,6 +22,8 @@ namespace Deprovgen.Generator.Domains
 			Resolvers = resolvers;
 			Children = children;
 			InterfaceName = interfaceName;
+			DoSupportGenericHost = doSupportGenericHost;
+			Captures = captures;
 		}
 
 		public string NameSpace { get; }
@@ -23,6 +32,8 @@ namespace Deprovgen.Generator.Domains
 		public ServiceDefinition[] Dependencies { get; }
 		public ResolverDefinition[] Resolvers { get; }
 		public FactoryDefinition[] Children { get; }
+		public CaptureDefinition[] Captures { get; set; }
+		public bool DoSupportGenericHost { get; }
 
 		public override string ToString()
 		{
@@ -32,6 +43,7 @@ namespace Deprovgen.Generator.Domains
 		public string GetAccessibility()
 		{
 			var max = Resolvers.Select(x => x.Accessibility)
+				.Concat(Captures.Select(x => x.Accessibility))
 				.OrderByDescending(x => x switch
 				{
 					Accessibility.NotApplicable => 7,
@@ -52,24 +64,42 @@ namespace Deprovgen.Generator.Domains
 
 		public string[] GetRequiredNamespaces()
 		{
-			var children = Children.Select(x => x.NameSpace);
-			var dependencies = Dependencies.Select(x => x.Namespace);
-			var resolverReturns = Resolvers.Select(x => x.ServiceType.Namespace);
-			var resolverParams = Resolvers.SelectMany(x => x.Parameters)
-				.Select(x => x.TypeNamespace);
-			return children.Concat(dependencies)
-				.Concat(resolverReturns)
-				.Concat(resolverParams)
+			IEnumerable<IEnumerable<string>> GetNamespaces()
+			{
+				yield return new[] { "System" };
+
+				yield return Children.Select(x => x.NameSpace);
+				yield return Dependencies.Select(x => x.Namespace);
+				yield return Resolvers.Select(x => x.ServiceType.Namespace);
+				yield return Resolvers.Select(x => x.ReturnType.GetFullNameSpace());
+				yield return Resolvers.SelectMany(x => x.Parameters)
+					.Select(x => x.TypeNamespace);
+				yield return Captures.Select(x => x.Namespace);
+
+				if (DoSupportGenericHost)
+				{
+					yield return new[]
+					{
+						"Deprovgen.GenericHost",
+						"Microsoft.Extensions.DependencyInjection",
+					};
+				}
+			}
+
+			return GetNamespaces().SelectMany(x => x)
 				.Distinct()
 				.Where(x => x != NameSpace)
-				.Where(x => x != "System")
 				.ToArray();
 		}
 
 		public string GetConstructorParameterList()
 		{
-			return Dependencies.Select(x => $"{x.TypeName} {x.ParameterName}")
-				.Join(", ");
+			var deps = Dependencies
+				.Select(x => $"{x.TypeName} {x.ParameterName}");
+			var caps = Captures
+				.Select(x => $"{x.InterfaceName} {x.ParameterName}");
+
+			return deps.Concat(caps).Join(", ");
 		}
 
 		public VariableDefinition[] GetResolverParameters(FactoryDefinition parent)
@@ -123,6 +153,12 @@ namespace Deprovgen.Generator.Domains
 			{
 				return $"{resolver.MethodName}({resolver.GetArgList(this, contextVariables)})";
 			}
+
+			if (CaptureDefinition.GetArgExpression(Captures, typeName) is {} alter)
+			{
+				return $"{alter.Item1.PropertyName}.{alter.Item2.MethodName}({alter.Item2.GetArgList(this, contextVariables)})";
+			}
+
 			return null;
 		}
 	}

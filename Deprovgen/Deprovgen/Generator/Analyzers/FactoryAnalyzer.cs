@@ -49,21 +49,55 @@ namespace Deprovgen.Generator.Analyzers
 		private async Task<FactoryDefinition> AnalyzeInterfaceAsync(INamedTypeSymbol symbol, CancellationToken ct)
 		{
 			var methods = ResolverAnalyzer.GetResolverDefinitions(symbol);
-			var dependencies = GetDependencies(methods);
+
+			var captures = GetCaptures(symbol).ToArray();
+
+			var dependencies = GetDependencies(methods, captures);
+
 			var children = await GetChildrenAsync(symbol, ct).ToArrayAsync(ct);
 
 			var typeName = symbol.Name[0].ToString().Replace("I", "") + symbol.Name.Substring(1);
 
-			return new FactoryDefinition(symbol.GetFullNameSpace(), typeName, dependencies, methods, children, symbol.Name);
+			var genericHost = symbol.GetAttributes()
+				.Any(x => x.AttributeClass.Name == nameof(ConfigureGenericHostAttribute));
+
+			return new FactoryDefinition(symbol.GetFullNameSpace(),
+				typeName,
+				dependencies,
+				methods,
+				children,
+				symbol.Name,
+				genericHost,
+				captures);
 		}
 
-		private static ServiceDefinition[] GetDependencies(ResolverDefinition[] methods)
+		private static ServiceDefinition[] GetDependencies(ResolverDefinition[] methods, CaptureDefinition[] captures)
 		{
+			var satisfied = captures.SelectMany(x => x.Resolvers)
+				.Concat(methods)
+				.ToArray();
+
 			return methods.Select(x => x.ServiceType)
 				.SelectMany(x => x.Dependencies)
 				.Distinct(x => $"{x.Namespace}.{x.TypeName}")
-				.Where(x => methods.All(y => y.ServiceType.TypeName != x.TypeName))
+				.Where(x => satisfied.All(y => y.ServiceType.TypeName != x.TypeName))
 				.ToArray();
+		}
+
+		private IEnumerable<CaptureDefinition> GetCaptures(INamedTypeSymbol symbol)
+		{
+			var properties = symbol.GetMembers()
+				.OfType<IPropertySymbol>()
+				.Where(x => x.IsReadOnly);
+
+			foreach (var propertySymbol in properties)
+			{
+				if (propertySymbol.Type is INamedTypeSymbol nts && nts.HasAttribute(nameof(FactoryAttribute)))
+				{
+					var analyzer = new CaptureAnalyzer(propertySymbol);
+					yield return analyzer.GetDefinition();
+				}
+			}
 		}
 
 		private async IAsyncEnumerable<FactoryDefinition> GetChildrenAsync(INamedTypeSymbol symbol,
@@ -79,11 +113,7 @@ namespace Deprovgen.Generator.Analyzers
 				if (attributeData.ConstructorArguments[0].Value is INamedTypeSymbol type)
 				{
 					var childSymbol = type.Interfaces
-						.FirstOrDefault(x =>
-						{
-							var attributes = x.GetAttributes();
-							return attributes.Any(x => x.AttributeClass.Name == nameof(FactoryAttribute));
-						});
+						.FirstOrDefault(x => x.HasAttribute(nameof(FactoryAttribute)));
 
 					if (childSymbol is {})
 					{

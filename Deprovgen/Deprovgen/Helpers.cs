@@ -24,7 +24,7 @@ namespace Deprovgen
 			return source.Distinct(new DelegateComparer<T, TKey>(selector));
 		}
 
-		public static string GetFullNameSpace(this INamedTypeSymbol typeSymbol)
+		public static string GetFullNameSpace(this ITypeSymbol typeSymbol)
 		{
 			IEnumerable<string> GetFullNameSpace(INamespaceSymbol nss)
 			{
@@ -77,6 +77,17 @@ namespace Deprovgen
 					return false;
 				}
 			}
+		}
+
+		public static bool HasAttribute(this INamedTypeSymbol symbol, string attributeName)
+		{
+			return symbol.GetAttributes()
+				.Any(attr => attr.AttributeClass.Name == attributeName);
+		}
+
+		public static string ToLowerCamelCase(this string name)
+		{
+			return name[0].ToString().ToLower() + name.Substring(1);
 		}
 	}
 }
