@@ -27,7 +27,11 @@ namespace Deprovgen.Generator.Syntaxes
 		{
 			IEnumerable<CaptureSyntax> GetCaptures()
 			{
+				var inInterfaces = factory.AllInterfaces
+					.SelectMany(x => x.GetMembers());
+
 				var properties = factory.GetMembers()
+					.Concat(inInterfaces)
 					.OfType<IPropertySymbol>();
 
 				foreach (var property in properties)

@@ -5,7 +5,7 @@ using Deprovgen.Utilities;
 
 namespace Deprovgen.Generator.DefinitionV2
 {
-	class InjectionContext
+	public class InjectionContext
 	{
 		private Dictionary<TypeName, string> InjectionCodes { get; }
 

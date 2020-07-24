@@ -18,6 +18,11 @@ namespace Deprovgen.Generator.Syntaxes
 
 		public static ResolutionSyntax FromType(INamedTypeSymbol symbol)
 		{
+			if (symbol.Constructors.Length == 0)
+			{
+				return new ResolutionSyntax(TypeName.FromSymbol(symbol), new TypeName[0]);
+			}
+
 			var dependencies = symbol.Constructors[0].Parameters
 				.Select(x => TypeName.FromSymbol(x.Type))
 				.ToArray();
@@ -27,9 +32,16 @@ namespace Deprovgen.Generator.Syntaxes
 		public static ResolutionSyntax[] FromResolversAttribute(IMethodSymbol resolver)
 		{
 			return resolver.GetAttributes()
-				.Where(x => x.AttributeClass.Name == nameof(ResolutionAttribute))
-				.Where(x => x.AttributeClass.Constructors.Length == 1)
-				.Where(x => x.AttributeClass.Constructors[0].Parameters.Length == 1)
+				.Where(x =>
+				{
+					Logger.WriteLine($"Check {x} is ResolutionAttribute").Wait();
+					return x.AttributeClass.Name == nameof(ResolutionAttribute);
+				})
+				.Where(x =>
+				{
+					Logger.WriteLine($"Check {x} has constructor with 1 argument").Wait();
+					return x.ConstructorArguments.Length == 1;
+				})
 				.Select(x => x.ConstructorArguments[0].Value)
 				.OfType<INamedTypeSymbol>()
 				.Select(FromType)

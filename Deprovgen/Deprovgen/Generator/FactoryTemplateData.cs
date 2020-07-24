@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Deprovgen.Generator.Domains;
+﻿using Deprovgen.Generator.DefinitionV2;
 
 namespace Deprovgen.Generator
 {
     partial class FactoryTemplate
     {
-        public FactoryDefinition Factory { get; set; }
+        public FactoryDefinitionV2 Factory { get; set; }
     }
 }

@@ -4,15 +4,20 @@ using System.Collections.Generic;
 
 namespace Deprovgen.Try
 {
-    internal partial class Factory : IFactory
+    internal partial class CapturingFactory : ICapturingFactory
     {
+        public IFactory Factory { get; }
 
-        private ServiceB? _ResolveServiceBCache;
-        private ServiceC? _ResolveServiceCCache;
-        private Client? _ResolveClientCache;
+        private Client2? _ResolveClient2Cache;
 
-        public Factory()
+        public CapturingFactory(IFactory factory)
         {
+            Factory = factory;
+        }
+
+        public Client2 ResolveClient2()
+        {
+            return _ResolveClient2Cache ??= new Client2(ResolveServices(ResolveServiceB()));
         }
 
         public ServiceA ResolveServiceAAsTransient()
@@ -22,17 +27,17 @@ namespace Deprovgen.Try
 
         public ServiceB ResolveServiceB()
         {
-            return _ResolveServiceBCache ??= new ServiceB();
+            return Factory.ResolveServiceB();
         }
 
         public ServiceC ResolveServiceC()
         {
-            return _ResolveServiceCCache ??= new ServiceC();
+            return Factory.ResolveServiceC();
         }
 
         public Client ResolveClient()
         {
-            return _ResolveClientCache ??= new Client(ResolveServices(ResolveServiceB()));
+            return Factory.ResolveClient();
         }
         public IEnumerable<IService> ResolveServices(ServiceB b)
         {

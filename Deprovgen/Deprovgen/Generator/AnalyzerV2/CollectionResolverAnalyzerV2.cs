@@ -33,7 +33,7 @@ namespace Deprovgen.Generator.AnalyzerV2
 				.ToArray();
 
 			return new CollectionResolverDefinitionV2(
-				_syntax.ElementType,
+				_syntax.CollectionType,
 				_syntax.MethodName,
 				resolutions,
 				parameters,

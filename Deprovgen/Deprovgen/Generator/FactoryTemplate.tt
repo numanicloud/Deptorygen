@@ -17,20 +17,22 @@ namespace <#= Factory.NameSpace #>
 <# } #>
     {
 <#  foreach(var dependency in Factory.Dependencies) { #>
-        private readonly <#= dependency.TypeName #> <#= dependency.FieldName #>;
+        private readonly <#= dependency.Name #> _<#= dependency.LowerCamelCase #>;
 <#  } #>
 <#  foreach(var capture in Factory.Captures) {  #>
         public <#= capture.InterfaceName #> <#= capture.PropertyName #> { get; }
 <#  }  #>
 
-<#  foreach(var resolver in Factory.Resolvers.Where(x => !x.IsTransient)) {  #>
-        private <#= resolver.ServiceType.TypeName #>? <#= resolver.CacheVarName #>;
-<#  } #>
+<#  foreach(var resolver in Factory.Resolvers) {
+        if(!resolver.IsTransient && !resolver.TryGetDelegation(Factory, out var dummy)) { #>
+        private <#= resolver.ReturnType.Name #>? <#= resolver.CacheVarName #>;
+<#      }
+    } #>
 
         public <#= Factory.TypeName #>(<#= Factory.GetConstructorParameterList() #>)
         {
 <#  foreach(var dependency in Factory.Dependencies) { #>
-            <#= dependency.FieldName #> = <#= dependency.ParameterName #>;
+            _<#= dependency.LowerCamelCase #> = <#= dependency.LowerCamelCase #>;
 <#  } #>
 <#  foreach(var capture in Factory.Captures) { #>
             <#= capture.PropertyName #> = <#= capture.ParameterName #>;
@@ -40,10 +42,12 @@ namespace <#= Factory.NameSpace #>
 
         public <#= resolver.ReturnType.Name #> <#= resolver.MethodName #>(<#= resolver.GetParameterList() #>)
         {
-<#      if(resolver.IsTransient) { #>
-            return new <#= resolver.ServiceType.TypeName #>(<#= resolver.ServiceType.GetConstructorArgList(resolver.Parameters, Factory) #>);
+<#      if(resolver.TryGetDelegation(Factory, out var code)) { #>
+            return <#= code #>;
+<#      } else if(resolver.IsTransient) { #>
+            return new <#= resolver.ResolutionName #>(<#= resolver.GetInstantiationArgList(Factory.Injection) #>);
 <#      } else { #>
-            return <#= resolver.CacheVarName #> ??= new <#= resolver.ServiceType.TypeName #>(<#= resolver.ServiceType.GetConstructorArgList(resolver.Parameters, Factory) #>);
+            return <#= resolver.CacheVarName #> ??= new <#= resolver.ResolutionName #>(<#= resolver.GetInstantiationArgList(Factory.Injection) #>);
 <#      }  #>
         }
 <#  } #>
@@ -52,7 +56,7 @@ namespace <#= Factory.NameSpace #>
         {
             return new <#= resolver.ElementTypeName #>[]
             {
-                <#= resolver.GetElementList(Factory, resolver.Parameters) #>
+                <#= resolver.GetElementList(Factory.Injection) #>
             };
         }
 <#  }  #>
@@ -60,8 +64,8 @@ namespace <#= Factory.NameSpace #>
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<<#= Factory.TypeName #>>(provider => this);
-<#      foreach(var resolver in Factory.Resolvers.Where(x => x.Parameters.Length == 0)) {  #>
-            services.AddTransient<<#= resolver.ReturnType.Name #>>(provider => <#= resolver.MethodName #>());
+<#      foreach(var item in Factory.GetResolverExpressionsForGenericHost()) {  #>
+            services.AddTransient<<#= item.typeName #>>(provider => <#= item.expression #>);
 <#      }  #>
         }
 <#  }  #>

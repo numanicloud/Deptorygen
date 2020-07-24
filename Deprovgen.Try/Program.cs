@@ -36,7 +36,7 @@ namespace Deprovgen.Try
 		}
 	}
 
-	public class ServiceC : IService
+	class ServiceC : IService
 	{
 		public void Say()
 		{
@@ -66,11 +66,67 @@ namespace Deprovgen.Try
 	[Factory]
 	interface IFactory
 	{
-		ServiceA ResolveServiceA();
+		ServiceA ResolveServiceAAsTransient();
 		ServiceB ResolveServiceB();
 		ServiceC ResolveServiceC();
-		IEnumerable<IService> ResolveServices();
+		[Resolution(typeof(ServiceA))]
+		[Resolution(typeof(ServiceB))]
+		[Resolution(typeof(ServiceC))]
+		IEnumerable<IService> ResolveServices(ServiceB b);
 		Client ResolveClient();
+	}
+
+	public class Client2
+	{
+		private readonly IEnumerable<IService> _services;
+
+		public Client2(IEnumerable<IService> services)
+		{
+			_services = services;
+		}
+	}
+
+	[Factory]
+	interface ICapturingFactory : IFactory
+	{
+		IFactory Factory { get; }
+		Client2 ResolveClient2();
+	}
+
+	public class Client3
+	{
+		private readonly ServiceA _a;
+		private readonly ServiceB _b;
+
+		public Client3(ServiceA a, ServiceB b)
+		{
+			_a = a;
+			_b = b;
+		}
+	}
+
+	class Iron : IServiceIron
+	{
+		private readonly ServiceA _a;
+
+		public Iron(ServiceA a)
+		{
+			_a = a;
+		}
+
+		public void Tell()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
+	[Factory]
+	interface ISuperFactory : ICapturingFactory
+	{
+		ICapturingFactory Capturing { get; }
+		Client3 ResolveClient3();
+		[Resolution(typeof(Iron))]
+		IServiceIron ResolveServiceIron();
 	}
 
 	class Program

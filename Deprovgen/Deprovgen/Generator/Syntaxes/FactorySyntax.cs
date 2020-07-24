@@ -26,7 +26,7 @@ namespace Deprovgen.Generator.Syntaxes
 			Captures = captures;
 		}
 
-		public static async Task<FactorySyntax> FromDeclaration(InterfaceDeclarationSyntax syntax, Document document, CancellationToken ct)
+		public static async Task<FactorySyntax> FromDeclarationAsync(InterfaceDeclarationSyntax syntax, Document document, CancellationToken ct)
 		{
 			async Task<INamedTypeSymbol> GetSymbol()
 			{

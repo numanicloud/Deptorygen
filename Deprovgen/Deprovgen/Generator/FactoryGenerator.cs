@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Deprovgen.Generator.DefinitionV2;
 using Deprovgen.Generator.Domains;
+using Deprovgen.Generator.Syntaxes;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -13,14 +15,15 @@ namespace Deprovgen.Generator
 {
 	class FactoryGenerator
 	{
-		public async Task<FactoryDefinition> GetDefinition(Document document,
+		public async Task<FactoryDefinitionV2> GetDefinition(Document document,
 			InterfaceDeclarationSyntax target,
 			CancellationToken ct)
 		{
 			try
 			{
-				var analyzer = new Analyzers.FactoryAnalyzer(target, document);
-				return await analyzer.GetFactoryDefinitionAsync(ct);
+				var syntax = await FactorySyntax.FromDeclarationAsync(target, document, ct);
+				var analyzer = new AnalyzerV2.FactoryAnalyzerV2(syntax);
+				return analyzer.GetDefinition();
 			}
 			catch (Exception e)
 			{
@@ -29,7 +32,7 @@ namespace Deprovgen.Generator
 			}
 		}
 
-		public Solution GetFactoryAppliedSolution(Document document, FactoryDefinition definition)
+		public Solution GetFactoryAppliedSolution(Document document, FactoryDefinitionV2 definition)
 		{
 			var template = new FactoryTemplate() { Factory = definition };
 			var code = template.TransformText();

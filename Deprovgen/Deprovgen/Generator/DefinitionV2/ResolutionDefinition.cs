@@ -5,7 +5,7 @@ using Deprovgen.Utilities;
 
 namespace Deprovgen.Generator.DefinitionV2
 {
-	class ResolutionDefinition
+	public class ResolutionDefinition
 	{
 		public TypeName TypeName { get; }
 		public TypeName[] Dependencies { get; }

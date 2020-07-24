@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Deprovgen.Annotations;
 using Deprovgen.Generator.DefinitionV2;
-using Deprovgen.Generator.Domains;
 using Deprovgen.Generator.Syntaxes;
 using Deprovgen.Utilities;
 
@@ -51,32 +48,42 @@ namespace Deprovgen.Generator.AnalyzerV2
 
 		private TypeName[] GetDependencies()
 		{
+			static IEnumerable<TypeName> ExceptParameters(IEnumerable<ResolutionSyntax> source, ParameterSyntax[] parameters)
+			{
+				return source.SelectMany(x => x.Dependencies)
+					.Except(parameters.Select(x => x.TypeName));
+			}
+
 			var returnDeps = _syntax.Resolvers
-				.SelectMany(x =>
-				{
-					var deps = x.ReturnTypeResolution?.Dependencies ?? new TypeName[0];
-					return deps.Except(x.Parameters.Select(y => y.TypeName));
-				});
+				.SelectMany(x => ExceptParameters(x.ReturnTypeResolution.AsEnumerable(), x.Parameters));
 
 			var resolutionDeps = _syntax.Resolvers
-				.SelectMany(x =>
-				{
-					return x.Resolutions.SelectMany(y => y.Dependencies)
-						.Except(x.Parameters.Select(y => y.TypeName));
-				});
+				.SelectMany(x => ExceptParameters(x.Resolutions, x.Parameters));
+
+			var collectionDeps = _syntax.CollectionResolvers
+				.SelectMany(x => ExceptParameters(x.Resolutions, x.Parameters));
 
 			var captureAbilities = _syntax.Captures
 				.SelectMany(x => x.Resolvers)
 				.Select(x => x.ReturnTypeName);
 
+			var captureCollectionAbilities = _syntax.Captures
+				.SelectMany(x => x.CollectionResolvers)
+				.Select(x => x.CollectionType);
+
 			var resolverAbilities = _syntax.Resolvers
 				.Select(x => x.ReturnTypeName);
 
-			var dependencies = returnDeps.Concat(resolutionDeps)
+			var collectionAbilities = _syntax.CollectionResolvers
+				.Select(x => x.CollectionType);
+
+			return returnDeps.Concat(resolutionDeps)
+				.Concat(collectionDeps)
 				.Except(captureAbilities)
+				.Except(captureCollectionAbilities)
 				.Except(resolverAbilities)
+				.Except(collectionAbilities)
 				.ToArray();
-			return dependencies;
 		}
 	}
 }

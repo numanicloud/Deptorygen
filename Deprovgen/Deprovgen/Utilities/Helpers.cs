@@ -106,5 +106,12 @@ namespace Deprovgen
 				}
 			}
 		}
+
+		public static IEnumerable<T> AsEnumerable<T>(this T? source) where T : class
+		{
+			return source is null
+				? Enumerable.Empty<T>()
+				: new T[] { source };
+		}
 	}
 }

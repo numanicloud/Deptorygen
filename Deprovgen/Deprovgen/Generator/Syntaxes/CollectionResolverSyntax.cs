@@ -11,21 +11,25 @@ namespace Deprovgen.Generator.Syntaxes
 	class CollectionResolverSyntax
 	{
 		public string MethodName { get; }
-		public TypeName ElementType { get; }
+		public TypeName CollectionType { get; }
+		public TypeName ElementType => CollectionType.TypeArguments[0];
 		public ParameterSyntax[] Parameters { get; }
 		public ResolutionSyntax[] Resolutions { get; }
 
-		public CollectionResolverSyntax(string methodName, TypeName elementType, ParameterSyntax[] parameters, ResolutionSyntax[] resolutions)
+		public CollectionResolverSyntax(string methodName,
+			TypeName collectionType,
+			ParameterSyntax[] parameters,
+			ResolutionSyntax[] resolutions)
 		{
 			MethodName = methodName;
-			ElementType = elementType;
+			CollectionType = collectionType;
 			Parameters = parameters;
 			Resolutions = resolutions;
 		}
 
 		public static CollectionResolverSyntax? FromResolver(IMethodSymbol resolver)
 		{
-			ResolutionSyntax? GetResolutionAsElement(AttributeData resolutionAttr, TypeName type)
+			static ResolutionSyntax? GetResolutionAsElement(AttributeData resolutionAttr, TypeName type)
 			{
 				if (resolutionAttr.ConstructorArguments[0].Value is INamedTypeSymbol nts)
 				{
@@ -46,18 +50,27 @@ namespace Deprovgen.Generator.Syntaxes
 				return null;
 			}
 
-			var elementType = TypeName.FromSymbol(resolver.ReturnType);
+			var typeName = TypeName.FromSymbol(resolver.ReturnType);
+			if (typeName.NameWithoutArguments == "IEnumerable" && typeName.TypeArguments.Length == 1)
+			{
+				var elementType = typeName.TypeArguments[0];
 
-			var parameters = ParameterSyntax.FromResolver(resolver);
+				var parameters = ParameterSyntax.FromResolver(resolver);
 
-			var resolutions = resolver.GetAttributes()
-				.Where(x => x.AttributeClass.Name == nameof(ResolutionAttribute))
-				.Where(x => x.AttributeConstructor.Parameters.Length == 1)
-				.Select(x => GetResolutionAsElement(x, elementType))
-				.FilterNull()
-				.ToArray();
+				var resolutions = resolver.GetAttributes()
+					.Where(x => x.AttributeClass.Name == nameof(ResolutionAttribute))
+					.Where(x => x.AttributeConstructor.Parameters.Length == 1)
+					.Select(x => GetResolutionAsElement(x, elementType))
+					.FilterNull()
+					.ToArray();
 
-			return new CollectionResolverSyntax(resolver.Name, elementType, parameters, resolutions);
+				if (resolutions.Any())
+				{
+					return new CollectionResolverSyntax(resolver.Name, typeName, parameters, resolutions);
+				}
+			}
+
+			return null;
 		}
 	}
 }

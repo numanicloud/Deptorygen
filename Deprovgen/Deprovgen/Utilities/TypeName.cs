@@ -1,30 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using System;
+using System.Linq;
 
 namespace Deprovgen.Utilities
 {
 	public class TypeName : IEquatable<TypeName>
 	{
-		public TypeName(string fullNamespace, string name, Accessibility accessibility)
+		public TypeName(string fullNamespace, string name, Accessibility accessibility, TypeName[]? typeArguments = null)
 		{
 			FullNamespace = fullNamespace;
-			Name = name;
+			Name = typeArguments is null || typeArguments.Length == 0 ? name
+				: $"{name}<{typeArguments.Select(x => x.Name).Join(", ")}>";
+			NameWithoutArguments = name;
 			Accessibility = accessibility;
+			TypeArguments = typeArguments ?? new TypeName[0];
 		}
 
 		public string FullNamespace { get; }
 		public string Name { get; }
 		public Accessibility Accessibility { get; }
-		public string FullName => $"{FullNamespace}.{Name}";
-		public string LowerCamelCase => Name.ToLowerCamelCase();
+		public TypeName[] TypeArguments { get; }
+		public string LowerCamelCase => NameWithoutArguments.ToLowerCamelCase();
+		public string NameWithoutArguments { get; }
 
 		public bool Equals(TypeName other)
 		{
 			if (ReferenceEquals(null, other)) return false;
 			if (ReferenceEquals(this, other)) return true;
-			return FullNamespace == other.FullNamespace && Name == other.Name;
+			return FullNamespace == other.FullNamespace && Name == other.Name
+				&& TypeArguments.SequenceEqual(other.TypeArguments);
 		}
 
 		public override bool Equals(object obj)
@@ -56,7 +60,11 @@ namespace Deprovgen.Utilities
 
 		public static TypeName FromSymbol(INamedTypeSymbol symbol)
 		{
-			return new TypeName(symbol.GetFullNameSpace(), symbol.Name, symbol.DeclaredAccessibility);
+			var typeArguments = symbol.TypeArguments
+				.Select(FromSymbol)
+				.ToArray();
+
+			return new TypeName(symbol.GetFullNameSpace(), symbol.Name, symbol.DeclaredAccessibility, typeArguments);
 		}
 
 		public static bool operator ==(TypeName lop, TypeName rop) => lop?.Equals(rop) ?? false;

@@ -73,7 +73,7 @@ namespace Deprovgen.Generator
             this.Write(" : ");
             
             #line 14 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Factory.InterfaceNameInfo));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Factory.InterfaceName));
             
             #line default
             #line hidden
@@ -101,14 +101,14 @@ namespace Deprovgen.Generator
             this.Write("        private readonly ");
             
             #line 20 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.TypeName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.Name));
             
             #line default
             #line hidden
-            this.Write(" ");
+            this.Write(" _");
             
             #line 20 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.FieldName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.LowerCamelCase));
             
             #line default
             #line hidden
@@ -149,241 +149,257 @@ namespace Deprovgen.Generator
             this.Write("\r\n");
             
             #line 26 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-  foreach(var resolver in Factory.Resolvers.Where(x => !x.IsTransient)) {  
+  foreach(var resolver in Factory.Resolvers) {
+        if(!resolver.IsTransient && !resolver.TryGetDelegation(Factory, out var dummy)) { 
             
             #line default
             #line hidden
             this.Write("        private ");
             
-            #line 27 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ServiceType.TypeName));
+            #line 28 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ReturnType.Name));
             
             #line default
             #line hidden
             this.Write("? ");
             
-            #line 27 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 28 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.CacheVarName));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 28 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-  } 
+            #line 29 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+      }
+    } 
             
             #line default
             #line hidden
             this.Write("\r\n        public ");
             
-            #line 30 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 32 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Factory.TypeName));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 30 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 32 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Factory.GetConstructorParameterList()));
             
             #line default
             #line hidden
             this.Write(")\r\n        {\r\n");
             
-            #line 32 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 34 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   foreach(var dependency in Factory.Dependencies) { 
             
             #line default
             #line hidden
-            this.Write("            ");
+            this.Write("            _");
             
-            #line 33 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.FieldName));
+            #line 35 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.LowerCamelCase));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 33 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.ParameterName));
+            #line 35 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(dependency.LowerCamelCase));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 34 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 36 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   } 
             
             #line default
             #line hidden
             
-            #line 35 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 37 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   foreach(var capture in Factory.Captures) { 
             
             #line default
             #line hidden
             this.Write("            ");
             
-            #line 36 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 38 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(capture.PropertyName));
             
             #line default
             #line hidden
             this.Write(" = ");
             
-            #line 36 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 38 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(capture.ParameterName));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
-            #line 37 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 39 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   }  
             
             #line default
             #line hidden
             this.Write("        }\r\n");
             
-            #line 39 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 41 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   foreach(var resolver in Factory.Resolvers){ 
             
             #line default
             #line hidden
             this.Write("\r\n        public ");
             
-            #line 41 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 43 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ReturnType.Name));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 41 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 43 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.MethodName));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 41 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 43 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetParameterList()));
             
             #line default
             #line hidden
             this.Write(")\r\n        {\r\n");
             
-            #line 43 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-      if(resolver.IsTransient) { 
-            
-            #line default
-            #line hidden
-            this.Write("            return new ");
-            
-            #line 44 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ServiceType.TypeName));
-            
-            #line default
-            #line hidden
-            this.Write("(");
-            
-            #line 44 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ServiceType.GetConstructorArgList(resolver.Parameters, Factory)));
-            
-            #line default
-            #line hidden
-            this.Write(");\r\n");
-            
             #line 45 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-      } else { 
+      if(resolver.TryGetDelegation(Factory, out var code)) { 
             
             #line default
             #line hidden
             this.Write("            return ");
             
             #line 46 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(code));
+            
+            #line default
+            #line hidden
+            this.Write(";\r\n");
+            
+            #line 47 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+      } else if(resolver.IsTransient) { 
+            
+            #line default
+            #line hidden
+            this.Write("            return new ");
+            
+            #line 48 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ResolutionName));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 48 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetInstantiationArgList(Factory.Injection)));
+            
+            #line default
+            #line hidden
+            this.Write(");\r\n");
+            
+            #line 49 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+      } else { 
+            
+            #line default
+            #line hidden
+            this.Write("            return ");
+            
+            #line 50 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.CacheVarName));
             
             #line default
             #line hidden
             this.Write(" ??= new ");
             
-            #line 46 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ServiceType.TypeName));
+            #line 50 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ResolutionName));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 46 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ServiceType.GetConstructorArgList(resolver.Parameters, Factory)));
+            #line 50 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetInstantiationArgList(Factory.Injection)));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 47 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 51 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
       }  
             
             #line default
             #line hidden
             this.Write("        }\r\n");
             
-            #line 49 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 53 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   } 
             
             #line default
             #line hidden
             
-            #line 50 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 54 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   foreach(var resolver in Factory.CollectionResolvers) { 
             
             #line default
             #line hidden
             this.Write("        public IEnumerable<");
             
-            #line 51 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 55 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ElementTypeName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 51 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 55 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.MethodName));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 51 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 55 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetParameterList()));
             
             #line default
             #line hidden
             this.Write(")\r\n        {\r\n            return new ");
             
-            #line 53 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 57 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ElementTypeName));
             
             #line default
             #line hidden
             this.Write("[]\r\n            {\r\n                ");
             
-            #line 55 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetElementList(Factory, resolver.Parameters)));
+            #line 59 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetElementList(Factory.Injection)));
             
             #line default
             #line hidden
             this.Write("\r\n            };\r\n        }\r\n");
             
-            #line 58 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 62 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   }  
             
             #line default
             #line hidden
             
-            #line 59 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 63 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   if(Factory.DoSupportGenericHost) {  
             
             #line default
@@ -391,42 +407,42 @@ namespace Deprovgen.Generator
             this.Write("        public void ConfigureServices(IServiceCollection services)\r\n        {\r\n  " +
                     "          services.AddTransient<");
             
-            #line 62 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 66 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Factory.TypeName));
             
             #line default
             #line hidden
             this.Write(">(provider => this);\r\n");
             
-            #line 63 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-      foreach(var resolver in Factory.Resolvers.Where(x => x.Parameters.Length == 0)) {  
+            #line 67 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+      foreach(var item in Factory.GetResolverExpressionsForGenericHost()) {  
             
             #line default
             #line hidden
             this.Write("            services.AddTransient<");
             
-            #line 64 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ReturnType.Name));
+            #line 68 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.typeName));
             
             #line default
             #line hidden
             this.Write(">(provider => ");
             
-            #line 64 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.MethodName));
+            #line 68 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(item.expression));
             
             #line default
             #line hidden
-            this.Write("());\r\n");
+            this.Write(");\r\n");
             
-            #line 65 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 69 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
       }  
             
             #line default
             #line hidden
             this.Write("        }\r\n");
             
-            #line 67 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
+            #line 71 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
   }  
             
             #line default
