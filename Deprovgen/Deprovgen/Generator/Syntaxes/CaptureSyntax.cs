@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Deprovgen.Annotations;
 using Deprovgen.Utilities;
 using Microsoft.CodeAnalysis;

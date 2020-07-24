@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Deprovgen.Generator.Domains;
 using Deprovgen.Utilities;
 using Microsoft.CodeAnalysis;
 
-namespace Deprovgen.Generator.DefinitionV2
+namespace Deprovgen.Generator.Definition
 {
-	public class CollectionResolverDefinitionV2
+	public class CollectionResolverDefinition
 	{
 		public TypeName ReturnType { get; }
 		public TypeName ElementTypeInfo => ReturnType.TypeArguments[0];
@@ -19,7 +16,7 @@ namespace Deprovgen.Generator.DefinitionV2
 		public string ElementTypeName => ElementTypeInfo.Name;
 		public InjectionContext Injection { get; }
 
-		public CollectionResolverDefinitionV2(TypeName returnType,
+		public CollectionResolverDefinition(TypeName returnType,
 			string methodName,
 			TypeName[] serviceTypes,
 			VariableDefinition[] parameters,

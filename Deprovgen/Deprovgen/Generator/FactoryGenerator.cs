@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Deprovgen.Generator.DefinitionV2;
-using Deprovgen.Generator.Domains;
+using Deprovgen.Generator.Analyzer;
+using Deprovgen.Generator.Definition;
 using Deprovgen.Generator.Syntaxes;
+using Deprovgen.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -15,14 +15,14 @@ namespace Deprovgen.Generator
 {
 	class FactoryGenerator
 	{
-		public async Task<FactoryDefinitionV2> GetDefinition(Document document,
+		public async Task<FactoryDefinition> GetDefinition(Document document,
 			InterfaceDeclarationSyntax target,
 			CancellationToken ct)
 		{
 			try
 			{
 				var syntax = await FactorySyntax.FromDeclarationAsync(target, document, ct);
-				var analyzer = new AnalyzerV2.FactoryAnalyzerV2(syntax);
+				var analyzer = new FactoryAnalyzer(syntax);
 				return analyzer.GetDefinition();
 			}
 			catch (Exception e)
@@ -32,9 +32,9 @@ namespace Deprovgen.Generator
 			}
 		}
 
-		public Solution GetFactoryAppliedSolution(Document document, FactoryDefinitionV2 definition)
+		public Solution GetFactoryAppliedSolution(Document document, FactoryDefinition definition)
 		{
-			var template = new FactoryTemplate() { Factory = definition };
+			var template = new FactoryTemplate(definition);
 			var code = template.TransformText();
 
 			Logger.WriteLine(code).Wait();

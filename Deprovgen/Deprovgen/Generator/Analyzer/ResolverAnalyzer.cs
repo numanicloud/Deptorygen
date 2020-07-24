@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Deprovgen.Generator.DefinitionV2;
-using Deprovgen.Generator.Domains;
+using Deprovgen.Generator.Definition;
 using Deprovgen.Generator.Syntaxes;
 
-namespace Deprovgen.Generator.AnalyzerV2
+namespace Deprovgen.Generator.Analyzer
 {
-	class ResolverAnalyzerV2
+	class ResolverAnalyzer
 	{
 		private readonly ResolverSyntax _syntax;
 
-		public ResolverAnalyzerV2(ResolverSyntax syntax)
+		public ResolverAnalyzer(ResolverSyntax syntax)
 		{
 			_syntax = syntax;
 		}
 
-		public ResolverDefinitionV2 GetDefinition()
+		public ResolverDefinition GetDefinition()
 		{
 			var parameters = _syntax.Parameters
 				.Select(x => new VariableDefinition(x.TypeName, x.ParameterName))
@@ -39,7 +36,7 @@ namespace Deprovgen.Generator.AnalyzerV2
 				}
 			}
 
-			return new ResolverDefinitionV2(
+			return new ResolverDefinition(
 				_syntax.MethodName,
 				_syntax.ReturnTypeName,
 				resolutions,

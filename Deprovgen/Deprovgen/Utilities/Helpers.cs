@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 
-namespace Deprovgen
+namespace Deprovgen.Utilities
 {
 	public static class Helpers
 	{

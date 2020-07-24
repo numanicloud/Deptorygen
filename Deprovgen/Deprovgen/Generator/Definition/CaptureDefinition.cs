@@ -1,26 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Deprovgen.Utilities;
-using Microsoft.CodeAnalysis;
+﻿using Deprovgen.Utilities;
 
-namespace Deprovgen.Generator.DefinitionV2
+namespace Deprovgen.Generator.Definition
 {
-	public class CaptureDefinitionV2
+	public class CaptureDefinition
 	{
 		public TypeName InterfaceNameInfo { get; }
-		public ResolverDefinitionV2[] Resolvers { get; }
-		public CollectionResolverDefinitionV2[] CollectionResolvers { get; }
+		public ResolverDefinition[] Resolvers { get; }
+		public CollectionResolverDefinition[] CollectionResolvers { get; }
 		public InjectionContext Injection { get; }
 		public string PropertyName { get; }
 
 		public string InterfaceName => InterfaceNameInfo.Name;
 		public string ParameterName => PropertyName.ToLowerCamelCase();
 
-		public CaptureDefinitionV2(TypeName interfaceNameInfo,
+		public CaptureDefinition(TypeName interfaceNameInfo,
 			string propertyName,
-			ResolverDefinitionV2[] resolvers,
-			CollectionResolverDefinitionV2[] collectionResolvers)
+			ResolverDefinition[] resolvers,
+			CollectionResolverDefinition[] collectionResolvers)
 		{
 			InterfaceNameInfo = interfaceNameInfo;
 			PropertyName = propertyName;

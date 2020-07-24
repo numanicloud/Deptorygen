@@ -3,16 +3,16 @@ using System.Linq;
 using Deprovgen.Utilities;
 using Microsoft.CodeAnalysis;
 
-namespace Deprovgen.Generator.DefinitionV2
+namespace Deprovgen.Generator.Definition
 {
-	public class FactoryDefinitionV2
+	public class FactoryDefinition
 	{
 		public string TypeName { get; }
 		public TypeName InterfaceNameInfo { get; }
 		public TypeName[] Dependencies { get; }
-		public ResolverDefinitionV2[] Resolvers { get; }
-		public CollectionResolverDefinitionV2[] CollectionResolvers { get; }
-		public CaptureDefinitionV2[] Captures { get; }
+		public ResolverDefinition[] Resolvers { get; }
+		public CollectionResolverDefinition[] CollectionResolvers { get; }
+		public CaptureDefinition[] Captures { get; }
 		public bool DoSupportGenericHost { get; }
 		public InjectionContext Injection { get; }
 		public InjectionContext CapturedInjection { get; }
@@ -20,12 +20,12 @@ namespace Deprovgen.Generator.DefinitionV2
 		public string InterfaceName => InterfaceNameInfo.Name;
 		public string NameSpace => InterfaceNameInfo.FullNamespace;
 
-		public FactoryDefinitionV2(string typeName,
+		public FactoryDefinition(string typeName,
 			TypeName interfaceNameInfo,
 			TypeName[] dependencies,
-			ResolverDefinitionV2[] resolvers,
-			CollectionResolverDefinitionV2[] collectionResolvers,
-			CaptureDefinitionV2[] captures,
+			ResolverDefinition[] resolvers,
+			CollectionResolverDefinition[] collectionResolvers,
+			CaptureDefinition[] captures,
 			bool doSupportGenericHost)
 		{
 			TypeName = typeName;

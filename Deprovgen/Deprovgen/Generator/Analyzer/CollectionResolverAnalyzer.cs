@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Deprovgen.Generator.DefinitionV2;
-using Deprovgen.Generator.Domains;
+﻿using System.Linq;
+using Deprovgen.Generator.Definition;
 using Deprovgen.Generator.Syntaxes;
 using Microsoft.CodeAnalysis;
 
-namespace Deprovgen.Generator.AnalyzerV2
+namespace Deprovgen.Generator.Analyzer
 {
-	class CollectionResolverAnalyzerV2
+	class CollectionResolverAnalyzer
 	{
 		private readonly CollectionResolverSyntax _syntax;
 
-		public CollectionResolverAnalyzerV2(CollectionResolverSyntax syntax)
+		public CollectionResolverAnalyzer(CollectionResolverSyntax syntax)
 		{
 			_syntax = syntax;
 		}
 
-		public CollectionResolverDefinitionV2 GetDefinition()
+		public CollectionResolverDefinition GetDefinition()
 		{
 			var accessibility = _syntax.Parameters.Select(x => x.TypeName.Accessibility)
 				.Append(_syntax.ElementType.Accessibility)
@@ -32,7 +28,7 @@ namespace Deprovgen.Generator.AnalyzerV2
 				.Select(x => new VariableDefinition(x.TypeName, x.ParameterName))
 				.ToArray();
 
-			return new CollectionResolverDefinitionV2(
+			return new CollectionResolverDefinition(
 				_syntax.CollectionType,
 				_syntax.MethodName,
 				resolutions,

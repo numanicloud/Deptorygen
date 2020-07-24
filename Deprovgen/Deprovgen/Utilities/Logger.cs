@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Deprovgen
+namespace Deprovgen.Utilities
 {
 	class Logger
 	{

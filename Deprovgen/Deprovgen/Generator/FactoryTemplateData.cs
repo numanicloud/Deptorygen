@@ -1,9 +1,14 @@
-﻿using Deprovgen.Generator.DefinitionV2;
+﻿using Deprovgen.Generator.Definition;
 
 namespace Deprovgen.Generator
 {
-    partial class FactoryTemplate
-    {
-        public FactoryDefinitionV2 Factory { get; set; }
-    }
+	partial class FactoryTemplate
+	{
+		public FactoryTemplate(FactoryDefinition factory)
+		{
+			Factory = factory;
+		}
+
+		public FactoryDefinition Factory { get; }
+	}
 }

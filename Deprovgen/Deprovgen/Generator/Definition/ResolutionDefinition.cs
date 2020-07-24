@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Deprovgen.Utilities;
+﻿using Deprovgen.Utilities;
 
-namespace Deprovgen.Generator.DefinitionV2
+namespace Deprovgen.Generator.Definition
 {
 	public class ResolutionDefinition
 	{

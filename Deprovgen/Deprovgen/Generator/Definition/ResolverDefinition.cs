@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Deprovgen.Generator.Domains;
-using Deprovgen.Generator.Syntaxes;
+﻿using System.Linq;
 using Deprovgen.Utilities;
 using Microsoft.CodeAnalysis;
 
-namespace Deprovgen.Generator.DefinitionV2
+namespace Deprovgen.Generator.Definition
 {
-	public enum ResolverBehavior
-	{
-		Cached, Transient, Delegation
-	}
-
-	public class ResolverDefinitionV2
+	public class ResolverDefinition
 	{
 		public string MethodName { get; }
 		public TypeName ReturnType { get; }
@@ -26,7 +16,7 @@ namespace Deprovgen.Generator.DefinitionV2
 		public InjectionContext Injection { get; }
 		public string ResolutionName => Resolution.TypeName.Name;
 
-		public ResolverDefinitionV2(string methodName,
+		public ResolverDefinition(string methodName,
 			TypeName returnType,
 			ResolutionDefinition resolution,
 			VariableDefinition[] parameters,
@@ -68,7 +58,7 @@ namespace Deprovgen.Generator.DefinitionV2
 				.Join(", ");
 		}
 
-		public bool TryGetDelegation(FactoryDefinitionV2 factory, out string code)
+		public bool TryGetDelegation(FactoryDefinition factory, out string code)
 		{
 			foreach (var capture in factory.Captures)
 			{

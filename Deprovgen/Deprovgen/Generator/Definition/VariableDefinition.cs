@@ -1,6 +1,6 @@
 ﻿using Deprovgen.Utilities;
 
-namespace Deprovgen.Generator.Domains
+namespace Deprovgen.Generator.Definition
 {
 	public class VariableDefinition
 	{

@@ -1,22 +1,22 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Deprovgen.Annotations;
-using Deprovgen.Generator.DefinitionV2;
+using Deprovgen.Generator.Definition;
 using Deprovgen.Generator.Syntaxes;
 using Deprovgen.Utilities;
 
-namespace Deprovgen.Generator.AnalyzerV2
+namespace Deprovgen.Generator.Analyzer
 {
-	class FactoryAnalyzerV2
+	class FactoryAnalyzer
 	{
 		private readonly FactorySyntax _syntax;
 
-		public FactoryAnalyzerV2(FactorySyntax syntax)
+		public FactoryAnalyzer(FactorySyntax syntax)
 		{
 			_syntax = syntax;
 		}
 
-		public FactoryDefinitionV2 GetDefinition()
+		public FactoryDefinition GetDefinition()
 		{
 			var interfaceName = _syntax.InterfaceSymbol.Name;
 			var typeName = interfaceName[0].ToString().Replace("I", "") +
@@ -25,18 +25,18 @@ namespace Deprovgen.Generator.AnalyzerV2
 			var genericHost = _syntax.InterfaceSymbol.HasAttribute(nameof(ConfigureGenericHostAttribute));
 
 			var resolvers = _syntax.Resolvers
-				.Select(x => new ResolverAnalyzerV2(x).GetDefinition())
+				.Select(x => new ResolverAnalyzer(x).GetDefinition())
 				.ToArray();
 
 			var collectionResolvers = _syntax.CollectionResolvers
-				.Select(x => new CollectionResolverAnalyzerV2(x).GetDefinition())
+				.Select(x => new CollectionResolverAnalyzer(x).GetDefinition())
 				.ToArray();
 
 			var captures = _syntax.Captures
-				.Select(x => new CaptureAnalyzerV2(x).GetDefinition())
+				.Select(x => new CaptureAnalyzer(x).GetDefinition())
 				.ToArray();
 
-			return new FactoryDefinitionV2(
+			return new FactoryDefinition(
 				typeName,
 				TypeName.FromSymbol(_syntax.InterfaceSymbol),
 				GetDependencies(),
