@@ -37,6 +37,13 @@ namespace Deprovgen.Generator.Definition
 			}
 		}
 
+		public bool GetRequireDispose(FactoryDefinition factory)
+		{
+			return Resolution.IsDisposable
+			       && !IsTransient
+			       && !TryGetDelegation(factory, out var dummy);
+		}
+
 		public string GetParameterList()
 		{
 			return Parameters.Select(x => x.Code).Join(", ");

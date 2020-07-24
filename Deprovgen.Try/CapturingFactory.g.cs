@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Deprovgen.Try
 {
     internal partial class CapturingFactory : ICapturingFactory
+        , IDisposable
     {
         public IFactory Factory { get; }
 
@@ -22,7 +23,7 @@ namespace Deprovgen.Try
 
         public ServiceA ResolveServiceAAsTransient()
         {
-            return new ServiceA();
+            return Factory.ResolveServiceAAsTransient();
         }
 
         public ServiceB ResolveServiceB()
@@ -39,6 +40,7 @@ namespace Deprovgen.Try
         {
             return Factory.ResolveClient();
         }
+
         public IEnumerable<IService> ResolveServices(ServiceB b)
         {
             return new IService[]
@@ -47,6 +49,11 @@ namespace Deprovgen.Try
 				b,
 				ResolveServiceC()
             };
+        }
+
+        
+        public void Dispose()
+        {
         }
     }
 }

@@ -12,13 +12,14 @@ namespace Deprovgen.Generator.Syntaxes
 		public ResolutionSyntax? ReturnTypeResolution { get; }
 		public ResolutionSyntax[] Resolutions { get; }
 		public ParameterSyntax[] Parameters { get; }
-		public Accessibility Accessibility { get; set; }
+		public Accessibility Accessibility { get; }
 
 		public ResolverSyntax(string methodName,
 			TypeName returnTypeName,
 			ResolutionSyntax? returnTypeResolution,
 			ResolutionSyntax[] resolutions,
-			ParameterSyntax[] parameters, Accessibility accessibility)
+			ParameterSyntax[] parameters,
+			Accessibility accessibility)
 		{
 			MethodName = methodName;
 			ReturnTypeName = returnTypeName;

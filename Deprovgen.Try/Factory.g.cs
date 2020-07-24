@@ -5,6 +5,7 @@ using System.Collections.Generic;
 namespace Deprovgen.Try
 {
     internal partial class Factory : IFactory
+        , IDisposable
     {
 
         private ServiceB? _ResolveServiceBCache;
@@ -34,6 +35,7 @@ namespace Deprovgen.Try
         {
             return _ResolveClientCache ??= new Client(ResolveServices(ResolveServiceB()));
         }
+
         public IEnumerable<IService> ResolveServices(ServiceB b)
         {
             return new IService[]
@@ -42,6 +44,13 @@ namespace Deprovgen.Try
 				b,
 				ResolveServiceC()
             };
+        }
+
+        
+        public void Dispose()
+        {
+            _ResolveServiceBCache.Dispose();
+            _ResolveServiceCCache.Dispose();
         }
     }
 }

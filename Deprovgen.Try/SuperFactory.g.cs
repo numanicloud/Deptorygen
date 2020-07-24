@@ -5,62 +5,69 @@ using Deprovgen.Try.Interface;
 
 namespace Deprovgen.Try
 {
-    internal partial class SuperFactory : ISuperFactory
-    {
-        public ICapturingFactory Capturing { get; }
-        public IFactory Factory { get; }
+	internal partial class SuperFactory : ISuperFactory
+		, IDisposable
+	{
+		public ICapturingFactory Capturing { get; }
+		public IFactory Factory { get; }
 
-        private Client3? _ResolveClient3Cache;
-        private IServiceIron? _ResolveServiceIronCache;
+		private Client3? _ResolveClient3Cache;
+		private IServiceIron? _ResolveServiceIronCache;
 
-        public SuperFactory(ICapturingFactory capturing, IFactory factory)
-        {
-            Capturing = capturing;
-            Factory = factory;
-        }
+		public SuperFactory(ICapturingFactory capturing, IFactory factory)
+		{
+			Capturing = capturing;
+			Factory = factory;
+		}
 
-        public Client3 ResolveClient3()
-        {
-            return _ResolveClient3Cache ??= new Client3(ResolveServiceAAsTransient(), ResolveServiceB());
-        }
+		public Client3 ResolveClient3()
+		{
+			return _ResolveClient3Cache ??= new Client3(ResolveServiceAAsTransient(), ResolveServiceB());
+		}
 
-        public IServiceIron ResolveServiceIron()
-        {
-            return _ResolveServiceIronCache ??= new Iron(ResolveServiceAAsTransient());
-        }
+		public IServiceIron ResolveServiceIron()
+		{
+			return _ResolveServiceIronCache ??= new Iron(ResolveServiceAAsTransient());
+		}
 
-        public Client2 ResolveClient2()
-        {
-            return Capturing.ResolveClient2();
-        }
+		public Client2 ResolveClient2()
+		{
+			return Capturing.ResolveClient2();
+		}
 
-        public ServiceA ResolveServiceAAsTransient()
-        {
-            return Capturing.ResolveServiceAAsTransient();
-        }
+		public ServiceA ResolveServiceAAsTransient()
+		{
+			return Capturing.ResolveServiceAAsTransient();
+		}
 
-        public ServiceB ResolveServiceB()
-        {
-            return Capturing.ResolveServiceB();
-        }
+		public ServiceB ResolveServiceB()
+		{
+			return Capturing.ResolveServiceB();
+		}
 
-        public ServiceC ResolveServiceC()
-        {
-            return Capturing.ResolveServiceC();
-        }
+		public ServiceC ResolveServiceC()
+		{
+			return Capturing.ResolveServiceC();
+		}
 
-        public Client ResolveClient()
-        {
-            return Capturing.ResolveClient();
-        }
-        public IEnumerable<IService> ResolveServices(ServiceB b)
-        {
-            return new IService[]
-            {
-                ResolveServiceAAsTransient(),
+		public Client ResolveClient()
+		{
+			return Capturing.ResolveClient();
+		}
+
+		public IEnumerable<IService> ResolveServices(ServiceB b)
+		{
+			return new IService[]
+			{
+				ResolveServiceAAsTransient(),
 				b,
 				ResolveServiceC()
-            };
-        }
-    }
+			};
+		}
+
+		
+		public void Dispose()
+		{
+		}
+	}
 }

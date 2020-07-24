@@ -12,6 +12,7 @@ using <#= ns #>;
 namespace <#= Factory.NameSpace #>
 {
     <#= Factory.GetAccessibility() #> partial class <#= Factory.TypeName #> : <#= Factory.InterfaceName #>
+        , IDisposable
 <#  if(Factory.DoSupportGenericHost) { #>
         , IDeprovgenFactory
 <# } #>
@@ -51,6 +52,7 @@ namespace <#= Factory.NameSpace #>
 <#      }  #>
         }
 <#  } #>
+
 <#  foreach(var resolver in Factory.CollectionResolvers) { #>
         public IEnumerable<<#= resolver.ElementTypeName #>> <#= resolver.MethodName #>(<#= resolver.GetParameterList() #>)
         {
@@ -60,6 +62,7 @@ namespace <#= Factory.NameSpace #>
             };
         }
 <#  }  #>
+
 <#  if(Factory.DoSupportGenericHost) {  #>
         public void ConfigureServices(IServiceCollection services)
         {
@@ -69,5 +72,14 @@ namespace <#= Factory.NameSpace #>
 <#      }  #>
         }
 <#  }  #>
+        
+        public void Dispose()
+        {
+<#  foreach(var resolver in Factory.Resolvers) {
+        if(resolver.GetRequireDispose(Factory)) { #>
+            <#= resolver.CacheVarName #>.Dispose();
+<#      }
+    } #>
+        }
     }
 }

@@ -20,27 +20,42 @@ namespace Deprovgen.Try
 		void Say();
 	}
 
-	public class ServiceA : IService
+	public class ServiceA : IService, IDisposable
 	{
 		public void Say()
 		{
 			Console.WriteLine("I am ServiceA.");
 		}
+
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
 	}
 
-	public class ServiceB : IService
+	public class ServiceB : IService, IDisposable
 	{
 		public void Say()
 		{
 			Console.WriteLine("I am ServiceB.");
 		}
+
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
 	}
 
-	class ServiceC : IService
+	class ServiceC : IService, IDisposable
 	{
 		public void Say()
 		{
 			Console.WriteLine("I am ServiceC.");
+		}
+
+		public void Dispose()
+		{
+			throw new NotImplementedException();
 		}
 	}
 

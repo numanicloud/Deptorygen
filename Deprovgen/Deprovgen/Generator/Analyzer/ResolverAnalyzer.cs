@@ -5,6 +5,14 @@ using Deprovgen.Generator.Syntaxes;
 
 namespace Deprovgen.Generator.Analyzer
 {
+	class Hoge : IDisposable
+	{
+		public void Dispose()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
 	class ResolverAnalyzer
 	{
 		private readonly ResolverSyntax _syntax;
@@ -21,14 +29,14 @@ namespace Deprovgen.Generator.Analyzer
 				.ToArray();
 
 			var resolutions = _syntax.Resolutions
-				.Select(x => new ResolutionDefinition(x.TypeName, x.Dependencies))
+				.Select(x => new ResolutionDefinition(x.TypeName, x.Dependencies, x.IsDisposable))
 				.FirstOrDefault();
 
 			if (resolutions is null)
 			{
 				if (_syntax.ReturnTypeResolution is {} ret)
 				{
-					resolutions = new ResolutionDefinition(ret.TypeName, ret.Dependencies);
+					resolutions = new ResolutionDefinition(ret.TypeName, ret.Dependencies, ret.IsDisposable);
 				}
 				else
 				{
