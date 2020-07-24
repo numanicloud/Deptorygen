@@ -43,6 +43,8 @@ namespace Deprovgen.Generator.Analyzers
 
 		private async Task<FactoryDefinition> AnalyzeInterfaceAsync(INamedTypeSymbol symbol, CancellationToken ct)
 		{
+			var collectionResolvers = ResolverAnalyzer.GetCollectionResolverDefinitions(symbol);
+
 			var methods = ResolverAnalyzer.GetResolverDefinitions(symbol);
 
 			var captures = GetCaptures(symbol).ToArray();
@@ -60,10 +62,11 @@ namespace Deprovgen.Generator.Analyzers
 				methods,
 				symbol.Name,
 				genericHost,
-				captures);
+				captures,
+				collectionResolvers);
 		}
 
-		private static ServiceDefinition[] GetDependencies(INamedTypeSymbol definition, ResolverDefinition[] methods, CaptureDefinition[] captures)
+		private static TypeName[] GetDependencies(INamedTypeSymbol definition, ResolverDefinition[] methods, CaptureDefinition[] captures)
 		{
 			var satisfied = captures.SelectMany(x => x.Resolvers)
 				.Concat(methods)
@@ -74,11 +77,10 @@ namespace Deprovgen.Generator.Analyzers
 			var result = from resolver in methods
 						 from dependency in resolver.ServiceType.Dependencies
 						 let parameters = resolver.Parameters.Select(x => x.TypeNameInfo)
-						 where !parameters.Concat(satisfied).Contains(dependency.TypeNameInfo)
+						 where !parameters.Concat(satisfied).Contains(dependency)
 						 select dependency;
 
-			return result.Distinct(x => x.TypeNameInfo)
-				.ToArray();
+			return result.Distinct().ToArray();
 		}
 
 		private IEnumerable<CaptureDefinition> GetCaptures(INamedTypeSymbol symbol)

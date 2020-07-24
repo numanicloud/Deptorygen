@@ -7,14 +7,16 @@ namespace Deprovgen.Utilities
 {
 	public class TypeName : IEquatable<TypeName>
 	{
-		public TypeName(string fullNamespace, string name)
+		public TypeName(string fullNamespace, string name, Accessibility accessibility)
 		{
 			FullNamespace = fullNamespace;
 			Name = name;
+			Accessibility = accessibility;
 		}
 
 		public string FullNamespace { get; }
 		public string Name { get; }
+		public Accessibility Accessibility { get; }
 		public string FullName => $"{FullNamespace}.{Name}";
 		public string LowerCamelCase => Name.ToLowerCamelCase();
 
@@ -41,6 +43,12 @@ namespace Deprovgen.Utilities
 			}
 		}
 
+		public TypeName ToNonInterfaceName()
+		{
+			var name = Name[0].ToString().Replace("I", "") + Name.Substring(1);
+			return new TypeName(FullNamespace, name, Accessibility);
+		}
+
 		public static TypeName FromSymbol(ITypeSymbol symbol)
 		{
 			return symbol is INamedTypeSymbol nts ? FromSymbol(nts) : throw new ArgumentException();
@@ -48,7 +56,11 @@ namespace Deprovgen.Utilities
 
 		public static TypeName FromSymbol(INamedTypeSymbol symbol)
 		{
-			return new TypeName(symbol.GetFullNameSpace(), symbol.Name);
+			return new TypeName(symbol.GetFullNameSpace(), symbol.Name, symbol.DeclaredAccessibility);
 		}
+
+		public static bool operator ==(TypeName lop, TypeName rop) => lop?.Equals(rop) ?? false;
+
+		public static bool operator !=(TypeName lop, TypeName rop) => !(lop?.Equals(rop) ?? true);
 	}
 }

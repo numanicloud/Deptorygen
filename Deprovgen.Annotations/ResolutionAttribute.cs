@@ -5,11 +5,11 @@ using System.Text;
 namespace Deprovgen.Annotations
 {
 	[AttributeUsage(AttributeTargets.Method)]
-	public class ImplementationAttribute : Attribute
+	public class ResolutionAttribute : Attribute
 	{
 		public Type Type { get; }
 
-		public ImplementationAttribute(Type type)
+		public ResolutionAttribute(Type type)
 		{
 			Type = type;
 		}

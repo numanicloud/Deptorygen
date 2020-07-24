@@ -6,6 +6,7 @@
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<LangVersion>latest</LangVersion>
+		<Nullable>Enable</Nullable>
 	</PropertyGroup>
 
 	<PropertyGroup>

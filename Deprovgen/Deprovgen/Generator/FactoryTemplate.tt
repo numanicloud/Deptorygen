@@ -47,6 +47,15 @@ namespace <#= Factory.NameSpace #>
 <#      }  #>
         }
 <#  } #>
+<#  foreach(var resolver in Factory.CollectionResolvers) { #>
+        public IEnumerable<<#= resolver.ElementTypeName #>> <#= resolver.MethodName #>(<#= resolver.GetParameterList() #>)
+        {
+            return new <#= resolver.ElementTypeName #>[]
+            {
+                <#= resolver.GetElementList(Factory, resolver.Parameters) #>
+            };
+        }
+<#  }  #>
 <#  if(Factory.DoSupportGenericHost) {  #>
         public void ConfigureServices(IServiceCollection services)
         {

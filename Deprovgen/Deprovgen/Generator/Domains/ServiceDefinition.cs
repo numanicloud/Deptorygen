@@ -6,7 +6,7 @@ namespace Deprovgen.Generator.Domains
 {
 	public class ServiceDefinition
 	{
-		public ServiceDefinition(TypeName typeName, ServiceDefinition[] dependencies)
+		public ServiceDefinition(TypeName typeName, TypeName[] dependencies)
 		{
 			TypeNameInfo = typeName;
 			Dependencies = dependencies;
@@ -17,7 +17,7 @@ namespace Deprovgen.Generator.Domains
 		public string TypeName => TypeNameInfo.Name;
 		public string FieldName => "_" + TypeNameInfo.LowerCamelCase;
 		public string ParameterName => TypeNameInfo.LowerCamelCase;
-		public ServiceDefinition[] Dependencies { get; }
+		public TypeName[] Dependencies { get; }
 
 		public override string ToString()
 		{

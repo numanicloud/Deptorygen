@@ -85,9 +85,26 @@ namespace Deprovgen
 				.Any(attr => attr.AttributeClass.Name == attributeName);
 		}
 
+		public static bool HasAttribute(this ITypeSymbol symbol, string attributeName)
+		{
+			return symbol.GetAttributes()
+				.Any(attr => attr.AttributeClass.Name == attributeName);
+		}
+
 		public static string ToLowerCamelCase(this string name)
 		{
 			return name[0].ToString().ToLower() + name.Substring(1);
+		}
+
+		public static IEnumerable<T> FilterNull<T>(this IEnumerable<T?> source) where T : class
+		{
+			foreach (var item in source)
+			{
+				if (item is {})
+				{
+					yield return item;
+				}
+			}
 		}
 	}
 }
