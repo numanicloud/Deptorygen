@@ -3,6 +3,13 @@
 DeptorygenはC#コードに対してアナライザーとCodeFixを提供することで、
 クラス間の依存関係を解決しながらインスタンスを生成するDIコンテナの役割を果たします。
 
+## 入手
+
+Nuget Galleryにて、以下のパッケージをインストールしてください。
+
+* Deptorygen
+* Deptorygen.Annotations
+
 ## 例
 
 ```csharp
