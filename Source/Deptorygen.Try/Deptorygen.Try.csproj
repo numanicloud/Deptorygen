@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<AssemblyName>Deptorygen.Try</AssemblyName>
+		<RootNamespace>Deptorygen.Try</RootNamespace>
+		<Nullable>Enable</Nullable>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.0-preview.6.20305.6" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Deprovgen.Annotations\Deptorygen.Annotations.csproj" />
+		<ProjectReference Include="..\Deprovgen.GenericHost\Deptorygen.GenericHost.csproj" />
+		<ProjectReference Include="..\Deprovgen\Deprovgen\Deptorygen.csproj">
+			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+			<OutputItemType>Analyzer</OutputItemType>
+		</ProjectReference>
+	</ItemGroup>
+
+</Project>

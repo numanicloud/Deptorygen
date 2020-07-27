@@ -1,0 +1,1 @@
+cp -Path nupkgs/*.nupkg -Destination D:\Naohiro\MyFiles\MyNugetFeed\Deprovgen\

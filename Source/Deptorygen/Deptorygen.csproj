@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<LangVersion>latest</LangVersion>
+		<Nullable>Enable</Nullable>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>Deptorygen</PackageId>
+		<Authors>NumAniCloud</Authors>
+		<PackageLicenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</PackageLicenseUrl>
+		<PackageProjectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</PackageProjectUrl>
+		<PackageIconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</PackageIconUrl>
+		<RepositoryUrl>http://REPOSITORY_URL_HERE_OR_DELETE_THIS_LINE</RepositoryUrl>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<Description>Deptorygen</Description>
+		<PackageReleaseNotes>Summary of changes made in this release of the package.</PackageReleaseNotes>
+		<Copyright>Copyright Ⓒ 2020 NumAniCloud</Copyright>
+		<PackageTags>Deptorygen, analyzers</PackageTags>
+		<NoPackageAnalysis>true</NoPackageAnalysis>
+		<Company>NumAniCloud</Company>
+		<AssemblyName>Deptorygen</AssemblyName>
+		<RootNamespace>Deptorygen</RootNamespace>
+		<Product>Deptorygen</Product>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.9.8" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.3.1" />
+		<PackageReference Include="System.CodeDom" Version="4.7.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Generator\FactoryTemplate.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>FactoryTemplate.tt</DependentUpon>
+		</Compile>
+		<Compile Update="Resources.Designer.cs" DesignTime="True" AutoGen="True" DependentUpon="Resources.resx" />
+		<EmbeddedResource Update="Resources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="Resources.Designer.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Update="tools\*.ps1" CopyToOutputDirectory="Always" Pack="true" PackagePath="" />
+		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="..\..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\..\Deprovgen.Annotations\Deptorygen.Annotations.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Generator\FactoryTemplate.tt">
+	    <Generator>TextTemplatingFilePreprocessor</Generator>
+	    <LastGenOutput>FactoryTemplate.cs</LastGenOutput>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+
+</Project>
