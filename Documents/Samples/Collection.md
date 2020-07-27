@@ -6,10 +6,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Collection
+namespace UseDeptorygen.Samples.Collection
 {
 	abstract class Service
 	{
@@ -90,7 +90,7 @@ namespace UseDeprovgen.Samples.Collection
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Collection
+namespace UseDeptorygen.Samples.Collection
 {
     internal partial class Factory : IFactory
         , IDisposable

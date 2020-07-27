@@ -3,16 +3,16 @@
 クライアントクラスに必要な依存先クラスが2つ以上あるとき、ファクトリーがその依存先を全て自分で生成することはできないとしても、
 自分で生成できるものまでコンストラクタを通じて要求してしまうのは望ましくありません。
 
-なので、Deprovgenで生成したファクトリーは全ての依存先ではなく、自分では生成できない依存先のみをコンストラクタを通じて要求します。
+なので、Deptorygenで生成したファクトリーは全ての依存先ではなく、自分では生成できない依存先のみをコンストラクタを通じて要求します。
 
 以下はユーザーの書くコードです。
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.AutoAndManual
+namespace UseDeptorygen.Samples.AutoAndManual
 {
 	// こちらはファクトリーで生成してもらう予定
 	class ServiceSilver
@@ -77,7 +77,7 @@ namespace UseDeprovgen.Samples.AutoAndManual
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.AutoAndManual
+namespace UseDeptorygen.Samples.AutoAndManual
 {
     internal partial class Factory : IFactory
         , IDisposable

@@ -1,4 +1,4 @@
-# Deprovgen サンプル集
+# Deptorygen サンプル集
 
 ## サンプルの読み方
 
@@ -7,7 +7,7 @@
 これの`Run`メソッドが Main メソッドから呼ばれます。
 
 ```csharp
-namespace UseDeprovgen.Infra
+namespace UseDeptorygen.Infra
 {
 	interface ISample
 	{
@@ -22,18 +22,18 @@ namespace UseDeprovgen.Infra
 
 あるクラスが別のクラスをコンストラクタで要求しているとき、
 そこへオブジェクトを正しく与えるのは骨の折れる作業です。
-Deprovgenでファクトリークラスを生成すると、コンストラクタに何を渡せばよいか判断してくれます。
+Deptorygenでファクトリークラスを生成すると、コンストラクタに何を渡せばよいか判断してくれます。
 
-このサンプルでのシナリオはあまり有用なものではありませんが、Deprovgenの働きの基本を確認することができます。
+このサンプルでのシナリオはあまり有用なものではありませんが、Deptorygenの働きの基本を確認することができます。
 
 以下はユーザーコードです。
 
 ```csharp
 using System;
-using UseDeprovgen.Infra;
-using Deprovgen.Annotations;
+using UseDeptorygen.Infra;
+using Deptorygen.Annotations;
 
-namespace UseDeprovgen.Samples.Basic
+namespace UseDeptorygen.Samples.Basic
 {
     // Clientクラスにこのクラスを注入したい
 	class Service
@@ -61,7 +61,7 @@ namespace UseDeprovgen.Samples.Basic
 		}
 	}
 
-    // ファクトリーの定義。これをタネにDeprovgenの生成を走らせます
+    // ファクトリーの定義。これをタネにDeptorygenの生成を走らせます
 	[Factory]
 	interface IFactory
 	{
@@ -90,7 +90,7 @@ namespace UseDeprovgen.Samples.Basic
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Basic
+namespace UseDeptorygen.Samples.Basic
 {
     internal partial class Factory : IFactory
         , IDisposable
@@ -142,10 +142,10 @@ This is Service!
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.BasicDependency
+namespace UseDeptorygen.Samples.BasicDependency
 {
 	class Service
 	{
@@ -201,7 +201,7 @@ namespace UseDeprovgen.Samples.BasicDependency
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.BasicDependency
+namespace UseDeptorygen.Samples.BasicDependency
 {
     internal partial class Factory : IFactory
         , IDisposable
@@ -242,16 +242,16 @@ This is Service!
 
 ## キャッシュできていることを確認
 
-シングルトンパターンとして利用したいクラスは、ファクトリー内部にキャッシュして使いまわしてもらいたいと考えるでしょう。Deprovgenのファクトリーがオブジェクトを生成する場合、デフォルトでそのオブジェクトをキャッシュします。
+シングルトンパターンとして利用したいクラスは、ファクトリー内部にキャッシュして使いまわしてもらいたいと考えるでしょう。Deptorygenのファクトリーがオブジェクトを生成する場合、デフォルトでそのオブジェクトをキャッシュします。
 
 以下はユーザーの書くコードです。
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.UseCache
+namespace UseDeptorygen.Samples.UseCache
 {
 	// このクラスが依存関係解決時にキャッシュされているか確かめたい
 	class Service
@@ -319,7 +319,7 @@ namespace UseDeprovgen.Samples.UseCache
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.UseCache
+namespace UseDeptorygen.Samples.UseCache
 {
     internal partial class Factory : IFactory
         , IDisposable
@@ -380,10 +380,10 @@ This is Service #0.
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Transient
+namespace UseDeptorygen.Samples.Transient
 {
 	// このクラスが依存関係解決時にキャッシュされないことを確かめたい
 	class Service
@@ -450,7 +450,7 @@ namespace UseDeprovgen.Samples.Transient
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Transient
+namespace UseDeptorygen.Samples.Transient
 {
     internal partial class Factory : IFactory
         , IDisposable
@@ -488,7 +488,7 @@ This is Service #0.
 This is Service #1.
 ```
 
-キャッシュするかどうかを、解決メソッドに対して属性を書くことで指定したい場合もあるかと思いますが、メソッド名はファクトリーを使用するプログラマーにとって重要であり、キャッシュをするのかどうかは常に名前から判別できるようDeprovgenは強制しています。
+キャッシュするかどうかを、解決メソッドに対して属性を書くことで指定したい場合もあるかと思いますが、メソッド名はファクトリーを使用するプログラマーにとって重要であり、キャッシュをするのかどうかは常に名前から判別できるようDeptorygenは強制しています。
 
 この機能が備わっている都合上、名前の末尾が `AsTransient` であるようなクラスの解決メソッドを定義したい場合、 `ResolveXXXAsTransientInstance` などというように `AsTransient` の後に別の文字を足さない限り、クラスはキャッシュしないものとしてコード生成が実行されてしまいますのでご注意ください。
 
@@ -496,16 +496,16 @@ This is Service #1.
 
 クライアントクラスに必要な依存先クラスが2つ以上あるとき、ファクトリーがその依存先を全て自分で生成することはできないとしても、自分で生成できるものまでコンストラクタを通じて要求してしまうのは望ましくありません。
 
-なので、Deprovgenで生成したファクトリーは全ての依存先ではなく、自分では生成できない依存先のみをコンストラクタを通じて要求します。
+なので、Deptorygenで生成したファクトリーは全ての依存先ではなく、自分では生成できない依存先のみをコンストラクタを通じて要求します。
 
 以下はユーザーの書くコードです。
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.AutoAndManual
+namespace UseDeptorygen.Samples.AutoAndManual
 {
 	// こちらはファクトリーで生成してもらう予定
 	class ServiceSilver
@@ -570,7 +570,7 @@ namespace UseDeprovgen.Samples.AutoAndManual
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.AutoAndManual
+namespace UseDeptorygen.Samples.AutoAndManual
 {
     internal partial class Factory : IFactory
         , IDisposable
@@ -624,10 +624,10 @@ I'm Gold.
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Parameterize
+namespace UseDeptorygen.Samples.Parameterize
 {
 	class Service
 	{
@@ -684,7 +684,7 @@ namespace UseDeprovgen.Samples.Parameterize
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Parameterize
+namespace UseDeptorygen.Samples.Parameterize
 {
     internal partial class Factory : IFactory
         , IDisposable
@@ -744,10 +744,10 @@ It's Service!
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.FactoryProvider
+namespace UseDeptorygen.Samples.FactoryProvider
 {
 	class Service
 	{
@@ -843,7 +843,7 @@ namespace UseDeprovgen.Samples.FactoryProvider
 // <autogenerated />
 using System;
 
-namespace UseDeprovgen.Samples.FactoryProvider
+namespace UseDeptorygen.Samples.FactoryProvider
 {
     internal partial class FactoryA : IFactoryA
     {
@@ -884,7 +884,7 @@ namespace UseDeprovgen.Samples.FactoryProvider
 // <autogenerated />
 using System;
 
-namespace UseDeprovgen.Samples.FactoryProvider
+namespace UseDeptorygen.Samples.FactoryProvider
 {
     internal partial class FactoryB : IFactoryB
     {
@@ -933,7 +933,7 @@ This is Service 2
 
 後述の「他のファクトリー定義を取り込む」を利用すると、基となったファクトリーで解決できるようなものを、派生先のファクトリーが自分自身で解決するようになります。
 
-これを利用しなければならないことが許容できるならば、Deprovgen側で追加の機能を用意する必要はありません。
+これを利用しなければならないことが許容できるならば、Deptorygen側で追加の機能を用意する必要はありません。
 
 #### 基底ファクトリーをコンストラクタで注入する
 
@@ -972,16 +972,16 @@ interface IFactoryY : IFactoryX
 }
 ```
 
-Deprovgenではこの書き方をファクトリー定義に利用することができます。要するに、インターフェースを実装するときは通常その基底インターフェースも考慮する必要があるので、Deprovgenの生成するファクトリーもそうするということです。
+Deptorygenではこの書き方をファクトリー定義に利用することができます。要するに、インターフェースを実装するときは通常その基底インターフェースも考慮する必要があるので、Deptorygenの生成するファクトリーもそうするということです。
 
 ### サンプル
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Mixin
+namespace UseDeptorygen.Samples.Mixin
 {
 	class Service
 	{
@@ -1071,7 +1071,7 @@ namespace UseDeprovgen.Samples.Mixin
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Mixin
+namespace UseDeptorygen.Samples.Mixin
 {
     internal partial class BaseFactory : IBaseFactory
         , IDisposable
@@ -1110,7 +1110,7 @@ namespace UseDeprovgen.Samples.Mixin
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Mixin
+namespace UseDeptorygen.Samples.Mixin
 {
     internal partial class MixinFactory : IMixinFactory
         , IDisposable
@@ -1179,10 +1179,10 @@ That's Service2!
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Capture
+namespace UseDeptorygen.Samples.Capture
 {
 	class Service
 	{
@@ -1255,7 +1255,7 @@ namespace UseDeprovgen.Samples.Capture
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Capture
+namespace UseDeptorygen.Samples.Capture
 {
     internal partial class BaseFactory : IBaseFactory
         , IDisposable
@@ -1296,7 +1296,7 @@ namespace UseDeprovgen.Samples.Capture
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Capture
+namespace UseDeptorygen.Samples.Capture
 {
     internal partial class CaptureFactory : ICaptureFactory
         , IDisposable
@@ -1349,11 +1349,11 @@ Its Service2!
 以下はユーザーの書くコードです。
 
 ```csharp
-using Deprovgen.Annotations;
+using Deptorygen.Annotations;
 using System;
-using UseDeprovgen.Infra;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.CaptureMixin
+namespace UseDeptorygen.Samples.CaptureMixin
 {
 	class Service
 	{
@@ -1414,7 +1414,7 @@ namespace UseDeprovgen.Samples.CaptureMixin
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.CaptureMixin
+namespace UseDeptorygen.Samples.CaptureMixin
 {
     internal partial class BaseFactory : IBaseFactory
         , IDisposable
@@ -1454,7 +1454,7 @@ namespace UseDeprovgen.Samples.CaptureMixin
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.CaptureMixin
+namespace UseDeptorygen.Samples.CaptureMixin
 {
     internal partial class CaptureFactory : ICaptureFactory
         , IDisposable
@@ -1512,9 +1512,9 @@ GenericHostはMicrosoftが提供している汎用的なフレームワークで
 
 汎用的な機能の中にはDIコンテナが含まれていますが、このDIコンテナはどんな依存関係も動的に解決しようとします。この方法は強力で、アセンブリから読み込まれている型であればどんな型の依存関係も解決することができます。
 
-Deprovgenでは、どんな依存関係も静的に解決しようとします。しかし型どうしの依存関係は静的に解決できるものばかりではないため、動的なDIコンテナと併せて利用することをお勧めします。
+Deptorygenでは、どんな依存関係も静的に解決しようとします。しかし型どうしの依存関係は静的に解決できるものばかりではないため、動的なDIコンテナと併せて利用することをお勧めします。
 
-Deprovgenでは、GenericHostによって依存関係の解決するときに、一部だけ静的に解決できるよう機能を拡張できます。
+Deptorygenでは、GenericHostによって依存関係の解決するときに、一部だけ静的に解決できるよう機能を拡張できます。
 
 ### サンプル
 
@@ -1522,12 +1522,12 @@ Deprovgenでは、GenericHostによって依存関係の解決するときに、
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using Deprovgen.GenericHost;
+using Deptorygen.Annotations;
+using Deptorygen.GenericHost;
 using Microsoft.Extensions.DependencyInjection;
-using UseDeprovgen.Infra;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.GenericHost
+namespace UseDeptorygen.Samples.GenericHost
 {
 	class Service
 	{
@@ -1581,7 +1581,7 @@ namespace UseDeprovgen.Samples.GenericHost
 			var services = new ServiceCollection();
 
 			// GenericHost の ServiceCollection インスタンスに、ファクトリーのインスタンスを登録する
-			services.UseDeprovgenFactory(new Factory());
+			services.UseDeptorygenFactory(new Factory());
 
 			var serviceProvider = services.BuildServiceProvider();
 
@@ -1598,14 +1598,14 @@ namespace UseDeprovgen.Samples.GenericHost
 // <autogenerated />
 using System;
 using System.Collections.Generic;
-using Deprovgen.GenericHost;
+using Deptorygen.GenericHost;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace UseDeprovgen.Samples.GenericHost
+namespace UseDeptorygen.Samples.GenericHost
 {
     internal partial class Factory : IFactory
         , IDisposable
-        , IDeprovgenFactory
+        , IDeptorygenFactory
     {
 
         private Service? _ResolveServiceCache;
@@ -1674,10 +1674,10 @@ It is Service2.
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Collection
+namespace UseDeptorygen.Samples.Collection
 {
 	abstract class Service
 	{
@@ -1758,7 +1758,7 @@ namespace UseDeprovgen.Samples.Collection
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Collection
+namespace UseDeptorygen.Samples.Collection
 {
     internal partial class Factory : IFactory
         , IDisposable
@@ -1845,10 +1845,10 @@ interface IFactory
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Disposable
+namespace UseDeptorygen.Samples.Disposable
 {
 	class Service : IDisposable
 	{
@@ -1893,7 +1893,7 @@ namespace UseDeprovgen.Samples.Disposable
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Disposable
+namespace UseDeptorygen.Samples.Disposable
 {
     internal partial class Factory : IFactory
         , IDisposable
@@ -1934,7 +1934,7 @@ Disposed.
 
 ## インターフェースに対して具象クラスでもって解決する
 
-# Deprovgenに欲しい機能
+# Deptorygenに欲しい機能
 
 ## IEnumerable&lt;T> に対する注入
 
@@ -2002,7 +2002,7 @@ class DerivedFactory
 |解決方法のカスタマイズ|できない|**できる**|
 |生成コードをアノテーションに用いる|用いる|用いる|
 
-この手のカスタマイズは、Deprovgenでやりたいシナリオを「Deprovgenの機能を他者が使う」と「他者の機能をDeprovgenが使う」に分けたうちの後者なのかもしれない。
+この手のカスタマイズは、Deptorygenでやりたいシナリオを「Deptorygenの機能を他者が使う」と「他者の機能をDeptorygenが使う」に分けたうちの後者なのかもしれない。
 すなわち、ファクトリーを注入できるようにすればあらゆるカスタマイズができ、例えばGenericHostに依存関係を部分的に解決してもらうことなどもできる。
 
 ### ファクトリーのキャプチャ再考
@@ -2191,11 +2191,11 @@ FactoryProvider機能は削減してよさそう。
 
 キャッシュに対してDisposeを呼び出したい。
 
-## Deprovgenでは検証しないエラーを明確にする
+## Deptorygenでは検証しないエラーを明確にする
 
-コードが静的に生成されるため、依存解決ができない場合はコンパイルエラーとなる。これがDeprovgenの主な利点である。
+コードが静的に生成されるため、依存解決ができない場合はコンパイルエラーとなる。これがDeptorygenの主な利点である。
 
-コード生成自体ができない場合にのみ、Deprovgenはエラーを起こす。
+コード生成自体ができない場合にのみ、Deptorygenはエラーを起こす。
 その場合、Code Fix自体ができないようにするのが良いだろう。
 それから、エラーが出る状況に関するドキュメントも欲しい。
 

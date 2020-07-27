@@ -6,7 +6,7 @@ namespace Deptorygen.Utilities
 {
 	class Logger
 	{
-		private const string LogFilePath = "D:\\Naohiro\\Documents\\#Documents\\開発\\deprovgen.txt";
+		private const string LogFilePath = "D:\\Naohiro\\Documents\\#Documents\\開発\\deptorygen.txt";
 
 		public static async Task WriteLine(string message)
 		{

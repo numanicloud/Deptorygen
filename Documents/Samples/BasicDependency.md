@@ -6,10 +6,10 @@
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.BasicDependency
+namespace UseDeptorygen.Samples.BasicDependency
 {
 	class Service
 	{
@@ -65,7 +65,7 @@ namespace UseDeprovgen.Samples.BasicDependency
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.BasicDependency
+namespace UseDeptorygen.Samples.BasicDependency
 {
     internal partial class Factory : IFactory
         , IDisposable

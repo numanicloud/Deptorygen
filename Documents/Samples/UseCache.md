@@ -1,15 +1,15 @@
 # キャッシュできていることを確認
 
-シングルトンパターンとして利用したいクラスは、ファクトリー内部にキャッシュして使いまわしてもらいたいと考えるでしょう。Deprovgenのファクトリーがオブジェクトを生成する場合、デフォルトでそのオブジェクトをキャッシュします。
+シングルトンパターンとして利用したいクラスは、ファクトリー内部にキャッシュして使いまわしてもらいたいと考えるでしょう。Deptorygenのファクトリーがオブジェクトを生成する場合、デフォルトでそのオブジェクトをキャッシュします。
 
 以下はユーザーの書くコードです。
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.UseCache
+namespace UseDeptorygen.Samples.UseCache
 {
 	// このクラスが依存関係解決時にキャッシュされているか確かめたい
 	class Service
@@ -77,7 +77,7 @@ namespace UseDeprovgen.Samples.UseCache
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.UseCache
+namespace UseDeptorygen.Samples.UseCache
 {
     internal partial class Factory : IFactory
         , IDisposable

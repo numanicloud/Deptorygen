@@ -4,10 +4,10 @@
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Disposable
+namespace UseDeptorygen.Samples.Disposable
 {
 	class Service : IDisposable
 	{
@@ -52,7 +52,7 @@ namespace UseDeprovgen.Samples.Disposable
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Disposable
+namespace UseDeptorygen.Samples.Disposable
 {
     internal partial class Factory : IFactory
         , IDisposable

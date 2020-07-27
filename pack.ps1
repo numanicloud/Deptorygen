@@ -4,9 +4,9 @@
     sleep 2
 }
 
-$paths = "Deprovgen/Deprovgen/Deprovgen.csproj",`
-    "Deprovgen.Annotations/Deprovgen.Annotations.csproj",`
-    "Deprovgen.GenericHost/Deprovgen.GenericHost.csproj"
+$paths = "Source/Deptorygen/Deptorygen.csproj",`
+    "Source/Deptorygen.Annotations/Deptorygen.Annotations.csproj",`
+    "Source/Deptorygen.GenericHost/Deptorygen.GenericHost.csproj"
 
 $ver = cat nupkgs/version
 $ver = [System.Int32]::Parse($ver) + 1

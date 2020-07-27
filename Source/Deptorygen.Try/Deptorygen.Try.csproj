@@ -13,12 +13,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Deprovgen.Annotations\Deptorygen.Annotations.csproj" />
-		<ProjectReference Include="..\Deprovgen.GenericHost\Deptorygen.GenericHost.csproj" />
-		<ProjectReference Include="..\Deprovgen\Deprovgen\Deptorygen.csproj">
-			<ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-			<OutputItemType>Analyzer</OutputItemType>
-		</ProjectReference>
+	  <ProjectReference Include="..\Deptorygen.Annotations\Deptorygen.Annotations.csproj" />
+	  <ProjectReference Include="..\Deptorygen\Deptorygen.csproj">
+		  <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+		  <OutputItemType>Analyzer</OutputItemType>
+	  </ProjectReference>
 	</ItemGroup>
 
 </Project>

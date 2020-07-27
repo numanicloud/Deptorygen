@@ -101,7 +101,6 @@ namespace Deptorygen.Generator.Definition
 				{
 					yield return new[]
 					{
-						"Deprovgen.GenericHost",
 						"Microsoft.Extensions.DependencyInjection"
 					};
 				}

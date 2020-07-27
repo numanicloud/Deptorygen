@@ -7,10 +7,10 @@
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Parameterize
+namespace UseDeptorygen.Samples.Parameterize
 {
 	class Service
 	{
@@ -67,7 +67,7 @@ namespace UseDeprovgen.Samples.Parameterize
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Parameterize
+namespace UseDeptorygen.Samples.Parameterize
 {
     internal partial class Factory : IFactory
         , IDisposable

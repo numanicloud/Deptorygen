@@ -2,18 +2,18 @@
 
 あるクラスが別のクラスをコンストラクタで要求しているとき、
 そこへオブジェクトを正しく与えるのは骨の折れる作業です。
-Deprovgenでファクトリークラスを生成すると、コンストラクタに何を渡せばよいか判断してくれます。
+Deptorygenでファクトリークラスを生成すると、コンストラクタに何を渡せばよいか判断してくれます。
 
-このサンプルでのシナリオはあまり有用なものではありませんが、Deprovgenの働きの基本を確認することができます。
+このサンプルでのシナリオはあまり有用なものではありませんが、Deptorygenの働きの基本を確認することができます。
 
 以下はユーザーコードです。
 
 ```csharp
 using System;
-using UseDeprovgen.Infra;
-using Deprovgen.Annotations;
+using UseDeptorygen.Infra;
+using Deptorygen.Annotations;
 
-namespace UseDeprovgen.Samples.Basic
+namespace UseDeptorygen.Samples.Basic
 {
     // Clientクラスにこのクラスを注入したい
 	class Service
@@ -41,7 +41,7 @@ namespace UseDeprovgen.Samples.Basic
 		}
 	}
 
-    // ファクトリーの定義。これをタネにDeprovgenの生成を走らせます
+    // ファクトリーの定義。これをタネにDeptorygenの生成を走らせます
 	[Factory]
 	interface IFactory
 	{
@@ -70,7 +70,7 @@ namespace UseDeprovgen.Samples.Basic
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Basic
+namespace UseDeptorygen.Samples.Basic
 {
     internal partial class Factory : IFactory
         , IDisposable

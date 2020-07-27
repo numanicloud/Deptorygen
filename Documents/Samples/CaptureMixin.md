@@ -5,11 +5,11 @@
 以下はユーザーの書くコードです。
 
 ```csharp
-using Deprovgen.Annotations;
+using Deptorygen.Annotations;
 using System;
-using UseDeprovgen.Infra;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.CaptureMixin
+namespace UseDeptorygen.Samples.CaptureMixin
 {
 	class Service
 	{
@@ -70,7 +70,7 @@ namespace UseDeprovgen.Samples.CaptureMixin
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.CaptureMixin
+namespace UseDeptorygen.Samples.CaptureMixin
 {
     internal partial class BaseFactory : IBaseFactory
         , IDisposable
@@ -110,7 +110,7 @@ namespace UseDeprovgen.Samples.CaptureMixin
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.CaptureMixin
+namespace UseDeptorygen.Samples.CaptureMixin
 {
     internal partial class CaptureFactory : ICaptureFactory
         , IDisposable

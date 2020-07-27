@@ -32,17 +32,17 @@ interface IFactoryY : IFactoryX
 }
 ```
 
-Deprovgenではこの書き方をファクトリー定義に利用することができます。
-要するに、インターフェースを実装するときは通常その基底インターフェースも考慮する必要があるので、Deprovgenの生成するファクトリーもそうするということです。
+Deptorygenではこの書き方をファクトリー定義に利用することができます。
+要するに、インターフェースを実装するときは通常その基底インターフェースも考慮する必要があるので、Deptorygenの生成するファクトリーもそうするということです。
 
 ## サンプル
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Mixin
+namespace UseDeptorygen.Samples.Mixin
 {
 	class Service
 	{
@@ -132,7 +132,7 @@ namespace UseDeprovgen.Samples.Mixin
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Mixin
+namespace UseDeptorygen.Samples.Mixin
 {
     internal partial class BaseFactory : IBaseFactory
         , IDisposable
@@ -171,7 +171,7 @@ namespace UseDeprovgen.Samples.Mixin
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Mixin
+namespace UseDeptorygen.Samples.Mixin
 {
     internal partial class MixinFactory : IMixinFactory
         , IDisposable

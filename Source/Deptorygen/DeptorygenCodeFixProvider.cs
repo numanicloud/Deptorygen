@@ -12,12 +12,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Deptorygen
 {
-	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DeprovgenCodeFixProvider)), Shared]
-	public class DeprovgenCodeFixProvider : CodeFixProvider
+	[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(DeptorygenCodeFixProvider)), Shared]
+	public class DeptorygenCodeFixProvider : CodeFixProvider
 	{
 		private const string Title = "Create Factory";
 
-		public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DeprovgenAnalyzer.DiagnosticId);
+		public sealed override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(DeptorygenAnalyzer.DiagnosticId);
 
 		public sealed override FixAllProvider GetFixAllProvider()
 		{

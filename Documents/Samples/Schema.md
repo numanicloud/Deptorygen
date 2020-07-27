@@ -5,7 +5,7 @@
 これの`Run`メソッドが Main メソッドから呼ばれます。
 
 ```csharp
-namespace UseDeprovgen.Infra
+namespace UseDeptorygen.Infra
 {
 	interface ISample
 	{

@@ -52,7 +52,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Deprovgen.Annotations\Deptorygen.Annotations.csproj" />
+	  <ProjectReference Include="..\Deptorygen.Annotations\Deptorygen.Annotations.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

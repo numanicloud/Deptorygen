@@ -18,10 +18,10 @@
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Capture
+namespace UseDeptorygen.Samples.Capture
 {
 	class Service
 	{
@@ -94,7 +94,7 @@ namespace UseDeprovgen.Samples.Capture
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Capture
+namespace UseDeptorygen.Samples.Capture
 {
     internal partial class BaseFactory : IBaseFactory
         , IDisposable
@@ -135,7 +135,7 @@ namespace UseDeprovgen.Samples.Capture
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Capture
+namespace UseDeptorygen.Samples.Capture
 {
     internal partial class CaptureFactory : ICaptureFactory
         , IDisposable

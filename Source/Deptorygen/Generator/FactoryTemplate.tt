@@ -13,9 +13,6 @@ namespace <#= Factory.NameSpace #>
 {
     <#= Factory.GetAccessibility() #> partial class <#= Factory.TypeName #> : <#= Factory.InterfaceName #>
         , IDisposable
-<#  if(Factory.DoSupportGenericHost) { #>
-        , IDeprovgenFactory
-<# } #>
     {
 <#  foreach(var dependency in Factory.Dependencies) { #>
         private readonly <#= dependency.Name #> _<#= dependency.LowerCamelCase #>;

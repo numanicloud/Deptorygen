@@ -6,10 +6,10 @@
 
 ```csharp
 using System;
-using Deprovgen.Annotations;
-using UseDeprovgen.Infra;
+using Deptorygen.Annotations;
+using UseDeptorygen.Infra;
 
-namespace UseDeprovgen.Samples.Transient
+namespace UseDeptorygen.Samples.Transient
 {
 	// このクラスが依存関係解決時にキャッシュされないことを確かめたい
 	class Service
@@ -76,7 +76,7 @@ namespace UseDeprovgen.Samples.Transient
 using System;
 using System.Collections.Generic;
 
-namespace UseDeprovgen.Samples.Transient
+namespace UseDeptorygen.Samples.Transient
 {
     internal partial class Factory : IFactory
         , IDisposable
@@ -116,7 +116,7 @@ This is Service #1.
 
 キャッシュするかどうかを、解決メソッドに対して属性を書くことで指定したい場合もあるかと思いますが、
 メソッド名はファクトリーを使用するプログラマーにとって重要であり、
-キャッシュをするのかどうかは常に名前から判別できるようDeprovgenは強制しています。
+キャッシュをするのかどうかは常に名前から判別できるようDeptorygenは強制しています。
 
 この機能が備わっている都合上、名前の末尾が `AsTransient` であるようなクラスの解決メソッドを定義したい場合、
  `ResolveXXXAsTransientInstance` などというように `AsTransient` の後に別の文字を足さない限り、

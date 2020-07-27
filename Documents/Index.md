@@ -1,4 +1,4 @@
-# Deprovgen マニュアル
+# Deptorygen マニュアル
 
 ## 詳細解説
 
