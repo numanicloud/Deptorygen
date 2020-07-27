@@ -26,6 +26,7 @@
 		<AssemblyName>Deptorygen</AssemblyName>
 		<RootNamespace>Deptorygen</RootNamespace>
 		<Product>Deptorygen</Product>
+		<Version>0.0.0</Version>
 	</PropertyGroup>
 
 	<ItemGroup>
