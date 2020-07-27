@@ -157,7 +157,7 @@ namespace Deprovgen.Generator
             this.Write("        private ");
             
             #line 29 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ReturnType.Name));
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ResolutionName));
             
             #line default
             #line hidden
@@ -464,7 +464,7 @@ namespace Deprovgen.Generator
             
             #line default
             #line hidden
-            this.Write(".Dispose();\r\n");
+            this.Write("?.Dispose();\r\n");
             
             #line 81 "D:\Naohiro\Documents\Repos2\Tools\Deprovgen\Deprovgen\Deprovgen\Generator\FactoryTemplate.tt"
       }

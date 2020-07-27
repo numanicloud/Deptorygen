@@ -12,7 +12,7 @@ namespace Deprovgen.Try
 		public IFactory Factory { get; }
 
 		private Client3? _ResolveClient3Cache;
-		private IServiceIron? _ResolveServiceIronCache;
+		private Iron? _ResolveServiceIronCache;
 
 		public SuperFactory(ICapturingFactory capturing, IFactory factory)
 		{

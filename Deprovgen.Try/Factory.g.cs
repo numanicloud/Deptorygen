@@ -49,8 +49,8 @@ namespace Deprovgen.Try
         
         public void Dispose()
         {
-            _ResolveServiceBCache.Dispose();
-            _ResolveServiceCCache.Dispose();
+            _ResolveServiceBCache?.Dispose();
+            _ResolveServiceCCache?.Dispose();
         }
     }
 }

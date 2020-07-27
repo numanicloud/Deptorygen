@@ -144,6 +144,20 @@ namespace Deprovgen.Try
 		IServiceIron ResolveServiceIron();
 	}
 
+	[Factory]
+	interface IRedFactory
+	{
+		[Resolution(typeof(PinkFactory))]
+		IPinkFactory ResolvePinkFactory();
+	}
+
+	[Factory]
+	interface IPinkFactory
+	{
+		IRedFactory RedFactory { get; }
+		ServiceA ResolveServiceA();
+	}
+
 	class Program
 	{
 		static void Main(string[] args)

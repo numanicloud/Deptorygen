@@ -26,7 +26,7 @@ namespace <#= Factory.NameSpace #>
 
 <#  foreach(var resolver in Factory.Resolvers) {
         if(!resolver.IsTransient && !resolver.TryGetDelegation(Factory, out var dummy)) { #>
-        private <#= resolver.ReturnType.Name #>? <#= resolver.CacheVarName #>;
+        private <#= resolver.ResolutionName #>? <#= resolver.CacheVarName #>;
 <#      }
     } #>
 
@@ -77,7 +77,7 @@ namespace <#= Factory.NameSpace #>
         {
 <#  foreach(var resolver in Factory.Resolvers) {
         if(resolver.GetRequireDispose(Factory)) { #>
-            <#= resolver.CacheVarName #>.Dispose();
+            <#= resolver.CacheVarName #>?.Dispose();
 <#      }
     } #>
         }

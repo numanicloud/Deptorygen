@@ -77,12 +77,18 @@ namespace Deprovgen.Generator.Analyzer
 			var collectionAbilities = _syntax.CollectionResolvers
 				.Select(x => x.CollectionType);
 
+			var self = new TypeName[]
+			{
+				TypeName.FromSymbol(_syntax.InterfaceSymbol),
+			};
+
 			return returnDeps.Concat(resolutionDeps)
 				.Concat(collectionDeps)
 				.Except(captureAbilities)
 				.Except(captureCollectionAbilities)
 				.Except(resolverAbilities)
 				.Except(collectionAbilities)
+				.Except(self)
 				.ToArray();
 		}
 	}
