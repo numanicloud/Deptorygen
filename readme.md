@@ -3,6 +3,8 @@
 DeptorygenはC#コードに対してアナライザーとCodeFixを提供することで、
 クラス間の依存関係を解決しながらインスタンスを生成するDIコンテナの役割を果たします。
 
+プロジェクト名は「Dependency Factory Generator」の略です。
+
 ## 入手
 
 Nuget Galleryにて、以下のパッケージをインストールしてください。
