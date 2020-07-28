@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Deptorygen.Annotations
+namespace Deptorygen.GenericHost
 {
 	[AttributeUsage(AttributeTargets.Interface)]
 	public class ConfigureGenericHostAttribute : Attribute

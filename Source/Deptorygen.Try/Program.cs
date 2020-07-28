@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Deptorygen.Annotations;
+using Deptorygen.GenericHost;
 
 namespace Deptorygen.Try
 {

@@ -14,6 +14,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Deptorygen.Annotations\Deptorygen.Annotations.csproj" />
+	  <ProjectReference Include="..\Deptorygen.GenericHost\Deptorygen.GenericHost.csproj" />
 	  <ProjectReference Include="..\Deptorygen\Deptorygen.csproj">
 		  <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
 		  <OutputItemType>Analyzer</OutputItemType>

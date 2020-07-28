@@ -3,6 +3,7 @@ using System.Linq;
 using Deptorygen.Annotations;
 using Deptorygen.Generator.Definition;
 using Deptorygen.Generator.Syntaxes;
+using Deptorygen.GenericHost;
 using Deptorygen.Utilities;
 
 namespace Deptorygen.Generator.Analyzer
