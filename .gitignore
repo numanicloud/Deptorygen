@@ -3,3 +3,4 @@ bin
 obj
 *.nupkg
 desktop.ini
+Source/packages

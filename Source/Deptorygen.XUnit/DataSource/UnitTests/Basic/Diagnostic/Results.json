@@ -1,0 +1,10 @@
+[
+  {
+    "id": "Deptorygen",
+    "sevirity": "Info",
+    "line": 34,
+    "column": 12,
+    "path": "Basic.cs",
+    "message-args": ["Factory"]
+  }
+]

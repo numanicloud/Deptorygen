@@ -18,7 +18,7 @@ namespace Deptorygen
 		private static readonly LocalizableString Description = new LocalizableResourceString(nameof(Resources.AnalyzerDescription), Resources.ResourceManager, typeof(Resources));
 		private const string Category = "Naming";
 
-		private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Warning, isEnabledByDefault: true, description: Description);
+		private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(DiagnosticId, Title, MessageFormat, Category, DiagnosticSeverity.Info, isEnabledByDefault: true, description: Description);
 
 		public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
 
@@ -44,7 +44,9 @@ namespace Deptorygen
 			if (namedTypeSymbol.GetAttributes().Any(a => a.AttributeClass.Name == nameof(FactoryAttribute)))
 			{
 				// For all such symbols, produce a diagnostic.
-				var diagnostic = Diagnostic.Create(Rule, namedTypeSymbol.Locations[0], namedTypeSymbol.Name);
+				var arg = namedTypeSymbol.Name[0].ToString().Replace("I", "")
+					+ namedTypeSymbol.Name.Substring(1);
+				var diagnostic = Diagnostic.Create(Rule, namedTypeSymbol.Locations[0], arg);
 				context.ReportDiagnostic(diagnostic);
 			}
 		}
