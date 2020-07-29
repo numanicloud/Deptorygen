@@ -4,25 +4,25 @@ using System.Collections.Generic;
 
 namespace UseDeptorygen.Samples.Basic
 {
-    internal partial class Factory : IFactory
-        , IDisposable
-    {
-        private readonly Service _service;
+	internal partial class Factory : IFactory
+		, IDisposable
+	{
+		private readonly Service _service;
 
-        private Client? _ResolveClientCache;
+		private Client? _ResolveClientCache;
 
-        public Factory(Service service)
-        {
-            _service = service;
-        }
+		public Factory(Service service)
+		{
+			_service = service;
+		}
 
-        public Client ResolveClient()
-        {
-            return _ResolveClientCache ??= new Client(_service);
-        }
+		public Client ResolveClient()
+		{
+			return _ResolveClientCache ??= new Client(_service);
+		}
 
-        public void Dispose()
-        {
-        }
-    }
+		public void Dispose()
+		{
+		}
+	}
 }

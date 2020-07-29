@@ -1,39 +1,74 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="DataSource\UnitTests\Basic\Expected\Basic.cs" />
-    <Compile Remove="DataSource\UnitTests\Basic\Expected\Factory.g.cs" />
-    <Compile Remove="DataSource\UnitTests\Basic\Source\Basic.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="netstandard" />
+		<Compile Remove="DataSource\UnitTests\AutoAndManual\Expected\AutoAndManual.cs" />
+		<Compile Remove="DataSource\UnitTests\AutoAndManual\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\AutoAndManual\Source\AutoAndManual.cs" />
+		<Compile Remove="DataSource\UnitTests\BasicDependency\Expected\BasicDependency.cs" />
+		<Compile Remove="DataSource\UnitTests\BasicDependency\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\BasicDependency\Source\BasicDependency.cs" />
+		<Compile Remove="DataSource\UnitTests\Basic\Expected\Basic.cs" />
+		<Compile Remove="DataSource\UnitTests\Basic\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Basic\Source\Basic.cs" />
+		<Compile Remove="DataSource\UnitTests\Capture2\Expected\BaseFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Capture2\Expected\Capture.cs" />
+		<Compile Remove="DataSource\UnitTests\Capture2\Expected\CaptureFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Capture2\Source\Capture.cs" />
+		<Compile Remove="DataSource\UnitTests\Capture1\Expected\Capture.cs" />
+		<Compile Remove="DataSource\UnitTests\Capture1\Expected\CaptureFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Capture1\Source\Capture.cs" />
+		<Compile Remove="DataSource\UnitTests\Capture2\Source\CaptureFactory.g.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <None Include="DataSource\UnitTests\Basic\Expected\Basic.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSource\UnitTests\Basic\Expected\Factory.g.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-    <None Include="DataSource\UnitTests\Basic\Source\Basic.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Include="DataSource\UnitTests\AutoAndManual\Expected\AutoAndManual.cs" />
+		<None Include="DataSource\UnitTests\AutoAndManual\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\AutoAndManual\Source\AutoAndManual.cs" />
+		<None Include="DataSource\UnitTests\BasicDependency\Expected\BasicDependency.cs" />
+		<None Include="DataSource\UnitTests\BasicDependency\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\BasicDependency\Source\BasicDependency.cs" />
+		<None Include="DataSource\UnitTests\Basic\Expected\Basic.cs">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+		<None Include="DataSource\UnitTests\Basic\Expected\Factory.g.cs">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+		<None Include="DataSource\UnitTests\Basic\Source\Basic.cs">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</None>
+		<None Include="DataSource\UnitTests\Capture2\Expected\BaseFactory.g.cs" />
+		<None Include="DataSource\UnitTests\Capture2\Expected\Capture.cs" />
+		<None Include="DataSource\UnitTests\Capture2\Expected\CaptureFactory.g.cs" />
+		<None Include="DataSource\UnitTests\Capture2\Source\Capture.cs" />
+		<None Include="DataSource\UnitTests\Capture1\Expected\Capture.cs" />
+		<None Include="DataSource\UnitTests\Capture1\Expected\CaptureFactory.g.cs" />
+		<None Include="DataSource\UnitTests\Capture1\Source\Capture.cs" />
+		<None Include="DataSource\UnitTests\Capture2\Source\CaptureFactory.g.cs" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.7.0-4.final" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="xunit" Version="2.3.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.7.0-4.final" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
+		<PackageReference Include="NETStandard.Library" Version="2.0.3" />
+		<PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+		<PackageReference Include="xunit" Version="2.3.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Deptorygen\Deptorygen.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Deptorygen.Annotations\Deptorygen.Annotations.csproj" />
+		<ProjectReference Include="..\Deptorygen\Deptorygen.csproj" />
+	</ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties DataSource_4Deptorygen.XUnitUnitTests_4LowercaseLetters_4Diagnostic_4Results_1json__JSONSchema="result-schama-v2" /></VisualStudio></ProjectExtensions>
+	<ProjectExtensions>
+		<VisualStudio>
+			<UserProperties DataSource_4Deptorygen.XUnitUnitTests_4LowercaseLetters_4Diagnostic_4Results_1json__JSONSchema="result-schama-v2" />
+		</VisualStudio>
+	</ProjectExtensions>
 
 </Project>

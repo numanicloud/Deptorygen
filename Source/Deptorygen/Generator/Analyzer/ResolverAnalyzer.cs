@@ -28,15 +28,15 @@ namespace Deptorygen.Generator.Analyzer
 				.Select(x => new VariableDefinition(x.TypeName, x.ParameterName))
 				.ToArray();
 
-			var resolutions = _syntax.Resolutions
+			var resolution = _syntax.Resolutions
 				.Select(x => new ResolutionDefinition(x.TypeName, x.Dependencies, x.IsDisposable))
 				.FirstOrDefault();
 
-			if (resolutions is null)
+			if (resolution is null)
 			{
 				if (_syntax.ReturnTypeResolution is {} ret)
 				{
-					resolutions = new ResolutionDefinition(ret.TypeName, ret.Dependencies, ret.IsDisposable);
+					resolution = new ResolutionDefinition(ret.TypeName, ret.Dependencies, ret.IsDisposable);
 				}
 				else
 				{
@@ -47,7 +47,7 @@ namespace Deptorygen.Generator.Analyzer
 			return new ResolverDefinition(
 				_syntax.MethodName,
 				_syntax.ReturnTypeName,
-				resolutions,
+				resolution,
 				parameters,
 				_syntax.MethodName.EndsWith("AsTransient"),
 				"_" + _syntax.MethodName + "Cache");

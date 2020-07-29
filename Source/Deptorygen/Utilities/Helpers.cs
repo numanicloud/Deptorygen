@@ -91,5 +91,25 @@ namespace Deptorygen.Utilities
 				? Enumerable.Empty<T>()
 				: new T[] { source };
 		}
+
+		public static IEnumerable<(T item, bool isLast)> WithFooterFlag<T>(this IEnumerable<T> source)
+			where T : class
+		{
+			T? prevItem = null;
+			foreach (var item in source)
+			{
+				if (prevItem is {})
+				{
+					yield return (prevItem, false);
+				}
+
+				prevItem = item;
+			}
+
+			if (prevItem is {})
+			{
+				yield return (prevItem, true);
+			}
+		}
 	}
 }

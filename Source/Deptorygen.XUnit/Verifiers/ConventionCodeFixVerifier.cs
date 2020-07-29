@@ -165,7 +165,8 @@ namespace TestHelper
                     actualSources.Add(doc.Name, code);
                 }
 
-                Assert.True(actualSources.Keys.SequenceEqual(expectedSources.Keys));
+                Assert.True(!actualSources.Keys.Except(expectedSources.Keys).Any());
+                Assert.True(!expectedSources.Keys.Except(actualSources.Keys).Any());
 
                 foreach (var item in actualSources)
                 {
@@ -229,11 +230,13 @@ namespace TestHelper
         {
             get
             {
-                yield return MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
+                //yield return MetadataReference.CreateFromFile(typeof(object).Assembly.Location);
                 yield return MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
                 yield return MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
                 yield return MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
                 yield return MetadataReference.CreateFromFile(typeof(FactoryAttribute).Assembly.Location);
+                yield return MetadataReference.CreateFromFile("C:\\Program Files\\dotnet\\packs\\Microsoft.NETCore.App.Ref\\3.1.0\\ref\\netcoreapp3.1\\netstandard.dll");
+                yield return MetadataReference.CreateFromFile("C:\\Program Files\\dotnet\\packs\\Microsoft.NETCore.App.Ref\\3.1.0\\ref\\netcoreapp3.1\\System.Runtime.dll");
             }
         }
 
@@ -265,7 +268,7 @@ namespace TestHelper
             }
 
             var project = solution.GetProject(projectId)
-                .WithCompilationOptions(CompilationOptions);
+	            .WithCompilationOptions(CompilationOptions);
             return project;
         }
 

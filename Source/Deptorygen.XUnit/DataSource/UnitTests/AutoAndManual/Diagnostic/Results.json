@@ -1,0 +1,10 @@
+[
+  {
+    "id": "Deptorygen",
+    "sevirity": "Info",
+    "line": 44,
+    "column": 12,
+    "path": "AutoAndManual.cs",
+    "message-args": ["Factory"]
+  }
+]
