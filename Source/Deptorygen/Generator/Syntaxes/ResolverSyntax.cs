@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Syntaxes
 {
-	class ResolverSyntax
+	class ResolverSyntax : IServiceConsumer, IServiceProvider
 	{
 		public string MethodName { get; }
 		public TypeName ReturnTypeName { get; }
@@ -64,6 +65,19 @@ namespace Deptorygen.Generator.Syntaxes
 			}
 
 			return (resolverResult.ToArray(), collectionResult.ToArray());
+		}
+
+		public IEnumerable<TypeName> GetRequiredServiceTypes()
+		{
+			return ReturnTypeResolution.AsEnumerable()
+				.Concat(Resolutions)
+				.SelectMany(x => x.Dependencies)
+				.Except(Parameters.Select(x => x.TypeName));
+		}
+
+		public IEnumerable<TypeName> GetCapableServiceTypes()
+		{
+			yield return ReturnTypeName;
 		}
 	}
 }

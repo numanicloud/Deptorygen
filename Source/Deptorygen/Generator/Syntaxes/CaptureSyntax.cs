@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Deptorygen.Annotations;
+using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Syntaxes
 {
-	class CaptureSyntax
+	class CaptureSyntax : IServiceProvider
 	{
 		public string PropertyName { get; }
 		public TypeName TypeName { get; }
@@ -56,6 +57,13 @@ namespace Deptorygen.Generator.Syntaxes
 			}
 
 			return GetCaptures().ToArray();
+		}
+
+		public IEnumerable<TypeName> GetCapableServiceTypes()
+		{
+			return Resolvers.Cast<IServiceProvider>()
+				.Concat(CollectionResolvers)
+				.SelectMany(x => x.GetCapableServiceTypes());
 		}
 	}
 }

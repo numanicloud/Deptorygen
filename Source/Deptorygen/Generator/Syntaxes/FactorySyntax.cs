@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,10 +7,11 @@ using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.FindSymbols;
+using IServiceProvider = Deptorygen.Generator.Interfaces.IServiceProvider;
 
 namespace Deptorygen.Generator.Syntaxes
 {
-	class FactorySyntax
+	class FactorySyntax : IServiceProvider
 	{
 		public INamedTypeSymbol InterfaceSymbol { get; }
 		public ResolverSyntax[] Resolvers { get; }
@@ -51,6 +53,11 @@ namespace Deptorygen.Generator.Syntaxes
 			var captures = CaptureSyntax.FromFactory(symbol);
 
 			return new FactorySyntax(symbol, resolvers.Item1, resolvers.Item2, captures);
+		}
+
+		public IEnumerable<TypeName> GetCapableServiceTypes()
+		{
+			yield return TypeName.FromSymbol(InterfaceSymbol);
 		}
 	}
 }

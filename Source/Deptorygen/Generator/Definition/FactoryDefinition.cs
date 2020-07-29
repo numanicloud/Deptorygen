@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class FactoryDefinition
+	public class FactoryDefinition : IInjectionGenerator
 	{
 		public string TypeName { get; }
 		public TypeName InterfaceNameInfo { get; }
@@ -14,8 +15,7 @@ namespace Deptorygen.Generator.Definition
 		public CollectionResolverDefinition[] CollectionResolvers { get; }
 		public CaptureDefinition[] Captures { get; }
 		public bool DoSupportGenericHost { get; }
-		public InjectionContext Injection { get; }
-		public InjectionContext CapturedInjection { get; }
+		public InjectionContext2 Injection { get; }
 
 		public string InterfaceName => InterfaceNameInfo.Name;
 		public string NameSpace => InterfaceNameInfo.FullNamespace;
@@ -36,39 +36,12 @@ namespace Deptorygen.Generator.Definition
 			Captures = captures;
 			DoSupportGenericHost = doSupportGenericHost;
 
-			Injection = CreateInjectionContext();
-			CapturedInjection = Captures.Aggregate(new InjectionContext(),
-				(accumlate, x) => x.Injection.Merge(accumlate));
-		}
-
-		private InjectionContext CreateInjectionContext()
-		{
-			var injection = new InjectionContext
-			{
-				[InterfaceNameInfo] = "this"
-			};
-
-			foreach (var dependency in Dependencies)
-			{
-				injection[dependency] = $"_{dependency.LowerCamelCase}";
-			}
-
-			foreach (var resolver in Resolvers)
-			{
-				injection[resolver.ReturnType] = $"{resolver.MethodName}({resolver.GetArgsListForSelf(injection)})";
-			}
-
-			foreach (var resolver in CollectionResolvers)
-			{
-				injection[resolver.ReturnType] = $"{resolver.MethodName}({resolver.GetArgListForSelf(injection)})";
-			}
-
-			foreach (var capture in Captures)
-			{
-				injection = injection.Merge(capture.Injection);
-			}
-
-			return injection;
+			var generators = Resolvers.Cast<IInjectionGenerator>()
+				.Concat(CollectionResolvers)
+				.Concat(Captures)
+				.Append(this)
+				.ToArray();
+			Injection = new InjectionContext2(generators);
 		}
 
 		public string GetConstructorParameterList()
@@ -80,6 +53,14 @@ namespace Deptorygen.Generator.Definition
 
 		public string[] GetRequiredNamespaces()
 		{
+			IEnumerable<IDefinitionRequiringNamespace> GetRequesters()
+			{
+				return Resolvers.Cast<IDefinitionRequiringNamespace>()
+					.Concat(CollectionResolvers)
+					.Concat(Dependencies)
+					.Concat(Captures);
+			}
+
 			IEnumerable<IEnumerable<string>> GetNamespaces()
 			{
 				yield return new[]
@@ -88,14 +69,7 @@ namespace Deptorygen.Generator.Definition
 					"System.Collections.Generic"
 				};
 
-				yield return Resolvers.Select(x => x.ReturnType.FullNamespace);
-				yield return Resolvers.SelectMany(x => x.Parameters)
-					.Select(x => x.TypeNamespace);
-				yield return CollectionResolvers.Select(x => x.ElementTypeInfo.FullNamespace);
-				yield return CollectionResolvers.SelectMany(x => x.Parameters)
-					.Select(x => x.TypeNamespace);
-				yield return Dependencies.Select(x => x.FullNamespace);
-				yield return Captures.Select(x => x.InterfaceNameInfo.FullNamespace);
+				yield return GetRequesters().SelectMany(x => x.GetRequiredNamespaces());
 
 				if (DoSupportGenericHost)
 				{
@@ -129,6 +103,24 @@ namespace Deptorygen.Generator.Definition
 			return Resolvers.Where(x => x.Parameters.Length == 0)
 				.Select(x => (x.ReturnType.Name, $"{x.MethodName}()"))
 				.ToArray();
+		}
+
+		public string? GetInjectionExpression(TypeName typeName, InjectionContext2 context)
+		{
+			if (typeName == InterfaceNameInfo)
+			{
+				return "this";
+			}
+
+			foreach (var dependency in Dependencies)
+			{
+				if (typeName == dependency)
+				{
+					return $"_{dependency.LowerCamelCase}";
+				}
+			}
+
+			return null;
 		}
 	}
 }

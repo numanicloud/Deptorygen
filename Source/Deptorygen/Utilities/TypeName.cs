@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Deptorygen.Generator.Interfaces;
 using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Utilities
 {
-	public class TypeName : IEquatable<TypeName>
+	public class TypeName : IEquatable<TypeName>, IDefinitionRequiringNamespace
 	{
 		public TypeName(string fullNamespace, string name, Accessibility accessibility, TypeName[]? typeArguments = null)
 		{
@@ -45,6 +47,11 @@ namespace Deptorygen.Utilities
 			{
 				return ((FullNamespace != null ? FullNamespace.GetHashCode() : 0) * 397) ^ (Name != null ? Name.GetHashCode() : 0);
 			}
+		}
+
+		public IEnumerable<string> GetRequiredNamespaces()
+		{
+			yield return FullNamespace;
 		}
 
 		public static TypeName FromSymbol(ITypeSymbol symbol)

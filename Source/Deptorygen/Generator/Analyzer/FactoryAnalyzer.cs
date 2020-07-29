@@ -2,6 +2,7 @@
 using System.Linq;
 using Deptorygen.Annotations;
 using Deptorygen.Generator.Definition;
+using Deptorygen.Generator.Interfaces;
 using Deptorygen.Generator.Syntaxes;
 using Deptorygen.GenericHost;
 using Deptorygen.Utilities;
@@ -49,48 +50,19 @@ namespace Deptorygen.Generator.Analyzer
 
 		private TypeName[] GetDependencies()
 		{
-			static IEnumerable<TypeName> ExceptParameters(IEnumerable<ResolutionSyntax> source, ParameterSyntax[] parameters)
-			{
-				return source.SelectMany(x => x.Dependencies)
-					.Except(parameters.Select(x => x.TypeName));
-			}
+			var consumed = _syntax.Resolvers
+				.Cast<IServiceConsumer>()
+				.Concat(_syntax.CollectionResolvers)
+				.SelectMany(x => x.GetRequiredServiceTypes());
 
-			var returnDeps = _syntax.Resolvers
-				.SelectMany(x => ExceptParameters(x.ReturnTypeResolution.AsEnumerable(), x.Parameters));
+			var provided = _syntax.Resolvers
+				.Cast<IServiceProvider>()
+				.Concat(_syntax.CollectionResolvers)
+				.Concat(_syntax.Captures)
+				.Append(_syntax)
+				.SelectMany(x => x.GetCapableServiceTypes());
 
-			var resolutionDeps = _syntax.Resolvers
-				.SelectMany(x => ExceptParameters(x.Resolutions, x.Parameters));
-
-			var collectionDeps = _syntax.CollectionResolvers
-				.SelectMany(x => ExceptParameters(x.Resolutions, x.Parameters));
-
-			var captureAbilities = _syntax.Captures
-				.SelectMany(x => x.Resolvers)
-				.Select(x => x.ReturnTypeName);
-
-			var captureCollectionAbilities = _syntax.Captures
-				.SelectMany(x => x.CollectionResolvers)
-				.Select(x => x.CollectionType);
-
-			var resolverAbilities = _syntax.Resolvers
-				.Select(x => x.ReturnTypeName);
-
-			var collectionAbilities = _syntax.CollectionResolvers
-				.Select(x => x.CollectionType);
-
-			var self = new TypeName[]
-			{
-				TypeName.FromSymbol(_syntax.InterfaceSymbol),
-			};
-
-			return returnDeps.Concat(resolutionDeps)
-				.Concat(collectionDeps)
-				.Except(captureAbilities)
-				.Except(captureCollectionAbilities)
-				.Except(resolverAbilities)
-				.Except(collectionAbilities)
-				.Except(self)
-				.ToArray();
+			return consumed.Except(provided).ToArray();
 		}
 	}
 }

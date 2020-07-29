@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class InjectionContext
+	public class InjectionStore : IInjectionGenerator
 	{
 		private Dictionary<TypeName, string> InjectionCodes { get; }
 
@@ -19,7 +20,7 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
-		public InjectionContext()
+		public InjectionStore()
 		{
 			InjectionCodes = new Dictionary<TypeName, string>();
 		}
@@ -30,9 +31,9 @@ namespace Deptorygen.Generator.Definition
 		/// </summary>
 		/// <param name="other"></param>
 		/// <returns></returns>
-		public InjectionContext Merge(InjectionContext other)
+		public InjectionStore Merge(InjectionStore other)
 		{
-			var result = new InjectionContext();
+			var result = new InjectionStore();
 
 			foreach (var injection in other.InjectionCodes)
 			{
@@ -45,6 +46,11 @@ namespace Deptorygen.Generator.Definition
 			}
 
 			return result;
+		}
+
+		public string? GetInjectionExpression(TypeName typeName, InjectionContext2 context)
+		{
+			return this[typeName];
 		}
 	}
 }

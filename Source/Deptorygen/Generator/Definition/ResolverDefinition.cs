@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class ResolverDefinition
+	public class ResolverDefinition : IDefinitionRequiringNamespace, IInjectionGenerator
 	{
 		public string MethodName { get; }
 		public TypeName ReturnType { get; }
@@ -13,7 +15,7 @@ namespace Deptorygen.Generator.Definition
 		public bool IsTransient { get; }
 		public string CacheVarName { get; }
 		public Accessibility Accessibility => ReturnType.Accessibility;
-		public InjectionContext Injection { get; }
+		public InjectionContext2 Injection { get; }
 		public string ResolutionName => Resolution.TypeName.Name;
 
 		public ResolverDefinition(string methodName,
@@ -30,11 +32,12 @@ namespace Deptorygen.Generator.Definition
 			IsTransient = isTransient;
 			CacheVarName = cacheVarName;
 
-			Injection = new InjectionContext();
+			var store = new InjectionStore();
 			foreach (var parameter in Parameters)
 			{
-				Injection[parameter.TypeNameInfo] = $"{parameter.VarName}";
+				store[parameter.TypeNameInfo] = $"{parameter.VarName}";
 			}
+			Injection = new InjectionContext2(new []{store});
 		}
 
 		public bool GetRequireDispose(FactoryDefinition factory)
@@ -49,19 +52,19 @@ namespace Deptorygen.Generator.Definition
 			return Parameters.Select(x => x.Code).Join(", ");
 		}
 
-		public string GetInstantiationArgList(InjectionContext context)
+		public string GetInstantiationArgList(InjectionContext2 context)
 		{
 			var finalInjection = Injection.Merge(context);
 
 			return Resolution.Dependencies
-				.Select(x => finalInjection[x] ?? x.LowerCamelCase)
+				.Select(x => finalInjection.GetExpression(x) ?? x.LowerCamelCase)
 				.ToList().Join(", ");
 		}
 
-		public string GetArgsListForSelf(InjectionContext context)
+		public string GetArgsListForSelf(InjectionContext2 context)
 		{
 			return Parameters
-				.Select(x => context[x.TypeNameInfo] ?? x.VarName)
+				.Select(x => context.GetExpression(x.TypeNameInfo) ?? x.VarName)
 				.Join(", ");
 		}
 
@@ -69,19 +72,29 @@ namespace Deptorygen.Generator.Definition
 		{
 			foreach (var capture in factory.Captures)
 			{
-				foreach (var resolver in capture.Resolvers)
+				if (capture.GetInjectionExpression(this, factory.Injection) is {} injection)
 				{
-					if (resolver.Resolution.TypeName == Resolution.TypeName
-						&& resolver.IsTransient == IsTransient)
-					{
-						code = $"{capture.PropertyName}.{resolver.MethodName}({resolver.GetArgsListForSelf(factory.Injection)})";
-						return true;
-					}
+					code = injection;
+					return true;
 				}
 			}
 
 			code = "";
 			return false;
+		}
+
+		public IEnumerable<string> GetRequiredNamespaces()
+		{
+			yield return ReturnType.FullNamespace;
+			foreach (var p in Parameters)
+			{
+				yield return p.TypeNamespace;
+			}
+		}
+
+		public string? GetInjectionExpression(TypeName typeName, InjectionContext2 context)
+		{
+			return typeName == ReturnType ? $"{MethodName}({GetArgsListForSelf(context)})" : null;
 		}
 	}
 }

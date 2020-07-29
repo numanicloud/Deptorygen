@@ -1,11 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Deptorygen.Annotations;
+using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Syntaxes
 {
-	class CollectionResolverSyntax
+	class CollectionResolverSyntax : IServiceConsumer, IServiceProvider
 	{
 		public string MethodName { get; }
 		public TypeName CollectionType { get; }
@@ -68,6 +70,17 @@ namespace Deptorygen.Generator.Syntaxes
 			}
 
 			return null;
+		}
+
+		public IEnumerable<TypeName> GetRequiredServiceTypes()
+		{
+			return Resolutions.SelectMany(x => x.Dependencies)
+				.Except(Parameters.Select(x => x.TypeName));
+		}
+
+		public IEnumerable<TypeName> GetCapableServiceTypes()
+		{
+			yield return CollectionType;
 		}
 	}
 }

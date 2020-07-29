@@ -17,19 +17,30 @@ namespace <#= Factory.NameSpace #>
         , IDeptorygenFactory
 <#  }  #>
     {
-<#  foreach(var dependency in Factory.Dependencies) { #>
+<#  // 依存先フィールド #>
+<#  if(Factory.Dependencies.Any()) {  #>
+<#      foreach(var dependency in Factory.Dependencies) { #>
         private readonly <#= dependency.Name #> _<#= dependency.LowerCamelCase #>;
-<#  } #>
-<#  foreach(var capture in Factory.Captures) {  #>
-        public <#= capture.InterfaceName #> <#= capture.PropertyName #> { get; }
+<#      } #>
+
 <#  }  #>
+<#  // キャプチャプロパティ #>
+<#  if(Factory.Captures.Any()) { #>
+<#      foreach(var capture in Factory.Captures) {  #>
+        public <#= capture.InterfaceName #> <#= capture.PropertyName #> { get; }
+<#      }  #>
 
-<#  foreach(var resolver in Factory.Resolvers) {
-        if(!resolver.IsTransient && !resolver.TryGetDelegation(Factory, out var dummy)) { #>
+<#  }  #>
+<#  // キャッシュ #>
+<#  if(Factory.Resolvers.Any()) { #>
+<#      foreach(var resolver in Factory.Resolvers) {
+            if(!resolver.IsTransient && !resolver.TryGetDelegation(Factory, out var dummy)) { #>
         private <#= resolver.ResolutionName #>? <#= resolver.CacheVarName #>;
-<#      }
-    } #>
+<#          } #>
+<#      } #>
 
+<#  }  #>
+<#  // コンストラクタ #>
         public <#= Factory.TypeName #>(<#= Factory.GetConstructorParameterList() #>)
         {
 <#  foreach(var dependency in Factory.Dependencies) { #>
@@ -39,21 +50,26 @@ namespace <#= Factory.NameSpace #>
             <#= capture.PropertyName #> = <#= capture.ParameterName #>;
 <#  }  #>
         }
-<#  foreach(var resolver in Factory.Resolvers){ #>
 
+<#  // リゾルバー #>
+<#  if(Factory.Resolvers.Any()) { #>
+<#      foreach(var resolver in Factory.Resolvers) { #>
         public <#= resolver.ReturnType.Name #> <#= resolver.MethodName #>(<#= resolver.GetParameterList() #>)
         {
-<#      if(resolver.TryGetDelegation(Factory, out var code)) { #>
+<#          if(resolver.TryGetDelegation(Factory, out var code)) { #>
             return <#= code #>;
-<#      } else if(resolver.IsTransient) { #>
+<#          } else if(resolver.IsTransient) { #>
             return new <#= resolver.ResolutionName #>(<#= resolver.GetInstantiationArgList(Factory.Injection) #>);
-<#      } else { #>
+<#          } else { #>
             return <#= resolver.CacheVarName #> ??= new <#= resolver.ResolutionName #>(<#= resolver.GetInstantiationArgList(Factory.Injection) #>);
-<#      }  #>
+<#          }  #>
         }
-<#  } #>
+<#      } #>
 
-<#  foreach(var resolver in Factory.CollectionResolvers) { #>
+<#  }  #>
+<#  // コレクションリゾルバー #>
+<#  if(Factory.CollectionResolvers.Any()) { #>
+<#      foreach(var resolver in Factory.CollectionResolvers) { #>
         public IEnumerable<<#= resolver.ElementTypeName #>> <#= resolver.MethodName #>(<#= resolver.GetParameterList() #>)
         {
             return new <#= resolver.ElementTypeName #>[]
@@ -61,8 +77,10 @@ namespace <#= Factory.NameSpace #>
                 <#= resolver.GetElementList(Factory.Injection) #>
             };
         }
-<#  }  #>
+<#      }  #>
 
+<#  }  #>
+<#  // GenericHostサポート #>
 <#  if(Factory.DoSupportGenericHost) {  #>
         public void ConfigureServices(IServiceCollection services)
         {
@@ -71,8 +89,9 @@ namespace <#= Factory.NameSpace #>
             services.AddTransient<<#= item.typeName #>>(provider => <#= item.expression #>);
 <#      }  #>
         }
+
 <#  }  #>
-        
+<#  // Dispose #>
         public void Dispose()
         {
 <#  foreach(var resolver in Factory.Resolvers) {
