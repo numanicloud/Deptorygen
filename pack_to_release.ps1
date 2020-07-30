@@ -1,6 +1,7 @@
 ﻿function pack([string]$path) {
     Write-Host "==== ${path} をパッケージ化します" -ForegroundColor Cyan;
-    dotnet pack $_ -c Release -o nupkgs/release/ --version-suffix $ver -v minimal;
+    echo $suffix
+    dotnet pack $_ -c Release -o nupkgs/release/ --version-suffix $suffix -v minimal;
     sleep 2
 }
 
@@ -10,6 +11,7 @@ $paths = "Source/Deptorygen/Deptorygen.csproj",`
 
 $ver = cat nupkgs/release/version
 $ver = [System.Int32]::Parse($ver) + 1
+$suffix = "beta" + $ver
 
 rm nupkgs/release/*.nupkg
 $paths | foreach { pack $_ }

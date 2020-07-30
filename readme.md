@@ -12,6 +12,10 @@ Nuget Galleryにて、以下のパッケージをインストールしてくだ�
 * Deptorygen
 * Deptorygen.Annotations
 
+GenericHostとの連携機能が必要であれば、以下のパッケージもインストールしてください。
+
+* Deptorygen.GenericHost
+
 ## 例
 
 ```csharp
@@ -79,7 +83,6 @@ namespace UseDeptorygen.Samples.BasicDependency
     internal partial class Factory : IFactory
         , IDisposable
     {
-
         private Service? _ResolveServiceCache;
         private Client? _ResolveClientCache;
 
@@ -97,8 +100,6 @@ namespace UseDeptorygen.Samples.BasicDependency
             return _ResolveClientCache ??= new Client(ResolveService());
         }
 
-
-        
         public void Dispose()
         {
         }
