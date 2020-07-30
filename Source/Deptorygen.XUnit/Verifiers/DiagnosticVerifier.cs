@@ -1,3 +1,4 @@
+using System;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace TestHelper
     /// </summary>
     public abstract partial class DiagnosticVerifier
     {
-        #region To be implemented by Test classes
+	    #region To be implemented by Test classes
         /// <summary>
         /// Get the CSharp analyzer being tested - to be implemented in non-abstract class
         /// </summary>
@@ -81,7 +82,7 @@ namespace TestHelper
         private void VerifyDiagnostics(string[] sources, string language, DiagnosticAnalyzer analyzer, params DiagnosticResult[] expected)
         {
             var diagnostics = GetSortedDiagnostics(sources, language, analyzer);
-            VerifyDiagnosticResults(diagnostics, analyzer, expected);
+            VerifyDiagnosticResultsV2(diagnostics, analyzer, expected);
         }
 
         #endregion
@@ -161,6 +162,150 @@ namespace TestHelper
                             expected.Message, actual.GetMessage(), FormatDiagnostics(analyzer, actual)));
                 }
             }
+        }
+
+        [Flags]
+        private enum DiagnosticMatch
+        {
+            None = 0,
+            Id = 1 << 0,
+            Severity = 1 << 1,
+            Message = 1 << 2,
+            Line = 1 << 3,
+            Column = 1 << 4,
+            Path = 1 << 5
+        }
+
+        protected static void VerifyDiagnosticResultsV2(IEnumerable<Diagnostic> actualResults,
+	        DiagnosticAnalyzer analyzer, params DiagnosticResult[] expectedResults)
+        {
+	        var actualArray = actualResults.ToArray();
+
+	        int expectedCount = expectedResults.Length;
+	        int actualCount = actualArray.Length;
+
+	        if (expectedCount != actualCount)
+	        {
+		        string diagnosticsOutput = actualArray.Any() ? FormatDiagnostics(analyzer, actualArray) : "    NONE.";
+
+		        Assert.True(false,
+			        string.Format("Mismatch between number of diagnostics returned, expected \"{0}\" actual \"{1}\"\r\n\r\nDiagnostics:\r\n{2}\r\n", expectedCount, actualCount, diagnosticsOutput));
+	        }
+
+	        var fullMatch = DiagnosticMatch.Id
+	                        | DiagnosticMatch.Severity
+	                        | DiagnosticMatch.Message
+	                        | DiagnosticMatch.Line
+	                        | DiagnosticMatch.Column
+	                        | DiagnosticMatch.Path;
+	        foreach (var expected in expectedResults)
+	        {
+                var matches = new List<(Diagnostic, DiagnosticMatch)>();
+                foreach (var actual in actualArray)
+                {
+	                var match = DiagnosticMatch.None;
+
+	                if (expected.Id == actual.Id)
+	                {
+		                match |= DiagnosticMatch.Id;
+	                }
+
+	                if (expected.Severity == actual.Severity)
+	                {
+		                match |= DiagnosticMatch.Severity;
+	                }
+
+	                if (expected.Message == actual.GetMessage())
+	                {
+		                match |= DiagnosticMatch.Message;
+	                }
+
+	                match |= GetLocationMatch(actual, expected);
+
+                    matches.Add((actual, match));
+                }
+
+                if (!matches.Exists(x => x.Item2 == fullMatch))
+                {
+	                var max = matches.Max(x => (int) x.Item2);
+	                var mostMatchedDiagnostic = matches.First(x => (int) x.Item2 == max);
+
+                    Assert.True(false, 
+		                string.Format("No diagnostic matched with expected result.\r\nexpected:{1}\r\nMost matched actual diagnostic:{0}",
+			                FormatDiagnostics(analyzer, mostMatchedDiagnostic.Item1), expected));
+                }
+	        }
+        }
+
+        private static DiagnosticMatch GetLocationMatch(Diagnostic actual, DiagnosticResult expected)
+        {
+	        static bool IsPathMatch(Location actual, DiagnosticResultLocation expected)
+	        {
+		        var actualSpan = actual.GetLineSpan();
+
+		        return actualSpan.Path == expected.Path ||
+		               (actualSpan.Path != null && actualSpan.Path.Contains("Test0.") && expected.Path.Contains("Test."));
+	        }
+
+	        static bool IsLineMatch(Location actual, DiagnosticResultLocation expected)
+	        {
+		        var actualPosition = actual.GetLineSpan().StartLinePosition;
+		        return (actualPosition.Line <= 0 || actualPosition.Line + 1 == expected.Line);
+	        }
+
+	        static bool IsCharacterMatch(Location actual, DiagnosticResultLocation expected)
+	        {
+		        var actualPosition = actual.GetLineSpan().StartLinePosition;
+		        return (actualPosition.Character <= 0 || actualPosition.Character + 1 == expected.Column);
+	        }
+
+	        var match = DiagnosticMatch.None;
+	        var locations = GetLocations(actual, expected);
+
+	        if (locations.actual.Length != locations.expected.Length)
+	        {
+		        return match;
+	        }
+
+	        var locationPairs = Enumerable.Range(0, locations.actual.Length)
+		        .Select(i => (locations.actual[i], locations.expected[i]))
+		        .ToArray();
+
+	        bool IsSatisfy(Func<Location, DiagnosticResultLocation, bool> pred)
+	        {
+		        return locationPairs.All(t => pred(t.Item1, t.Item2));
+	        }
+
+	        if (IsSatisfy(IsPathMatch))
+	        {
+		        match |= DiagnosticMatch.Path;
+            }
+
+	        if (IsSatisfy(IsLineMatch))
+	        {
+		        match |= DiagnosticMatch.Line;
+            }
+
+	        if (IsSatisfy(IsCharacterMatch))
+	        {
+		        match |= DiagnosticMatch.Column;
+	        }
+
+	        return match;
+        }
+
+        private static (Location[] actual, DiagnosticResultLocation[] expected) GetLocations(Diagnostic actual, DiagnosticResult expected)
+        {
+	        static IEnumerable<Location> GetLocations(Diagnostic diagnostic)
+	        {
+		        yield return diagnostic.Location;
+		        foreach (var location in diagnostic.AdditionalLocations)
+		        {
+			        yield return location;
+		        }
+	        }
+
+	        return (GetLocations(actual).ToArray(), expected.Locations);
         }
 
         /// <summary>

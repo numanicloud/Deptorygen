@@ -5,7 +5,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Reference Include="netstandard" />
 		<Compile Remove="DataSource\UnitTests\AutoAndManual\Expected\AutoAndManual.cs" />
 		<Compile Remove="DataSource\UnitTests\AutoAndManual\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\AutoAndManual\Source\AutoAndManual.cs" />
@@ -23,6 +22,44 @@
 		<Compile Remove="DataSource\UnitTests\Capture1\Expected\CaptureFactory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Capture1\Source\Capture.cs" />
 		<Compile Remove="DataSource\UnitTests\Capture2\Source\CaptureFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureA\Expected\BaseFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureA\Expected\Capture.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureA\Expected\CaptureFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureA\Source\Capture.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureMixin1\Expected\CaptureFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureMixin1\Expected\CaptureMixin.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureMixin1\Source\CaptureMixin.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Expected\BaseFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Expected\CaptureFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Expected\CaptureMixin.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Source\CaptureFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Source\CaptureMixin.cs" />
+		<Compile Remove="DataSource\UnitTests\Collection\Expected\Collection.cs" />
+		<Compile Remove="DataSource\UnitTests\Collection\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Collection\Source\Collection.cs" />
+		<Compile Remove="DataSource\UnitTests\Disposable\Expected\Dispose.cs" />
+		<Compile Remove="DataSource\UnitTests\Disposable\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Disposable\Source\Dispose.cs" />
+		<Compile Remove="DataSource\UnitTests\GenericHost\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\GenericHost\Expected\GenericHost.cs" />
+		<Compile Remove="DataSource\UnitTests\GenericHost\Source\GenericHost.cs" />
+		<Compile Remove="DataSource\UnitTests\Mixin1\Expected\BaseFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Mixin1\Expected\Mixin.cs" />
+		<Compile Remove="DataSource\UnitTests\Mixin1\Source\Mixin.cs" />
+		<Compile Remove="DataSource\UnitTests\Mixin2\Expected\BaseFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Mixin2\Expected\Mixin.cs" />
+		<Compile Remove="DataSource\UnitTests\Mixin2\Expected\MixinFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Mixin2\Source\BaseFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Mixin2\Source\Mixin.cs" />
+		<Compile Remove="DataSource\UnitTests\Parameterize\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Parameterize\Expected\Parameterize.cs" />
+		<Compile Remove="DataSource\UnitTests\Parameterize\Source\Parameterize.cs" />
+		<Compile Remove="DataSource\UnitTests\Transient\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Transient\Expected\Transient.cs" />
+		<Compile Remove="DataSource\UnitTests\Transient\Source\Transient.cs" />
+		<Compile Remove="DataSource\UnitTests\UseCache\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\UseCache\Expected\UseCache.cs" />
+		<Compile Remove="DataSource\UnitTests\UseCache\Source\UseCache.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -49,12 +86,49 @@
 		<None Include="DataSource\UnitTests\Capture1\Expected\CaptureFactory.g.cs" />
 		<None Include="DataSource\UnitTests\Capture1\Source\Capture.cs" />
 		<None Include="DataSource\UnitTests\Capture2\Source\CaptureFactory.g.cs" />
+		<None Include="DataSource\UnitTests\CaptureA\Expected\BaseFactory.g.cs" />
+		<None Include="DataSource\UnitTests\CaptureA\Expected\Capture.cs" />
+		<None Include="DataSource\UnitTests\CaptureA\Expected\CaptureFactory.g.cs" />
+		<None Include="DataSource\UnitTests\CaptureA\Source\Capture.cs" />
+		<None Include="DataSource\UnitTests\CaptureMixin1\Expected\CaptureFactory.g.cs" />
+		<None Include="DataSource\UnitTests\CaptureMixin1\Expected\CaptureMixin.cs" />
+		<None Include="DataSource\UnitTests\CaptureMixin1\Source\CaptureMixin.cs" />
+		<None Include="DataSource\UnitTests\CaptureMixin2\Expected\BaseFactory.g.cs" />
+		<None Include="DataSource\UnitTests\CaptureMixin2\Expected\CaptureFactory.g.cs" />
+		<None Include="DataSource\UnitTests\CaptureMixin2\Expected\CaptureMixin.cs" />
+		<None Include="DataSource\UnitTests\CaptureMixin2\Source\CaptureFactory.g.cs" />
+		<None Include="DataSource\UnitTests\CaptureMixin2\Source\CaptureMixin.cs" />
+		<None Include="DataSource\UnitTests\Collection\Expected\Collection.cs" />
+		<None Include="DataSource\UnitTests\Collection\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\Collection\Source\Collection.cs" />
+		<None Include="DataSource\UnitTests\Disposable\Expected\Dispose.cs" />
+		<None Include="DataSource\UnitTests\Disposable\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\Disposable\Source\Dispose.cs" />
+		<None Include="DataSource\UnitTests\GenericHost\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\GenericHost\Expected\GenericHost.cs" />
+		<None Include="DataSource\UnitTests\GenericHost\Source\GenericHost.cs" />
+		<None Include="DataSource\UnitTests\Mixin1\Expected\BaseFactory.g.cs" />
+		<None Include="DataSource\UnitTests\Mixin1\Expected\Mixin.cs" />
+		<None Include="DataSource\UnitTests\Mixin1\Source\Mixin.cs" />
+		<None Include="DataSource\UnitTests\Mixin2\Expected\BaseFactory.g.cs" />
+		<None Include="DataSource\UnitTests\Mixin2\Expected\Mixin.cs" />
+		<None Include="DataSource\UnitTests\Mixin2\Expected\MixinFactory.g.cs" />
+		<None Include="DataSource\UnitTests\Mixin2\Source\BaseFactory.g.cs" />
+		<None Include="DataSource\UnitTests\Mixin2\Source\Mixin.cs" />
+		<None Include="DataSource\UnitTests\Parameterize\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\Parameterize\Expected\Parameterize.cs" />
+		<None Include="DataSource\UnitTests\Parameterize\Source\Parameterize.cs" />
+		<None Include="DataSource\UnitTests\Transient\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\Transient\Expected\Transient.cs" />
+		<None Include="DataSource\UnitTests\Transient\Source\Transient.cs" />
+		<None Include="DataSource\UnitTests\UseCache\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\UseCache\Expected\UseCache.cs" />
+		<None Include="DataSource\UnitTests\UseCache\Source\UseCache.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.7.0-4.final" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-		<PackageReference Include="NETStandard.Library" Version="2.0.3" />
 		<PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
 		<PackageReference Include="xunit" Version="2.3.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />

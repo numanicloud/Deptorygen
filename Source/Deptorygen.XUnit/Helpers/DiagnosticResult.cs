@@ -48,10 +48,7 @@ namespace TestHelper
                 return this.locations;
             }
 
-            set
-            {
-                this.locations = value;
-            }
+            set => this.locations = value;
         }
 
         public DiagnosticSeverity Severity { get; set; }
@@ -60,28 +57,15 @@ namespace TestHelper
 
         public string Message { get; set; }
 
-        public string Path
-        {
-            get
-            {
-                return this.Locations.Length > 0 ? this.Locations[0].Path : "";
-            }
-        }
+        public string Path => this.Locations.Length > 0 ? this.Locations[0].Path : "";
 
-        public int Line
-        {
-            get
-            {
-                return this.Locations.Length > 0 ? this.Locations[0].Line : -1;
-            }
-        }
+        public int Line => this.Locations.Length > 0 ? this.Locations[0].Line : -1;
 
-        public int Column
+        public int Column => this.Locations.Length > 0 ? this.Locations[0].Column : -1;
+
+        public override string ToString()
         {
-            get
-            {
-                return this.Locations.Length > 0 ? this.Locations[0].Column : -1;
-            }
+	        return $"DiagnosticResult Id={Id}, Message={Message}, Path={Path}, Line={Line}, Column={Column}";
         }
     }
 }

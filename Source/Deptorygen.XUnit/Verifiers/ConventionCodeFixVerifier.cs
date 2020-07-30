@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
 using System;
 using Deptorygen.Annotations;
+using Deptorygen.XUnit.Helpers;
 using Xunit;
 
 namespace TestHelper
@@ -145,8 +146,8 @@ namespace TestHelper
 
             var originalProject = CreateProject(sources);
 
-            var diagnostics = GetDiagnostics(originalProject, analyzer);
-            VerifyDiagnosticResults(diagnostics, analyzer, expectedResults);
+            var diagnostics = Helper.GetDiagnostics(originalProject, analyzer);
+            VerifyDiagnosticResultsV2(diagnostics, analyzer, expectedResults);
 
             foreach (var fixResult in fixResults)
             {
@@ -179,44 +180,57 @@ namespace TestHelper
 
         private static Project ApplyFix(Project project, DiagnosticAnalyzer analyzer, CodeFixProvider fix, int fixIndex)
         {
-            var diagnostics = GetDiagnostics(project, analyzer);
+            var diagnostics = Helper.GetDiagnostics(project, analyzer);
             var fixableDiagnostics = diagnostics.Where(d => fix.FixableDiagnosticIds.Contains(d.Id)).ToArray();
 
             var attempts = fixableDiagnostics.Length;
+            var performed = new HashSet<int>();
 
             for (int i = 0; i < attempts; i++)
             {
-                var diag = fixableDiagnostics.First();
-                var doc = project.Documents.FirstOrDefault(d => d.Name == diag.Location.SourceTree.FilePath);
-
+	            var diag = fixableDiagnostics.First();
+	            var doc = project.Documents.FirstOrDefault(d => d.Name == diag.Location.SourceTree.FilePath);
                 if (doc == null)
                 {
                     fixableDiagnostics = fixableDiagnostics.Skip(1).ToArray();
                     continue;
                 }
 
-                var actions = new List<CodeAction>();
-                var fixContex = new CodeFixContext(doc, diag, (a, d) => actions.Add(a), CancellationToken.None);
-                fix.RegisterCodeFixesAsync(fixContex).Wait();
-
-                if (!actions.Any())
+                var operations = GetOperations(fix, fixIndex, doc, diag);
+                if (operations is null)
                 {
-                    break;
+	                break;
                 }
 
-                var codeAction = actions[fixIndex];
-
-                var operations = codeAction.GetOperationsAsync(CancellationToken.None).Result;
                 var solution = operations.OfType<ApplyChangesOperation>().Single().ChangedSolution;
                 project = solution.GetProject(project.Id);
 
-                fixableDiagnostics = GetDiagnostics(project, analyzer)
+                performed.Add(diag.GetHashCode());
+
+                fixableDiagnostics = Helper.GetDiagnostics(project, analyzer)
                     .Where(d => fix.FixableDiagnosticIds.Contains(d.Id)).ToArray();
 
                 if (!fixableDiagnostics.Any()) break;
             }
 
             return project;
+        }
+
+        private static ImmutableArray<CodeActionOperation>? GetOperations(CodeFixProvider fix, int fixIndex, Document doc, Diagnostic diag)
+        {
+	        var actions = new List<CodeAction>();
+	        var fixContex = new CodeFixContext(doc, diag, (a, d) => actions.Add(a), CancellationToken.None);
+	        fix.RegisterCodeFixesAsync(fixContex).Wait();
+
+	        if (!actions.Any())
+	        {
+		        return null;
+	        }
+
+	        var codeAction = actions[fixIndex];
+
+	        var operations = codeAction.GetOperationsAsync(CancellationToken.None).Result;
+	        return operations;
         }
 
         private static Diagnostic[] GetDiagnostics(Project project, DiagnosticAnalyzer analyzer)

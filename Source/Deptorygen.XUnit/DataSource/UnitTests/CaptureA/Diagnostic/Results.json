@@ -1,0 +1,18 @@
+[
+  {
+    "id": "Deptorygen",
+    "sevirity": "Info",
+    "line": 50,
+    "column": 12,
+    "path": "Capture.cs",
+    "message-args": [ "CaptureFactory" ]
+  },
+  {
+    "id": "Deptorygen",
+    "sevirity": "Info",
+    "line": 42,
+    "column": 12,
+    "path": "Capture.cs",
+    "message-args": [ "BaseFactory" ]
+  }
+]

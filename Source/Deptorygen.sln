@@ -14,8 +14,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deptorygen.Annotations", "D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deptorygen.Try", "Deptorygen.Try\Deptorygen.Try.csproj", "{65322ABF-FB95-4561-A00E-4343FFD0F23B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deptorygen.Vsix", "Deptorygen.Vsix\Deptorygen.Vsix.csproj", "{323886EB-3FA9-4EC9-8D4A-F5156FBF5F9F}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deptorygen.GenericHost", "Deptorygen.GenericHost\Deptorygen.GenericHost.csproj", "{289B2014-AF49-4D73-B824-C86CC2108B31}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deptorygen.XUnit", "Deptorygen.XUnit\Deptorygen.XUnit.csproj", "{153C0282-7FB3-4758-BA84-E04DF4035E01}"
@@ -38,10 +36,6 @@ Global
 		{65322ABF-FB95-4561-A00E-4343FFD0F23B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65322ABF-FB95-4561-A00E-4343FFD0F23B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65322ABF-FB95-4561-A00E-4343FFD0F23B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{323886EB-3FA9-4EC9-8D4A-F5156FBF5F9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{323886EB-3FA9-4EC9-8D4A-F5156FBF5F9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{323886EB-3FA9-4EC9-8D4A-F5156FBF5F9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{323886EB-3FA9-4EC9-8D4A-F5156FBF5F9F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{289B2014-AF49-4D73-B824-C86CC2108B31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{289B2014-AF49-4D73-B824-C86CC2108B31}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{289B2014-AF49-4D73-B824-C86CC2108B31}.Release|Any CPU.ActiveCfg = Release|Any CPU
