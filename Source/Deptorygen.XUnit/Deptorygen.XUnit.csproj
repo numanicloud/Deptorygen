@@ -5,6 +5,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Remove="DataSource\UnitTests\AbstractClass\Expected\AbstractClass.cs" />
+		<Compile Remove="DataSource\UnitTests\AbstractClass\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\AbstractClass\Source\AbstractClass.cs" />
 		<Compile Remove="DataSource\UnitTests\AutoAndManual\Expected\AutoAndManual.cs" />
 		<Compile Remove="DataSource\UnitTests\AutoAndManual\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\AutoAndManual\Source\AutoAndManual.cs" />
@@ -22,10 +25,6 @@
 		<Compile Remove="DataSource\UnitTests\Capture1\Expected\CaptureFactory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Capture1\Source\Capture.cs" />
 		<Compile Remove="DataSource\UnitTests\Capture2\Source\CaptureFactory.g.cs" />
-		<Compile Remove="DataSource\UnitTests\CaptureA\Expected\BaseFactory.g.cs" />
-		<Compile Remove="DataSource\UnitTests\CaptureA\Expected\Capture.cs" />
-		<Compile Remove="DataSource\UnitTests\CaptureA\Expected\CaptureFactory.g.cs" />
-		<Compile Remove="DataSource\UnitTests\CaptureA\Source\Capture.cs" />
 		<Compile Remove="DataSource\UnitTests\CaptureMixin1\Expected\CaptureFactory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\CaptureMixin1\Expected\CaptureMixin.cs" />
 		<Compile Remove="DataSource\UnitTests\CaptureMixin1\Source\CaptureMixin.cs" />
@@ -54,12 +53,24 @@
 		<Compile Remove="DataSource\UnitTests\Parameterize\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Parameterize\Expected\Parameterize.cs" />
 		<Compile Remove="DataSource\UnitTests\Parameterize\Source\Parameterize.cs" />
+		<Compile Remove="DataSource\UnitTests\Resolution\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\Resolution\Expected\Resolution.cs" />
+		<Compile Remove="DataSource\UnitTests\Resolution\Source\Resolution.cs" />
 		<Compile Remove="DataSource\UnitTests\Transient\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Transient\Expected\Transient.cs" />
 		<Compile Remove="DataSource\UnitTests\Transient\Source\Transient.cs" />
 		<Compile Remove="DataSource\UnitTests\UseCache\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\UseCache\Expected\UseCache.cs" />
 		<Compile Remove="DataSource\UnitTests\UseCache\Source\UseCache.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="DataSource\UnitTests\AbstractClass\Expected\AbstractClass.cs" />
+	  <None Include="DataSource\UnitTests\AbstractClass\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\AbstractClass\Source\AbstractClass.cs" />
+	  <None Include="DataSource\UnitTests\Resolution\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\Resolution\Expected\Resolution.cs" />
+	  <None Include="DataSource\UnitTests\Resolution\Source\Resolution.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -86,10 +97,6 @@
 		<None Include="DataSource\UnitTests\Capture1\Expected\CaptureFactory.g.cs" />
 		<None Include="DataSource\UnitTests\Capture1\Source\Capture.cs" />
 		<None Include="DataSource\UnitTests\Capture2\Source\CaptureFactory.g.cs" />
-		<None Include="DataSource\UnitTests\CaptureA\Expected\BaseFactory.g.cs" />
-		<None Include="DataSource\UnitTests\CaptureA\Expected\Capture.cs" />
-		<None Include="DataSource\UnitTests\CaptureA\Expected\CaptureFactory.g.cs" />
-		<None Include="DataSource\UnitTests\CaptureA\Source\Capture.cs" />
 		<None Include="DataSource\UnitTests\CaptureMixin1\Expected\CaptureFactory.g.cs" />
 		<None Include="DataSource\UnitTests\CaptureMixin1\Expected\CaptureMixin.cs" />
 		<None Include="DataSource\UnitTests\CaptureMixin1\Source\CaptureMixin.cs" />

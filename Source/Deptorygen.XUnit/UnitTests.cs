@@ -52,6 +52,12 @@ namespace Deptorygen.XUnit
         [Fact]
         public void UseCache() => VerifyCSharpByConvention();
 
+        [Fact]
+        public void Resolution() => VerifyCSharpByConvention();
+
+        [Fact]
+        public void AbstractClass() => VerifyCSharpByConvention();
+
         protected override CodeFixProvider GetCSharpCodeFixProvider() => new DeptorygenCodeFixProvider();
 
         protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new DeptorygenAnalyzer();
