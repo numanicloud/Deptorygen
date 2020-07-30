@@ -10,7 +10,7 @@ namespace Deptorygen.Generator.Definition
 		public TypeName InterfaceNameInfo { get; }
 		public ResolverDefinition[] Resolvers { get; }
 		public CollectionResolverDefinition[] CollectionResolvers { get; }
-		public InjectionContext2 Injection { get; }
+		public InjectionContext Injection { get; }
 		public string PropertyName { get; }
 
 		public string InterfaceName => InterfaceNameInfo.Name;
@@ -29,7 +29,7 @@ namespace Deptorygen.Generator.Definition
 			var generators = Resolvers.Cast<IInjectionGenerator>()
 				.Concat(CollectionResolvers)
 				.ToArray();
-			Injection = new InjectionContext2(generators);
+			Injection = new InjectionContext(generators);
 		}
 
 		public IEnumerable<string> GetRequiredNamespaces()
@@ -37,21 +37,21 @@ namespace Deptorygen.Generator.Definition
 			yield return InterfaceNameInfo.FullNamespace;
 		}
 
-		public string? GetInjectionExpression(ResolverDefinition resolver, InjectionContext2 context)
+		public string? GetInjectionExpression(ResolverDefinition resolver, InjectionContext context)
 		{
 			var resolvers = Resolvers.Where(x => x.IsTransient == resolver.IsTransient)
 				.Cast<IInjectionGenerator>();
 			return GetInjectionExpression(resolver.ReturnType, context, resolvers);
 		}
 
-		public string? GetInjectionExpression(TypeName typeName, InjectionContext2 context)
+		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
 		{
 			var resolvers = Resolvers.Cast<IInjectionGenerator>()
 				.Concat(CollectionResolvers);
 			return GetInjectionExpression(typeName, context, resolvers);
 		}
 
-		private string? GetInjectionExpression(TypeName typeName, InjectionContext2 context,
+		private string? GetInjectionExpression(TypeName typeName, InjectionContext context,
 			IEnumerable<IInjectionGenerator> generators)
 		{
 			var code = generators

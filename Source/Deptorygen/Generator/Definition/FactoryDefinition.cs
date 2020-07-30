@@ -15,7 +15,7 @@ namespace Deptorygen.Generator.Definition
 		public CollectionResolverDefinition[] CollectionResolvers { get; }
 		public CaptureDefinition[] Captures { get; }
 		public bool DoSupportGenericHost { get; }
-		public InjectionContext2 Injection { get; }
+		public InjectionContext Injection { get; }
 
 		public string InterfaceName => InterfaceNameInfo.Name;
 		public string NameSpace => InterfaceNameInfo.FullNamespace;
@@ -41,7 +41,7 @@ namespace Deptorygen.Generator.Definition
 				.Concat(Captures)
 				.Append(this)
 				.ToArray();
-			Injection = new InjectionContext2(generators);
+			Injection = new InjectionContext(generators);
 		}
 
 		public string GetConstructorParameterList()
@@ -105,7 +105,7 @@ namespace Deptorygen.Generator.Definition
 				.ToArray();
 		}
 
-		public string? GetInjectionExpression(TypeName typeName, InjectionContext2 context)
+		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
 		{
 			if (typeName == InterfaceNameInfo)
 			{

@@ -58,6 +58,10 @@ namespace Deptorygen.Generator.Syntaxes
 		public IEnumerable<TypeName> GetCapableServiceTypes()
 		{
 			yield return TypeName.FromSymbol(InterfaceSymbol);
+			foreach (var capture in Captures)
+			{
+				yield return capture.TypeName;
+			}
 		}
 	}
 }

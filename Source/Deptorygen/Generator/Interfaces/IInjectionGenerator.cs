@@ -8,6 +8,6 @@ namespace Deptorygen.Generator.Interfaces
 {
 	public interface IInjectionGenerator
 	{
-		string? GetInjectionExpression(TypeName typeName, InjectionContext2 context);
+		string? GetInjectionExpression(TypeName typeName, InjectionContext context);
 	}
 }

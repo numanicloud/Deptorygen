@@ -7,12 +7,12 @@ using Deptorygen.Utilities;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class InjectionContext2
+	public class InjectionContext
 	{
 		private readonly IEnumerable<IInjectionGenerator> _generators;
 		private readonly Dictionary<TypeName, IInjectionGenerator> _generatorTable;
 
-		public InjectionContext2(IEnumerable<IInjectionGenerator> generators)
+		public InjectionContext(IEnumerable<IInjectionGenerator> generators)
 		{
 			_generators = generators;
 			_generatorTable = new Dictionary<TypeName, IInjectionGenerator>();
@@ -40,10 +40,10 @@ namespace Deptorygen.Generator.Definition
 			throw new InvalidOperationException();
 		}
 
-		public InjectionContext2 Merge(InjectionContext2 other)
+		public InjectionContext Merge(InjectionContext other)
 		{
 			var generators = _generators.Concat(other._generators);
-			var result = new InjectionContext2(generators);
+			var result = new InjectionContext(generators);
 
 			foreach (var g in _generatorTable)
 			{

@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.Text;
 using Newtonsoft.Json;
 using System;
 using Deptorygen.Annotations;
+using Deptorygen.GenericHost;
 using Deptorygen.XUnit.Helpers;
 using Xunit;
 
@@ -249,6 +250,7 @@ namespace TestHelper
                 yield return MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
                 yield return MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
                 yield return MetadataReference.CreateFromFile(typeof(FactoryAttribute).Assembly.Location);
+                yield return MetadataReference.CreateFromFile(typeof(ConfigureGenericHostAttribute).Assembly.Location);
                 yield return MetadataReference.CreateFromFile("C:\\Program Files\\dotnet\\packs\\Microsoft.NETCore.App.Ref\\3.1.0\\ref\\netcoreapp3.1\\netstandard.dll");
                 yield return MetadataReference.CreateFromFile("C:\\Program Files\\dotnet\\packs\\Microsoft.NETCore.App.Ref\\3.1.0\\ref\\netcoreapp3.1\\System.Runtime.dll");
             }

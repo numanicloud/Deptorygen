@@ -48,7 +48,7 @@ namespace Deptorygen.Generator.Definition
 			return result;
 		}
 
-		public string? GetInjectionExpression(TypeName typeName, InjectionContext2 context)
+		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
 		{
 			return this[typeName];
 		}

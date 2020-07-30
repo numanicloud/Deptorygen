@@ -16,7 +16,7 @@ namespace Deptorygen.Generator.Definition
 		public VariableDefinition[] Parameters { get; }
 		public Accessibility MostStrictAccessibility { get; }
 		public string ElementTypeName => ElementTypeInfo.Name;
-		public InjectionContext2 Injection { get; }
+		public InjectionContext Injection { get; }
 
 		public CollectionResolverDefinition(TypeName returnType,
 			string methodName,
@@ -35,7 +35,7 @@ namespace Deptorygen.Generator.Definition
 			{
 				store[parameter.TypeNameInfo] = parameter.VarName;
 			}
-			Injection = new InjectionContext2(new []{store});
+			Injection = new InjectionContext(new []{store});
 		}
 
 		public string GetParameterList()
@@ -43,14 +43,14 @@ namespace Deptorygen.Generator.Definition
 			return Parameters.Select(x => x.Code).Join(", ");
 		}
 
-		public string GetArgListForSelf(InjectionContext2 context)
+		public string GetArgListForSelf(InjectionContext context)
 		{
 			return Parameters
 				.Select(x => context.GetExpression(x.TypeNameInfo) ?? x.VarName)
 				.Join(", ");
 		}
 
-		public string GetElementList(InjectionContext2 context)
+		public string GetElementList(InjectionContext context)
 		{
 			var merged = Injection.Merge(context);
 			return ServiceTypes.Select(x => merged.GetExpression(x) ?? x.LowerCamelCase)
@@ -66,7 +66,7 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
-		public string? GetInjectionExpression(TypeName typeName, InjectionContext2 context)
+		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
 		{
 			return typeName == ReturnType ? $"{MethodName}({GetArgListForSelf(context)})" : null;
 		}
