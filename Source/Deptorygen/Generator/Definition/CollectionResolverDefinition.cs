@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class CollectionResolverDefinition : IDefinitionRequiringNamespace, IInjectionGenerator
+	public class CollectionResolverDefinition : IDefinitionRequiringNamespace, IInjectionGenerator, IAccessibilityClaimer
 	{
 		public TypeName ReturnType { get; }
 		public TypeName ElementTypeInfo => ReturnType.TypeArguments[0];
@@ -69,6 +69,18 @@ namespace Deptorygen.Generator.Definition
 		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
 		{
 			return typeName == ReturnType ? $"{MethodName}({GetArgListForSelf(context)})" : null;
+		}
+
+		public IEnumerable<Accessibility> Accessibilities
+		{
+			get
+			{
+				yield return ElementTypeInfo.Accessibility;
+				foreach (var parameter in Parameters)
+				{
+					yield return parameter.TypeNameInfo.Accessibility;
+				}
+			}
 		}
 	}
 }

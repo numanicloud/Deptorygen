@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class FactoryDefinition : IInjectionGenerator
+	public class FactoryDefinition : IInjectionGenerator, IAccessibilityClaimer
 	{
 		public string TypeName { get; }
 		public TypeName InterfaceNameInfo { get; }
@@ -89,11 +89,11 @@ namespace Deptorygen.Generator.Definition
 
 		public string GetAccessibility()
 		{
-			var accessibilities = Captures.Select(x => x.InterfaceNameInfo)
-				.Concat(Dependencies)
-				.Select(x => x.Accessibility)
-				.Concat(Resolvers.Select(x => x.Accessibility))
-				.Concat(CollectionResolvers.Select(x => x.MostStrictAccessibility));
+			var accessibilities = Captures.Cast<IAccessibilityClaimer>()
+				.Append(this)
+				.Concat(Resolvers)
+				.Concat(CollectionResolvers)
+				.SelectMany(x => x.Accessibilities);
 
 			return accessibilities.Any(x => x != Accessibility.Public) ? "internal" : "public";
 		}
@@ -121,6 +121,18 @@ namespace Deptorygen.Generator.Definition
 			}
 
 			return null;
+		}
+
+		public IEnumerable<Accessibility> Accessibilities
+		{
+			get
+			{
+				// コンストラクタ引数で要求するので、アクセシビリティに影響する
+				foreach (var dependency in Dependencies)
+				{
+					yield return dependency.Accessibility;
+				}
+			}
 		}
 	}
 }

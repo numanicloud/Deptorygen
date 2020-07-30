@@ -8,6 +8,9 @@
 		<Compile Remove="DataSource\UnitTests\AbstractClass\Expected\AbstractClass.cs" />
 		<Compile Remove="DataSource\UnitTests\AbstractClass\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\AbstractClass\Source\AbstractClass.cs" />
+		<Compile Remove="DataSource\UnitTests\AllPublic\Expected\AllPublic.cs" />
+		<Compile Remove="DataSource\UnitTests\AllPublic\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\AllPublic\Source\AllPublic.cs" />
 		<Compile Remove="DataSource\UnitTests\AutoAndManual\Expected\AutoAndManual.cs" />
 		<Compile Remove="DataSource\UnitTests\AutoAndManual\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\AutoAndManual\Source\AutoAndManual.cs" />
@@ -42,6 +45,24 @@
 		<Compile Remove="DataSource\UnitTests\GenericHost\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\GenericHost\Expected\GenericHost.cs" />
 		<Compile Remove="DataSource\UnitTests\GenericHost\Source\GenericHost.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalCapture\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalCapture\Expected\InternalCapture.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalCapture\Source\InternalCapture.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalDefinition\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalDefinition\Expected\InternalDefinition.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalDefinition\Source\InternalDefinition.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalDependency\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalDependency\Expected\InternalDependency.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalDependency\Source\InternalDependency.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalParameter\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalParameter\Expected\InternalParameter.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalParameter\Source\InternalParameter.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalResolution\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalResolution\Expected\InternalResolution.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalResolution\Source\InternalResolution.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalReturn\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalReturn\Expected\InternalReturn.cs" />
+		<Compile Remove="DataSource\UnitTests\InternalReturn\Source\InternalReturn.cs" />
 		<Compile Remove="DataSource\UnitTests\Mixin1\Expected\BaseFactory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Mixin1\Expected\Mixin.cs" />
 		<Compile Remove="DataSource\UnitTests\Mixin1\Source\Mixin.cs" />
@@ -62,12 +83,36 @@
 		<Compile Remove="DataSource\UnitTests\UseCache\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\UseCache\Expected\UseCache.cs" />
 		<Compile Remove="DataSource\UnitTests\UseCache\Source\UseCache.cs" />
+		<Compile Remove="DataSource\UnitTests\UsingNamespace\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\UsingNamespace\Expected\UsingNamespace.cs" />
+		<Compile Remove="DataSource\UnitTests\UsingNamespace\Source\UsingNamespace.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <None Include="DataSource\UnitTests\AbstractClass\Expected\AbstractClass.cs" />
 	  <None Include="DataSource\UnitTests\AbstractClass\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\AbstractClass\Source\AbstractClass.cs" />
+	  <None Include="DataSource\UnitTests\AllPublic\Expected\AllPublic.cs" />
+	  <None Include="DataSource\UnitTests\AllPublic\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\AllPublic\Source\AllPublic.cs" />
+	  <None Include="DataSource\UnitTests\InternalCapture\Expected\InternalCapture.cs" />
+	  <None Include="DataSource\UnitTests\InternalCapture\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\InternalCapture\Source\InternalCapture.cs" />
+	  <None Include="DataSource\UnitTests\InternalDefinition\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\InternalDefinition\Expected\InternalDefinition.cs" />
+	  <None Include="DataSource\UnitTests\InternalDefinition\Source\InternalDefinition.cs" />
+	  <None Include="DataSource\UnitTests\InternalDependency\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\InternalDependency\Expected\InternalDependency.cs" />
+	  <None Include="DataSource\UnitTests\InternalDependency\Source\InternalDependency.cs" />
+	  <None Include="DataSource\UnitTests\InternalParameter\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\InternalParameter\Expected\InternalParameter.cs" />
+	  <None Include="DataSource\UnitTests\InternalParameter\Source\InternalParameter.cs" />
+	  <None Include="DataSource\UnitTests\InternalResolution\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\InternalResolution\Expected\InternalResolution.cs" />
+	  <None Include="DataSource\UnitTests\InternalResolution\Source\InternalResolution.cs" />
+	  <None Include="DataSource\UnitTests\InternalReturn\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\InternalReturn\Expected\InternalReturn.cs" />
+	  <None Include="DataSource\UnitTests\InternalReturn\Source\InternalReturn.cs" />
 	  <None Include="DataSource\UnitTests\Resolution\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\Resolution\Expected\Resolution.cs" />
 	  <None Include="DataSource\UnitTests\Resolution\Source\Resolution.cs" />
@@ -131,6 +176,9 @@
 		<None Include="DataSource\UnitTests\UseCache\Expected\Factory.g.cs" />
 		<None Include="DataSource\UnitTests\UseCache\Expected\UseCache.cs" />
 		<None Include="DataSource\UnitTests\UseCache\Source\UseCache.cs" />
+		<None Include="DataSource\UnitTests\UsingNamespace\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\UsingNamespace\Expected\UsingNamespace.cs" />
+		<None Include="DataSource\UnitTests\UsingNamespace\Source\UsingNamespace.cs" />
 	</ItemGroup>
 
 	<ItemGroup>

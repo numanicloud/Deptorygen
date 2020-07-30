@@ -2,10 +2,11 @@
 using System.Linq;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
+using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class CaptureDefinition : IDefinitionRequiringNamespace, IInjectionGenerator
+	public class CaptureDefinition : IDefinitionRequiringNamespace, IInjectionGenerator, IAccessibilityClaimer
 	{
 		public TypeName InterfaceNameInfo { get; }
 		public ResolverDefinition[] Resolvers { get; }
@@ -59,6 +60,14 @@ namespace Deptorygen.Generator.Definition
 				.FilterNull()
 				.FirstOrDefault();
 			return code is null ? null : $"{PropertyName}.{code}";
+		}
+
+		public IEnumerable<Accessibility> Accessibilities
+		{
+			get
+			{
+				yield return InterfaceNameInfo.Accessibility;
+			}
 		}
 	}
 }
