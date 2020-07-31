@@ -25,6 +25,8 @@ namespace Deptorygen.Generator.Definition
 			InjectionCodes = new Dictionary<TypeName, string>();
 		}
 
+		public InjectionContext ToContext() => new InjectionContext(new []{ this });
+
 		/// <summary>
 		/// 2つの設定を合成し、それぞれに設定された依存関係の注入を全て使える新たなインスタンスを生成します。
 		/// other 引数に指定された設定のほうが優先度が低くなります。

@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Deptorygen.Generator.Interfaces;
+﻿using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Deptorygen.Generator.Definition
 {
@@ -36,12 +36,20 @@ namespace Deptorygen.Generator.Definition
 			Captures = captures;
 			DoSupportGenericHost = doSupportGenericHost;
 
-			var generators = Resolvers.Cast<IInjectionGenerator>()
+			var store = new InjectionStore()
+			{
+				[interfaceNameInfo] = "this"
+			};
+			foreach (var capture in Captures)
+			{
+				store[capture.InterfaceNameInfo] = capture.PropertyName;
+			}
+			var generators = Captures.Cast<IInjectionGenerator>()
+				.Concat(Resolvers)
 				.Concat(CollectionResolvers)
-				.Concat(Captures)
 				.Append(this)
 				.ToArray();
-			Injection = new InjectionContext(generators);
+			Injection = store.ToContext().Merge(new InjectionContext(generators));
 		}
 
 		public string GetConstructorParameterList()
@@ -100,9 +108,30 @@ namespace Deptorygen.Generator.Definition
 
 		public (string typeName, string expression)[] GetResolverExpressionsForGenericHost()
 		{
-			return Resolvers.Where(x => x.Parameters.Length == 0)
-				.Select(x => (x.ReturnType.Name, $"{x.MethodName}()"))
-				.ToArray();
+			var r1 = Resolvers.Where(x => x.Parameters.Length == 0)
+				.Select(x => (x.ReturnType.Name, $"{x.MethodName}()"));
+			return r1.ToArray();
+		}
+
+		public (string typeName, string[] expressions)[] GetCollectionResolverExpressionsForGenericHost()
+		{
+			var result = new List<(string, string[])>();
+			foreach (var resolver in CollectionResolvers)
+			{
+				var elements = resolver.ServiceTypes
+					.Select(x => Resolvers.FirstOrDefault(y => y.ReturnType == x))
+					.FilterNull()
+					.Where(x => x.Parameters.Length == 0)
+					.Select(x => $"{x.MethodName}()")
+					.ToArray();
+
+				if (elements.Any())
+				{
+					result.Add((resolver.ElementTypeName, elements));
+				}
+			}
+
+			return result.ToArray();
 		}
 
 		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
@@ -144,3 +173,11 @@ namespace Deptorygen.Generator.Definition
 		}
 	}
 }
+
+/*
+ * 解決の優先度
+ * - Parameter
+ * - this
+ * - Capture
+ * - Dependency
+ */

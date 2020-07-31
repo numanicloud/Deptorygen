@@ -89,10 +89,15 @@ namespace <#= Factory.NameSpace #>
 <#  if(Factory.DoSupportGenericHost) {  #>
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddTransient<<#= Factory.TypeName #>>(provider => this);
+			services.AddTransient<<#= Factory.InterfaceName #>>(provider => this);
 <#      foreach(var item in Factory.GetResolverExpressionsForGenericHost()) {  #>
 			services.AddTransient<<#= item.typeName #>>(provider => <#= item.expression #>);
 <#      }  #>
+<#		foreach(var item in Factory.GetCollectionResolverExpressionsForGenericHost()) {  #>
+<#			foreach(var exp in item.expressions) {  #>
+			services.AddTransient<<#= item.typeName #>>(provider => <#= exp #>);
+<#			}  #>
+<#		}  #>
 		}
 
 <#  }  #>

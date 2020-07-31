@@ -88,6 +88,9 @@ namespace Deptorygen.XUnit
 		[Fact]
 		public void ResolveByCapture() => VerifyCSharpByConvention();
 
+		[Fact]
+		public void CollectionGenericHost() => VerifyCSharpByConvention();
+
 		protected override CodeFixProvider GetCSharpCodeFixProvider() => new DeptorygenCodeFixProvider();
 
 		protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new DeptorygenAnalyzer();

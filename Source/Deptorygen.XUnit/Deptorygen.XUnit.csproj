@@ -36,6 +36,9 @@
 		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Expected\CaptureMixin.cs" />
 		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Source\CaptureFactory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Source\CaptureMixin.cs" />
+		<Compile Remove="DataSource\UnitTests\CollectionGenericHost\Expected\CollectionGenericHost.cs" />
+		<Compile Remove="DataSource\UnitTests\CollectionGenericHost\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\CollectionGenericHost\Source\CollectionGenericHost.cs" />
 		<Compile Remove="DataSource\UnitTests\Collection\Expected\Collection.cs" />
 		<Compile Remove="DataSource\UnitTests\Collection\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Collection\Source\Collection.cs" />
@@ -101,6 +104,9 @@
 	  <None Include="DataSource\UnitTests\AllPublic\Expected\AllPublic.cs" />
 	  <None Include="DataSource\UnitTests\AllPublic\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\AllPublic\Source\AllPublic.cs" />
+	  <None Include="DataSource\UnitTests\CollectionGenericHost\Expected\CollectionGenericHost.cs" />
+	  <None Include="DataSource\UnitTests\CollectionGenericHost\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\CollectionGenericHost\Source\CollectionGenericHost.cs" />
 	  <None Include="DataSource\UnitTests\InternalCapture\Expected\InternalCapture.cs" />
 	  <None Include="DataSource\UnitTests\InternalCapture\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\InternalCapture\Source\InternalCapture.cs" />
