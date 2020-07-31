@@ -25,6 +25,11 @@ namespace Deptorygen.Utilities
 		public string LowerCamelCase => NameWithoutArguments.ToLowerCamelCase();
 		public string NameWithoutArguments { get; }
 
+		public override string ToString()
+		{
+			return $"{FullNamespace}.{Name} ({Accessibility})";
+		}
+
 		public bool Equals(TypeName other)
 		{
 			if (other is null) return false;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Deptorygen.Exceptions;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 
@@ -37,7 +38,10 @@ namespace Deptorygen.Generator.Definition
 				}
 			}
 
-			throw new InvalidOperationException();
+			throw new CannotResolveException($"{typeName} のインスタンスを解決する手段がありませんでした。")
+			{
+				TargetType = typeName,
+			};
 		}
 
 		public InjectionContext Merge(InjectionContext other)

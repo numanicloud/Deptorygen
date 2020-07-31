@@ -82,6 +82,12 @@ namespace Deptorygen.XUnit
 		[Fact]
 		public void UsingNamespace() => VerifyCSharpByConvention();
 
+		[Fact]
+		public void ResolutionNamespace() => VerifyCSharpByConvention();
+
+		[Fact]
+		public void ResolveByCapture() => VerifyCSharpByConvention();
+
 		protected override CodeFixProvider GetCSharpCodeFixProvider() => new DeptorygenCodeFixProvider();
 
 		protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new DeptorygenAnalyzer();

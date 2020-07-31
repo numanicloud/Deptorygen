@@ -74,9 +74,15 @@
 		<Compile Remove="DataSource\UnitTests\Parameterize\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Parameterize\Expected\Parameterize.cs" />
 		<Compile Remove="DataSource\UnitTests\Parameterize\Source\Parameterize.cs" />
+		<Compile Remove="DataSource\UnitTests\ResolutionNamespace\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\ResolutionNamespace\Expected\ResolutionNamespace.cs" />
+		<Compile Remove="DataSource\UnitTests\ResolutionNamespace\Source\ResolutionNamespace.cs" />
 		<Compile Remove="DataSource\UnitTests\Resolution\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Resolution\Expected\Resolution.cs" />
 		<Compile Remove="DataSource\UnitTests\Resolution\Source\Resolution.cs" />
+		<Compile Remove="DataSource\UnitTests\ResolveByCapture\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\ResolveByCapture\Expected\ResolveByCapture.cs" />
+		<Compile Remove="DataSource\UnitTests\ResolveByCapture\Source\ResolveByCapture.cs" />
 		<Compile Remove="DataSource\UnitTests\Transient\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Transient\Expected\Transient.cs" />
 		<Compile Remove="DataSource\UnitTests\Transient\Source\Transient.cs" />
@@ -113,6 +119,9 @@
 	  <None Include="DataSource\UnitTests\InternalReturn\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\InternalReturn\Expected\InternalReturn.cs" />
 	  <None Include="DataSource\UnitTests\InternalReturn\Source\InternalReturn.cs" />
+	  <None Include="DataSource\UnitTests\ResolutionNamespace\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\ResolutionNamespace\Expected\ResolutionNamespace.cs" />
+	  <None Include="DataSource\UnitTests\ResolutionNamespace\Source\ResolutionNamespace.cs" />
 	  <None Include="DataSource\UnitTests\Resolution\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\Resolution\Expected\Resolution.cs" />
 	  <None Include="DataSource\UnitTests\Resolution\Source\Resolution.cs" />
@@ -170,6 +179,9 @@
 		<None Include="DataSource\UnitTests\Parameterize\Expected\Factory.g.cs" />
 		<None Include="DataSource\UnitTests\Parameterize\Expected\Parameterize.cs" />
 		<None Include="DataSource\UnitTests\Parameterize\Source\Parameterize.cs" />
+		<None Include="DataSource\UnitTests\ResolveByCapture\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\ResolveByCapture\Expected\ResolveByCapture.cs" />
+		<None Include="DataSource\UnitTests\ResolveByCapture\Source\ResolveByCapture.cs" />
 		<None Include="DataSource\UnitTests\Transient\Expected\Factory.g.cs" />
 		<None Include="DataSource\UnitTests\Transient\Expected\Transient.cs" />
 		<None Include="DataSource\UnitTests\Transient\Source\Transient.cs" />

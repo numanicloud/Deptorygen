@@ -1,12 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>netstandard2.1</TargetFramework>
+		<TargetFramework>netstandard2.0</TargetFramework>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Copyright>Copyright Ⓒ 2020 NumAniCloud</Copyright>
 		<AssemblyName>Deptorygen.GenericHost</AssemblyName>
 		<RootNamespace>Deptorygen.GenericHost</RootNamespace>
-		<Nullable>Enable</Nullable>
 		<VersionPrefix>1.0.0</VersionPrefix>
 	</PropertyGroup>
 

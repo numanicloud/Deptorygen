@@ -112,6 +112,14 @@ namespace Deptorygen.Generator.Definition
 				return "this";
 			}
 
+			foreach (var capture in Captures)
+			{
+				if (typeName == capture.InterfaceNameInfo)
+				{
+					return capture.PropertyName;
+				}
+			}
+
 			foreach (var dependency in Dependencies)
 			{
 				if (typeName == dependency)

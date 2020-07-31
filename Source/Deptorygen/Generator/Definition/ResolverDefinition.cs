@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Deptorygen.Exceptions;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
@@ -54,11 +55,22 @@ namespace Deptorygen.Generator.Definition
 
 		public string GetInstantiationArgList(InjectionContext context)
 		{
-			var finalInjection = Injection.Merge(context);
+			try
+			{
+				var finalInjection = Injection.Merge(context);
 
-			return Resolution.Dependencies
-				.Select(x => finalInjection.GetExpression(x) ?? x.LowerCamelCase)
-				.ToList().Join(", ");
+				return Resolution.Dependencies
+					.Select(x => finalInjection.GetExpression(x) ?? x.LowerCamelCase)
+					.ToList().Join(", ");
+			}
+			catch (CannotResolveException ex)
+			{
+				throw new CannotResolveException($"解決メソッド {MethodName} は、{ex.TargetType} を生成する手段がないため実行できませんでした。")
+				{
+					TargetType = ex.TargetType,
+					TargetResolver = this,
+				};
+			}
 		}
 
 		public string GetArgsListForSelf(InjectionContext context)
@@ -86,6 +98,7 @@ namespace Deptorygen.Generator.Definition
 		public IEnumerable<string> GetRequiredNamespaces()
 		{
 			yield return ReturnType.FullNamespace;
+			yield return Resolution.TypeName.FullNamespace;
 			foreach (var p in Parameters)
 			{
 				yield return p.TypeNamespace;
