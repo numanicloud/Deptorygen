@@ -10,7 +10,7 @@ Deptorygenの抱える問題の紹介も含みます。
 問題の一部は、順次修正されていくかもしれません。
 
 * [基本的な使い方](Guides/BasicStyle.md)
-* [コンストラクタで意外な引数を要求されるケース](Guides/Constructor.md)
+* [コンストラクタで意外な引数を要求されたら](Guides/Constructor.md)
 * [キャプチャ、ミックスイン、ファクトリーのファクトリー](Guides/FactoryStructure.md)
 * [ファクトリーを別のアセンブリに提供する](Guides/ExportType.md)
 
@@ -33,6 +33,7 @@ Deptorygenの抱える問題の紹介も含みます。
 * [他のファクトリー定義を取り込む（ミックスイン）](Samples/Mixin.md)
 * [依存関係の解決を別のファクトリーに委譲する（キャプチャ）](Samples/Capture.md)
 * [ミックスインとキャプチャを組み合わせる](Samples/CaptureMixin.md)
+* [インターフェースを戻り値として、実際には実装を返す](Samples/Resolution.md)
 * [コレクションに対してインスタンスを注入する](Samples/Collection.md)
 * [IDisposableなインスタンスが破棄されることを確認する](Samples/Disposable.md)
 * [GenericHostと連携する](Samples/GenericHost.md)
