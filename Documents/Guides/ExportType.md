@@ -92,7 +92,10 @@ namespace UseDeptorygen.Guides.Export
 
 まず、`IOpenFactory`で生成できる`PublicService`は、`InternalService`を生成するために必須です。
 また、publicなクラスが他にも存在する場合、それらは逆に`InternalService`を要求しているかもしれません。
+
 そのため、`IClosedFactory`でも`IOpenFactory`を実装する必要がありました。
+こうなると`IOpenFactory`は`IClosedFactory`から生成するクラス`ClosedFactory`が実装しているので、
+外部には`ClosedFactory`を`IOpenFactory`にキャストして送り出せばよいだけになります。
 
 それから、`IRequirementFactory`インターフェースに対してコード生成をしないのは、
 このインターフェースの実装が元々外部アセンブリに書かれている前提であり、
