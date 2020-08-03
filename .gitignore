@@ -4,3 +4,4 @@ obj
 *.nupkg
 desktop.ini
 Source/packages
+copy_nupkg.ps1
