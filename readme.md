@@ -16,6 +16,16 @@ GenericHostとの連携機能が必要であれば、以下のパッケージも
 
 * Deptorygen.GenericHost
 
+## 実行
+
+Visual Studio 2019で動作確認しています。
+
+動作させるために、`%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\Common7\IDE` に .NET Framework向けの `netstandard.dll` を配置する必要があります。
+このDLLは恐らく、 `%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\Microsoft.NET.Build.Extensions\net461\lib\nestandard.dll` にあります。
+
+Deptorygenパッケージをプロジェクトにインストールしたら、まずはVisual Studioを再起動する必要があります。
+再起動後、`[Factory]`属性がついているインターフェースに対して出るクイックヒント(電球マーク💡)を通じてコード生成を実行することができます。
+
 ## 例
 
 ```csharp
