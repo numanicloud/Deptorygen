@@ -103,7 +103,7 @@ namespace UseDeptorygen.Samples.CustomResolution
 `IService`に対して`ServiceGold`という実装が存在します。
 
 `IFactory`は`ICustomFactory`をキャプチャしていて、
-`ICustomFactory`に対して`MyCustomFactory`をキャプチャしています。
+`ICustomFactory`に対して`MyCustomFactory`という実装が存在します。
 
 `MyCustomFactory`はファクトリーとして利用されるときにログを画面に出力します。
 
