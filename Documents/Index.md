@@ -1,5 +1,8 @@
 # Deptorygen マニュアル
 
+それぞれのページは作成日時が異なるため、紹介するサンプルコードの一部は現状と合わないかもしれませんし、
+逆に一部だけ最新の情報になっているかもしれません。
+
 ## ガイド
 
 実際にDeptorygenを使用する手順の例を紹介します。
@@ -13,10 +16,7 @@ Deptorygenの抱える問題の紹介も含みます。
 * [コンストラクタで意外な引数を要求されたら](Guides/Constructor.md)
 * [キャプチャ、ミックスイン、ファクトリーのファクトリー](Guides/FactoryStructure.md)
 * [ファクトリーを別のアセンブリに提供する](Guides/ExportType.md)
-
-## 詳細解説
-
-* [ファクトリー自体のアクセシビリティはどう決まるか](Features/Accessibility.md)
+* [ファクトリー自体のアクセシビリティはどう決まるか](Guides/Accessibility.md)
 
 ## サンプル集
 
@@ -33,6 +33,7 @@ Deptorygenの抱える問題の紹介も含みます。
 * [他のファクトリー定義を取り込む（ミックスイン）](Samples/Mixin.md)
 * [依存関係の解決を別のファクトリーに委譲する（キャプチャ）](Samples/Capture.md)
 * [ミックスインとキャプチャを組み合わせる](Samples/CaptureMixin.md)
+* [インスタンスの生成手段を細かくカスタマイズする](Samples/CustomResolution.md)
 * [インターフェースを戻り値として、実際には実装を返す](Samples/Resolution.md)
 * [コレクションに対してインスタンスを注入する](Samples/Collection.md)
 * [IDisposableなインスタンスが破棄されることを確認する](Samples/Disposable.md)
