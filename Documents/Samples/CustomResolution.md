@@ -144,6 +144,8 @@ namespace UseDeptorygen.Samples.CustomResolution
 }
 ```
 
+実行結果は以下の通りです。
+
 ```txt
 Creating Service!
 Creating Dependency!
