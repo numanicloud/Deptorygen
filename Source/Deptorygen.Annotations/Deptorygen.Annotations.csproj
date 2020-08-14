@@ -5,6 +5,12 @@
 		<Copyright>Copyright Ⓒ 2020 NumAniCloud</Copyright>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<VersionPrefix>1.0.0</VersionPrefix>
+		<Description>Deptorygen用の属性を含むパッケージです。</Description>
+		<PackageTags>Deptorygen, analyzers, dependencyinjection</PackageTags>
+		<Authors>NumAniCloud</Authors>
+		<Company>NumAniCloud</Company>
+		<RepositoryUrl>https://github.com/NumAniCloud/Deptorygen</RepositoryUrl>
+		<Version>1.0.1</Version>
 	</PropertyGroup>
 
 </Project>

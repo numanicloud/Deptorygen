@@ -12,18 +12,20 @@
 	<PropertyGroup>
 		<PackageId>Deptorygen</PackageId>
 		<Authors>NumAniCloud</Authors>
-		<PackageLicenseUrl>https://github.com/NumAniCloud/Deptorygen/blob/master/license.txt</PackageLicenseUrl>
+		<PackageLicenseUrl></PackageLicenseUrl>
 		<RepositoryUrl>https://github.com/NumAniCloud/Deptorygen</RepositoryUrl>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-		<Description>Deptorygen</Description>
+		<Description>依存関係を静的に解決するDIコンテナ的なアナライザーです。</Description>
 		<Copyright>Copyright Ⓒ 2020 NumAniCloud</Copyright>
-		<PackageTags>Deptorygen, analyzers</PackageTags>
+		<PackageTags>Deptorygen, analyzers, dependencyinjection</PackageTags>
 		<NoPackageAnalysis>true</NoPackageAnalysis>
-		<Company>NumAniCloud</Company>
+		<Company></Company>
 		<AssemblyName>Deptorygen</AssemblyName>
 		<RootNamespace>Deptorygen</RootNamespace>
 		<Product>Deptorygen</Product>
 		<VersionPrefix>1.0.0</VersionPrefix>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Version>1.0.1</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

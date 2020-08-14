@@ -1,7 +1,7 @@
 ﻿function pack([string]$path) {
     Write-Host "==== ${path} をパッケージ化します" -ForegroundColor Cyan;
     echo $suffix
-    dotnet pack $_ -c Release -o nupkgs/release/ --version-suffix $suffix -v minimal;
+    dotnet pack $_ -c Release -o nupkgs/release/ -v minimal;
     sleep 2
 }
 
