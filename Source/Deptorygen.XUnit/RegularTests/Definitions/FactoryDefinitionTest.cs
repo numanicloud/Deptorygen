@@ -12,57 +12,95 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 	{
 		private TypeName ServiceAInfo => new TypeName("Sample", "ServiceA", Accessibility.Public);
 		private TypeName ServiceBInfo => new TypeName("Sample", "ServiceB", Accessibility.Public);
+		private TypeName ServiceCInfo => new TypeName("Sample", "ServiceC", Accessibility.Public);
 		private TypeName FactoryInterfaceInfo => new TypeName("Sample", "ISubject", Accessibility.Public);
-		private TypeName FactoryInfo => new TypeName("Sample", "Subject", Accessibility.Public);
 		private TypeName FactoryInterfaceInfo2 => new TypeName("Sample", "IFactory", Accessibility.Public);
+
+		private ResolverDefinition GetConventionalResolverDefinition(
+			TypeName typename,
+			VariableDefinition[]? variables = null,
+			ResolutionDefinition? resolution = null)
+		{
+			return new ResolverDefinition(
+				$"Resolve{typename.Name}",
+				typename,
+				resolution ?? new ResolutionDefinition(typename, new TypeName[0], false),
+				variables ?? new VariableDefinition[0],
+				false,
+				$"_Resolver{typename.Name}Cache");
+		}
+
+		private TypeName ToEnumerableType(TypeName source)
+		{
+			return new TypeName(
+				"System.Collections.Generic",
+				"IEnumerable",
+				Accessibility.Public,
+				new []{source});
+		}
+
+		private CollectionResolverDefinition GetCollectionResolverDefinition(
+			TypeName typeName)
+		{
+			return new CollectionResolverDefinition(
+				ToEnumerableType(typeName),
+				$"Resolve{typeName.Name}s",
+				new TypeName[0],
+				new VariableDefinition[0],
+				Accessibility.Public);
+		}
 
 		private FactoryDefinition GetFixtureFactoryDefinition(bool doCapture = false)
 		{
-			var dependencies = new[] { ServiceAInfo, };
-
-			var resolution = new ResolutionDefinition(ServiceBInfo, dependencies, false);
-
-			var resolveServiceB = new ResolverDefinition(
-				"ResolveServiceB",
-				ServiceBInfo,
-				resolution,
-				new VariableDefinition[0],
-				false,
-				"_ResolveServiceB");
-			var resolveFactory = new ResolverDefinition(
-				"ResolveFactory",
-				FactoryInterfaceInfo2,
-				new ResolutionDefinition(
-					new TypeName("Sample", "Factory", Accessibility.Public),
-					new TypeName[0],
-					false),
-				new VariableDefinition[0],
-				false,
-				"_ResolverFactoryCache");
-
-			var resolvers = new[] { resolveServiceB };
-
-			var collectionResolvers = new CollectionResolverDefinition[] { };
+			var resolveFactory = GetConventionalResolverDefinition(FactoryInterfaceInfo2);
+			var resolveServiceB = GetConventionalResolverDefinition(ServiceBInfo);
+			var resolveServiceC = GetConventionalResolverDefinition(
+				ServiceCInfo,
+				variables: new[] { new VariableDefinition(FactoryInterfaceInfo, "subject") });
+			var collectionResolverA = GetCollectionResolverDefinition(ServiceAInfo);
 
 			var captures = doCapture ? new CaptureDefinition[]
 			{
 				new CaptureDefinition(
 					FactoryInterfaceInfo2,
 					"Captured",
-					resolvers,
+					new[] { resolveServiceB },
+					new []{ collectionResolverA }),
+				new CaptureDefinition(
+					FactoryInterfaceInfo,
+					"Custom",
+					new []{ resolveServiceB, resolveFactory },
 					new CollectionResolverDefinition[0]),
 			} : new CaptureDefinition[0];
 
-			var definition = new FactoryDefinition(
+			return new FactoryDefinition(
 				"Subject",
 				FactoryInterfaceInfo,
-				dependencies,
-				new []{ resolveServiceB, resolveFactory },
-				collectionResolvers,
+				new TypeName[0],
+				new[] { resolveServiceB, resolveFactory, resolveServiceC },
+				new[] { collectionResolverA },
 				captures,
 				false);
+		}
 
-			return definition;
+		[Fact]
+		public void thisよりパラメータのほうが優先()
+		{
+			var definition = GetFixtureFactoryDefinition(true);
+
+			var generated = definition.Injection.GetExpression(ServiceCInfo);
+
+			Assert.Equal("ResolveServiceC(subject)", generated);
+		}
+
+		[Fact]
+		public void キャプチャしたファクトリーよりthisのほうが優先()
+		{
+			var definition = GetFixtureFactoryDefinition(true);
+
+			var generated = definition.Injection.GetExpression(FactoryInterfaceInfo);
+
+			Assert.Equal("this", generated);
 		}
 
 		[Fact]
@@ -73,6 +111,15 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 			var generated = definition.Injection.GetExpression(FactoryInterfaceInfo2);
 
 			Assert.Equal("Captured", generated);
+		}
+		[Fact]
+		public void コレクション解決メソッドよりもキャプチャしたコレクション解決メソッドのほうが優先()
+		{
+			var definition = GetFixtureFactoryDefinition(true);
+
+			var generated = definition.Injection.GetExpression(ToEnumerableType(ServiceAInfo));
+
+			Assert.Equal("Captured.ResolveServiceAs()", generated);
 		}
 
 		[Fact]

@@ -36,14 +36,13 @@ namespace Deptorygen.Generator.Definition
 			Captures = captures;
 			DoSupportGenericHost = doSupportGenericHost;
 
-			var store = new InjectionStore()
-			{
-				[interfaceNameInfo] = "this"
-			};
+			var store = new InjectionStore();
 			foreach (var capture in Captures)
 			{
 				store[capture.InterfaceNameInfo] = capture.PropertyName;
 			}
+
+			store[interfaceNameInfo] = "this";
 			var generators = Captures.Cast<IInjectionGenerator>()
 				.Concat(Resolvers)
 				.Concat(CollectionResolvers)
