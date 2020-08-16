@@ -46,7 +46,7 @@ namespace Deptorygen.Generator.Definition
 		public string GetArgListForSelf(InjectionContext context)
 		{
 			return Parameters
-				.Select(x => context.GetExpression(x.TypeNameInfo) ?? x.VarName)
+				.Select(x => x.VarName)
 				.Join(", ");
 		}
 
