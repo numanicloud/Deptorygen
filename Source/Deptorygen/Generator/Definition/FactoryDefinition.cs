@@ -159,6 +159,33 @@ namespace Deptorygen.Generator.Definition
 			return null;
 		}
 
+		public IEnumerable<InjectionExpression> GetInjectionExpressions(TypeName typeName, InjectionContext context)
+		{
+			yield return new InjectionExpression(typeName, InjectionMethod.This, "this");
+
+			foreach (var capture in Captures)
+			{
+				if (capture.InterfaceNameInfo == typeName)
+				{
+					yield return new InjectionExpression(
+						typeName,
+						InjectionMethod.CapturedFactory,
+						capture.PropertyName);
+				}
+			}
+
+			foreach (var dependency in Dependencies)
+			{
+				if (dependency == typeName)
+				{
+					yield return new InjectionExpression(
+						typeName,
+						InjectionMethod.Field,
+						$"_{dependency.LowerCamelCase}");
+				}
+			}
+		}
+
 		public IEnumerable<Accessibility> Accessibilities
 		{
 			get

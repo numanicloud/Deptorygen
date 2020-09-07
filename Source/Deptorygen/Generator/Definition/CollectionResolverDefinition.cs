@@ -71,6 +71,16 @@ namespace Deptorygen.Generator.Definition
 			return typeName == ReturnType ? $"{MethodName}({GetArgListForSelf(context)})" : null;
 		}
 
+		public IEnumerable<InjectionExpression> GetInjectionExpressions(TypeName typeName, InjectionContext context)
+		{
+			if (typeName == ReturnType)
+			{
+				yield return new InjectionExpression(typeName,
+					InjectionMethod.Resolver,
+					$"{MethodName}({GetArgListForSelf(context)})");
+			}
+		}
+
 		public IEnumerable<Accessibility> Accessibilities
 		{
 			get

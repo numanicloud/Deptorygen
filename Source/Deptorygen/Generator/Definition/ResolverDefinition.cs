@@ -53,6 +53,7 @@ namespace Deptorygen.Generator.Definition
 			return Parameters.Select(x => x.Code).Join(", ");
 		}
 
+		// TODO: このメソッドはResolutionDefinitionに移した方が自然かも
 		public string GetInstantiationArgList(InjectionContext context)
 		{
 			try
@@ -108,6 +109,16 @@ namespace Deptorygen.Generator.Definition
 		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
 		{
 			return typeName == ReturnType ? $"{MethodName}({GetArgsListForSelf(context)})" : null;
+		}
+
+		public IEnumerable<InjectionExpression> GetInjectionExpressions(TypeName typeName, InjectionContext context)
+		{
+			if (typeName == ReturnType)
+			{
+				yield return new InjectionExpression(typeName,
+					InjectionMethod.Resolver,
+					$"{MethodName}({GetArgsListForSelf(context)})");
+			}
 		}
 
 		public IEnumerable<Accessibility> Accessibilities

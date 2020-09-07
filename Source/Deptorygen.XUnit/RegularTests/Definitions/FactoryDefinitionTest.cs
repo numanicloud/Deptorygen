@@ -117,6 +117,7 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 		[Fact]
 		public void 解決メソッドでthisよりパラメータのほうが優先()
 		{
+			// パラメータはResolverDefinitionに属するので、このテストがあること自体が怪しいかも
 			var resolveServiceC = ResolverDefinition(ServiceCInfo,
 				variables: new[] { new VariableDefinition(FactoryInterfaceInfo, "subject") });
 			var factory = FactoryDefinition("Subject", FactoryInterfaceInfo,

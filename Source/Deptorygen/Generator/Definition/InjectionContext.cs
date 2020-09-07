@@ -10,13 +10,27 @@ namespace Deptorygen.Generator.Definition
 {
 	public class InjectionContext
 	{
+		private readonly IInjectionGenerator[] _generators_refactor;
+
 		private readonly IEnumerable<IInjectionGenerator> _generators;
 		private readonly Dictionary<TypeName, IInjectionGenerator> _generatorTable;
 
 		public InjectionContext(IEnumerable<IInjectionGenerator> generators)
 		{
-			_generators = generators;
 			_generatorTable = new Dictionary<TypeName, IInjectionGenerator>();
+			_generators_refactor = generators.ToArray();
+			_generators = _generators_refactor;
+		}
+
+		public string GetExpression_refactor(TypeName typeName, InjectionContext parent)
+		{
+			var expressions = new List<InjectionExpression>();
+			foreach (var provider in _generators_refactor)
+			{
+				expressions.AddRange(provider.GetInjectionExpressions(typeName, parent));
+			}
+
+			return expressions.OrderBy(x => x.Type).First().Code;
 		}
 
 		public string GetExpression(TypeName typeName)
@@ -51,6 +65,7 @@ namespace Deptorygen.Generator.Definition
 		/// <returns></returns>
 		public InjectionContext Merge(InjectionContext other)
 		{
+			// _generators フィールドをカプセル化すれば、Mergeメソッドに対してインターフェースの抽出ができそう
 			var generators = _generators.Concat(other._generators);
 			var result = new InjectionContext(generators);
 

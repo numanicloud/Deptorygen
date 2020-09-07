@@ -52,6 +52,30 @@ namespace Deptorygen.Generator.Definition
 			return GetInjectionExpression(typeName, context, resolvers);
 		}
 
+		public IEnumerable<InjectionExpression> GetInjectionExpressions(TypeName typeName, InjectionContext context)
+		{
+			IEnumerable<InjectionExpression> Enumerate(IEnumerable<IInjectionGenerator> generators)
+			{
+				foreach (var generator in generators)
+				{
+					foreach (var expression in generator.GetInjectionExpressions(typeName, context))
+					{
+						yield return new InjectionExpression(expression.Type, InjectionMethod.CapturedResolver, expression.Code);
+					}
+				}
+			}
+
+			foreach (var exp in Enumerate(Resolvers))
+			{
+				yield return exp;
+			}
+
+			foreach (var exp in Enumerate(CollectionResolvers))
+			{
+				yield return exp;
+			}
+		}
+
 		private string? GetInjectionExpression(TypeName typeName, InjectionContext context,
 			IEnumerable<IInjectionGenerator> generators)
 		{

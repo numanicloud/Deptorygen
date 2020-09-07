@@ -9,5 +9,6 @@ namespace Deptorygen.Generator.Interfaces
 	public interface IInjectionGenerator
 	{
 		string? GetInjectionExpression(TypeName typeName, InjectionContext context);
+		IEnumerable<InjectionExpression> GetInjectionExpressions(TypeName typeName, InjectionContext context);
 	}
 }

@@ -54,5 +54,13 @@ namespace Deptorygen.Generator.Definition
 		{
 			return this[typeName];
 		}
+
+		public IEnumerable<InjectionExpression> GetInjectionExpressions(TypeName typeName, InjectionContext context)
+		{
+			if (GetInjectionExpression(typeName, context) is {} exp)
+			{
+				yield return new InjectionExpression(typeName, InjectionMethod.Resolver, exp);
+			}
+		}
 	}
 }
