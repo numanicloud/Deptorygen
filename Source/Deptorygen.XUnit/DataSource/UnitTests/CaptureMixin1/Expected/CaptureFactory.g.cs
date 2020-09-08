@@ -29,7 +29,7 @@ namespace UseDeptorygen.Samples.CaptureMixin
 
 		public ICaptureFactory ResolveCaptureFactory()
 		{
-			return BaseFactory.ResolveCaptureFactory();
+			return this;
 		}
 
 		public void Dispose()

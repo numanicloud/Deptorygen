@@ -23,15 +23,23 @@ namespace Deptorygen.Generator.Definition
 
 		public string GetInstantiation(ResolverDefinition resolver, FactoryDefinition factory)
 		{
+			var selfCapability = factory.GetInjectionCapabilities(TargetType)
+				.Where(x => x.Method != InjectionMethod.Resolver)
+				.OrderBy(x => x.Method)
+				.FirstOrDefault();
+			if (selfCapability is {})
+			{
+				return selfCapability.Code;
+			}
+
 			var args = new List<string>();
 			foreach (var dependency in Dependencies)
 			{
 				var capabilities = resolver.GetInjectionCapabilities(dependency, factory)
-					.GroupBy(x => x.Type)
-					.Select(x => x.OrderBy(y => y.Method).First())
-					.ToDictionary(x => x.Type, x => x);
+					.OrderBy(x => x.Method)
+					.FirstOrDefault();
 
-				args.Add(capabilities.TryGetValue(dependency, out var exp) ? exp.Code : "<error>");
+				args.Add(capabilities?.Code ?? "<error>");
 			}
 
 			return $"new {TypeName.Name}({args.Join(", ")})";

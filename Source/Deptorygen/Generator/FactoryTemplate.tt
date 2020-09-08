@@ -58,9 +58,7 @@ namespace <#= Factory.NameSpace #>
 <#      foreach(var (resolver, isLast) in Factory.Resolvers.WithFooterFlag()) { #>
 		public <#= resolver.ReturnType.Name #> <#= resolver.MethodName #>(<#= resolver.GetParameterList() #>)
 		{
-<#          if(resolver.TryGetDelegation(Factory, out var code)) { #>
-			return <#= code #>;
-<#          } else if(resolver.IsTransient) { #>
+<#          if(resolver.IsTransient || resolver.IsAlternatedByCapture(Factory)) { #>
 			return <#= resolver.Resolution.GetInstantiation(resolver, Factory) #>;
 <#          } else { #>
 			return <#= resolver.CacheVarName #> ??= <#= resolver.Resolution.GetInstantiation(resolver, Factory) #>;

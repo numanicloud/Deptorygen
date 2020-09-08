@@ -356,25 +356,32 @@ namespace Deptorygen.Generator
             this.Write(")\r\n\t\t{\r\n");
             
             #line 61 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-          if(resolver.TryGetDelegation(Factory, out var code)) { 
+          if(resolver.IsTransient || resolver.IsAlternatedByCapture(Factory)) { 
             
             #line default
             #line hidden
             this.Write("\t\t\treturn ");
             
             #line 62 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(code));
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.Resolution.GetInstantiation(resolver, Factory)));
             
             #line default
             #line hidden
             this.Write(";\r\n");
             
             #line 63 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-          } else if(resolver.IsTransient) { 
+          } else { 
             
             #line default
             #line hidden
             this.Write("\t\t\treturn ");
+            
+            #line 64 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.CacheVarName));
+            
+            #line default
+            #line hidden
+            this.Write(" ??= ");
             
             #line 64 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.Resolution.GetInstantiation(resolver, Factory)));
@@ -384,133 +391,112 @@ namespace Deptorygen.Generator
             this.Write(";\r\n");
             
             #line 65 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-          } else { 
-            
-            #line default
-            #line hidden
-            this.Write("\t\t\treturn ");
-            
-            #line 66 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.CacheVarName));
-            
-            #line default
-            #line hidden
-            this.Write(" ??= ");
-            
-            #line 66 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.Resolution.GetInstantiation(resolver, Factory)));
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n");
-            
-            #line 67 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
           }  
             
             #line default
             #line hidden
             this.Write("\t\t}\r\n");
             
-            #line 69 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 67 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
 			if(!isLast) { 
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 71 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 69 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
 			} 
             
             #line default
             #line hidden
             
-            #line 72 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 70 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
       } 
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 74 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 72 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
   }  
             
             #line default
             #line hidden
             
-            #line 75 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 73 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
   // コレクションリゾルバー 
             
             #line default
             #line hidden
             
-            #line 76 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 74 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
   if(Factory.CollectionResolvers.Any()) { 
             
             #line default
             #line hidden
             
-            #line 77 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 75 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
       foreach(var resolver in Factory.CollectionResolvers) { 
             
             #line default
             #line hidden
             this.Write("\t\tpublic IEnumerable<");
             
-            #line 78 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 76 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ElementTypeName));
             
             #line default
             #line hidden
             this.Write("> ");
             
-            #line 78 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 76 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.MethodName));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 78 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 76 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetParameterList()));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t{\r\n\t\t\treturn new ");
             
-            #line 80 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 78 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ElementTypeName));
             
             #line default
             #line hidden
             this.Write("[]\r\n\t\t\t{\r\n\t\t\t\t");
             
-            #line 82 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 80 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetElementList(Factory.Injection)));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t\t};\r\n\t\t}\r\n");
             
-            #line 85 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 83 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
       }  
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 87 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 85 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
   }  
             
             #line default
             #line hidden
             
-            #line 88 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 86 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
   // GenericHostサポート 
             
             #line default
             #line hidden
             
-            #line 89 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 87 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
   if(Factory.DoSupportGenericHost) {  
             
             #line default
@@ -518,94 +504,94 @@ namespace Deptorygen.Generator
             this.Write("\t\tpublic void ConfigureServices(IServiceCollection services)\r\n\t\t{\r\n\t\t\tservices.Ad" +
                     "dTransient<");
             
-            #line 92 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 90 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Factory.InterfaceName));
             
             #line default
             #line hidden
             this.Write(">(provider => this);\r\n");
             
-            #line 93 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 91 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
       foreach(var item in Factory.GetResolverExpressionsForGenericHost()) {  
             
             #line default
             #line hidden
             this.Write("\t\t\tservices.AddTransient<");
             
-            #line 94 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 92 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.typeName));
             
             #line default
             #line hidden
             this.Write(">(provider => ");
             
-            #line 94 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 92 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.expression));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 95 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 93 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
       }  
             
             #line default
             #line hidden
             
-            #line 96 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 94 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
 		foreach(var item in Factory.GetCollectionResolverExpressionsForGenericHost()) {  
             
             #line default
             #line hidden
             
-            #line 97 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 95 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
 			foreach(var exp in item.expressions) {  
             
             #line default
             #line hidden
             this.Write("\t\t\tservices.AddTransient<");
             
-            #line 98 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 96 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(item.typeName));
             
             #line default
             #line hidden
             this.Write(">(provider => ");
             
-            #line 98 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 96 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(exp));
             
             #line default
             #line hidden
             this.Write(");\r\n");
             
-            #line 99 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 97 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
 			}  
             
             #line default
             #line hidden
             
-            #line 100 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 98 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
 		}  
             
             #line default
             #line hidden
             this.Write("\t\t}\r\n\r\n");
             
-            #line 103 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 101 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
   }  
             
             #line default
             #line hidden
             
-            #line 104 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 102 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
   // Dispose 
             
             #line default
             #line hidden
             this.Write("\t\tpublic void Dispose()\r\n\t\t{\r\n");
             
-            #line 107 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 105 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
   foreach(var resolver in Factory.Resolvers) {
 		if(resolver.GetRequireDispose(Factory)) { 
             
@@ -613,14 +599,14 @@ namespace Deptorygen.Generator
             #line hidden
             this.Write("\t\t\t");
             
-            #line 109 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 107 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(resolver.CacheVarName));
             
             #line default
             #line hidden
             this.Write("?.Dispose();\r\n");
             
-            #line 110 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
+            #line 108 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
       }
 	} 
             

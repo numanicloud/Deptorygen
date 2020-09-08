@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Deptorygen.Exceptions;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
@@ -15,8 +14,6 @@ namespace Deptorygen.Generator.Definition
 		public VariableDefinition[] Parameters { get; }
 		public bool IsTransient { get; }
 		public string CacheVarName { get; }
-		public Accessibility Accessibility => ReturnType.Accessibility;
-		public InjectionContext Injection { get; }
 		public string ResolutionName => Resolution.TypeName.Name;
 
 		public ResolverDefinition(string methodName,
@@ -32,13 +29,6 @@ namespace Deptorygen.Generator.Definition
 			Parameters = parameters;
 			IsTransient = isTransient;
 			CacheVarName = cacheVarName;
-
-			var store = new InjectionStore();
-			foreach (var parameter in Parameters)
-			{
-				store[parameter.TypeNameInfo] = $"{parameter.VarName}";
-			}
-			Injection = new InjectionContext(new []{store});
 		}
 
 		public bool GetRequireDispose(FactoryDefinition factory)
@@ -54,31 +44,17 @@ namespace Deptorygen.Generator.Definition
 		}
 
 		// TODO: このメソッドはResolutionDefinitionに移した方が自然かも
-		public string GetInstantiationArgList(InjectionContext context)
-		{
-			try
-			{
-				var finalInjection = Injection.Merge(context);
-
-				return Resolution.Dependencies
-					.Select(x => finalInjection.GetExpression(x) ?? x.LowerCamelCase)
-					.ToList().Join(", ");
-			}
-			catch (CannotResolveException ex)
-			{
-				throw new CannotResolveException($"解決メソッド {MethodName} は、{ex.TargetType} を生成する手段がないため実行できませんでした。")
-				{
-					TargetType = ex.TargetType,
-					TargetResolver = this,
-				};
-			}
-		}
 
 		public string GetArgsListForSelf(InjectionContext context)
 		{
 			return Parameters
 				.Select(x => x.VarName ?? context.GetExpression(x.TypeNameInfo))
 				.Join(", ");
+		}
+
+		public bool IsAlternatedByCapture(FactoryDefinition definition)
+		{
+			return definition.Captures.Any(x => x.Resolvers.Any(y => y.ReturnType == ReturnType));
 		}
 
 		public bool TryGetDelegation(FactoryDefinition factory, out string code)
@@ -127,6 +103,7 @@ namespace Deptorygen.Generator.Definition
 
 			var args = Parameters
 				.Select(x => factory.GetInjectionCapabilities(x.TypeNameInfo))
+				.Where(x => x.Any())
 				.Select(x => x.OrderBy(y => y.Method).First().Code)
 				.Join(", ");
 
