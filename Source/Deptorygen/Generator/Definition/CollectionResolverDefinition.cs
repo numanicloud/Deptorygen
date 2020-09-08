@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Deptorygen.Generator.Interfaces;
@@ -91,6 +92,23 @@ namespace Deptorygen.Generator.Definition
 					yield return parameter.TypeNameInfo.Accessibility;
 				}
 			}
+		}
+
+		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, FactoryDefinition factory)
+		{
+			yield break;
+		}
+
+		public InjectionExpression? GetDelegations(TypeName typeName, FactoryDefinition factory)
+		{
+			if (typeName == ReturnType)
+			{
+				return new InjectionExpression(typeName,
+					InjectionMethod.Resolver,
+					$"{MethodName}()");
+			}
+
+			return null;
 		}
 	}
 }

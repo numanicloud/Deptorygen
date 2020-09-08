@@ -186,6 +186,40 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
+		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName)
+		{
+			if (typeName == InterfaceNameInfo)
+			{
+				yield return new InjectionExpression(typeName, InjectionMethod.This, "this");
+			}
+
+			foreach (var resolver in Resolvers.Select(x => x.GetDelegation(typeName, this)).FilterNull())
+			{
+				yield return resolver;
+			}
+
+			foreach (var expression in CollectionResolvers.Select(x => x.GetDelegations(typeName, this)).FilterNull())
+			{
+				yield return expression;
+			}
+
+			foreach (var capture in Captures.SelectMany(x => x.GetDelegations(typeName, this)))
+			{
+				yield return capture;
+			}
+
+			foreach (var dependency in Dependencies)
+			{
+				if (dependency == typeName)
+				{
+					yield return new InjectionExpression(
+						typeName,
+						InjectionMethod.Field,
+						$"_{dependency.LowerCamelCase}");
+				}
+			}
+		}
+
 		public IEnumerable<Accessibility> Accessibilities
 		{
 			get

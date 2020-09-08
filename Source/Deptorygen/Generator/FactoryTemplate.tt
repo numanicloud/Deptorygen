@@ -61,9 +61,9 @@ namespace <#= Factory.NameSpace #>
 <#          if(resolver.TryGetDelegation(Factory, out var code)) { #>
 			return <#= code #>;
 <#          } else if(resolver.IsTransient) { #>
-			return new <#= resolver.ResolutionName #>(<#= resolver.GetInstantiationArgList(Factory.Injection) #>);
+			return <#= resolver.Resolution.GetInstantiation(resolver, Factory) #>;
 <#          } else { #>
-			return <#= resolver.CacheVarName #> ??= new <#= resolver.ResolutionName #>(<#= resolver.GetInstantiationArgList(Factory.Injection) #>);
+			return <#= resolver.CacheVarName #> ??= <#= resolver.Resolution.GetInstantiation(resolver, Factory) #>;
 <#          }  #>
 		}
 <#			if(!isLast) { #>

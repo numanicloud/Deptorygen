@@ -121,6 +121,36 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
+		public InjectionExpression? GetDelegation(TypeName typeName, FactoryDefinition factory)
+		{
+			if (typeName != ReturnType) return null;
+
+			var args = Parameters
+				.Select(x => factory.GetInjectionCapabilities(x.TypeNameInfo))
+				.Select(x => x.OrderBy(y => y.Method).First().Code)
+				.Join(", ");
+
+			return new InjectionExpression(typeName,
+				InjectionMethod.Resolver,
+				$"{MethodName}({args})");
+		}
+
+		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, FactoryDefinition factory)
+		{
+			foreach (var capability in factory.GetInjectionCapabilities(typeName))
+			{
+				yield return capability;
+			}
+
+			foreach (var parameter in Parameters)
+			{
+				if (parameter.TypeNameInfo == typeName)
+				{
+					yield return new InjectionExpression(typeName, InjectionMethod.Parameter, parameter.VarName);
+				}
+			}
+		}
+
 		public IEnumerable<Accessibility> Accessibilities
 		{
 			get

@@ -29,14 +29,14 @@ namespace Deptorygen.Generator.Analyzer
 				.ToArray();
 
 			var resolution = _syntax.Resolutions
-				.Select(x => new ResolutionDefinition(x.TypeName, x.Dependencies, x.IsDisposable))
+				.Select(x => new ResolutionDefinition(_syntax.ReturnTypeName, x.TypeName, x.Dependencies, x.IsDisposable))
 				.FirstOrDefault();
 
 			if (resolution is null)
 			{
 				if (_syntax.ReturnTypeResolution is {} ret)
 				{
-					resolution = new ResolutionDefinition(ret.TypeName, ret.Dependencies, ret.IsDisposable);
+					resolution = new ResolutionDefinition(_syntax.ReturnTypeName, ret.TypeName, ret.Dependencies, ret.IsDisposable);
 				}
 				else
 				{

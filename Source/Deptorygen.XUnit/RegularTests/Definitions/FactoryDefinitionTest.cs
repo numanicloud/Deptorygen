@@ -24,7 +24,7 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 			return new ResolverDefinition(
 				$"Resolve{typename.Name}",
 				typename,
-				resolution ?? new ResolutionDefinition(typename, new TypeName[0], false),
+				resolution ?? new ResolutionDefinition(typename, typename, new TypeName[0], false),
 				variables ?? new VariableDefinition[0],
 				false,
 				$"_Resolver{typename.Name}Cache");

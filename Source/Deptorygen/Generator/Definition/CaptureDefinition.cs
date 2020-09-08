@@ -76,6 +76,24 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
+		public IEnumerable<InjectionExpression> GetDelegations(TypeName typeName, FactoryDefinition factory)
+		{
+			if (typeName == InterfaceNameInfo)
+			{
+				yield return new InjectionExpression(typeName, InjectionMethod.CapturedFactory, PropertyName);
+			}
+
+			var capabilities1 = Resolvers.Select(x => x.GetDelegation(typeName, factory));
+			var capabilities2 = CollectionResolvers.Select(x => x.GetDelegations(typeName, factory));
+			foreach (var expression in capabilities1.Concat(capabilities2).FilterNull())
+			{
+				yield return new InjectionExpression(
+					typeName,
+					InjectionMethod.CapturedResolver,
+					$"{PropertyName}.{expression.Code}");
+			}
+		}
+
 		private string? GetInjectionExpression(TypeName typeName, InjectionContext context,
 			IEnumerable<IInjectionGenerator> generators)
 		{

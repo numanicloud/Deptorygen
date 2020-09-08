@@ -374,21 +374,14 @@ namespace Deptorygen.Generator
             
             #line default
             #line hidden
-            this.Write("\t\t\treturn new ");
+            this.Write("\t\t\treturn ");
             
             #line 64 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ResolutionName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.Resolution.GetInstantiation(resolver, Factory)));
             
             #line default
             #line hidden
-            this.Write("(");
-            
-            #line 64 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetInstantiationArgList(Factory.Injection)));
-            
-            #line default
-            #line hidden
-            this.Write(");\r\n");
+            this.Write(";\r\n");
             
             #line 65 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
           } else { 
@@ -402,21 +395,14 @@ namespace Deptorygen.Generator
             
             #line default
             #line hidden
-            this.Write(" ??= new ");
+            this.Write(" ??= ");
             
             #line 66 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.ResolutionName));
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.Resolution.GetInstantiation(resolver, Factory)));
             
             #line default
             #line hidden
-            this.Write("(");
-            
-            #line 66 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetInstantiationArgList(Factory.Injection)));
-            
-            #line default
-            #line hidden
-            this.Write(");\r\n");
+            this.Write(";\r\n");
             
             #line 67 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
           }  
