@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class FactoryDefinition : IInjectionGenerator, IAccessibilityClaimer
+	public class FactoryDefinition : IAccessibilityClaimer
 	{
 		public string TypeName { get; }
 		public TypeName InterfaceNameInfo { get; }
@@ -118,59 +118,6 @@ namespace Deptorygen.Generator.Definition
 			return result.ToArray();
 		}
 
-		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
-		{
-			if (typeName == InterfaceNameInfo)
-			{
-				return "this";
-			}
-
-			foreach (var capture in Captures)
-			{
-				if (typeName == capture.InterfaceNameInfo)
-				{
-					return capture.PropertyName;
-				}
-			}
-
-			foreach (var dependency in Dependencies)
-			{
-				if (typeName == dependency)
-				{
-					return $"_{dependency.LowerCamelCase}";
-				}
-			}
-
-			return null;
-		}
-
-		public IEnumerable<InjectionExpression> GetInjectionExpressions(TypeName typeName, InjectionContext context)
-		{
-			yield return new InjectionExpression(typeName, InjectionMethod.This, "this");
-
-			foreach (var capture in Captures)
-			{
-				if (capture.InterfaceNameInfo == typeName)
-				{
-					yield return new InjectionExpression(
-						typeName,
-						InjectionMethod.CapturedFactory,
-						capture.PropertyName);
-				}
-			}
-
-			foreach (var dependency in Dependencies)
-			{
-				if (dependency == typeName)
-				{
-					yield return new InjectionExpression(
-						typeName,
-						InjectionMethod.Field,
-						$"_{dependency.LowerCamelCase}");
-				}
-			}
-		}
-
 		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, IResolverContext caller)
 		{
 			if (typeName == InterfaceNameInfo)
@@ -221,11 +168,3 @@ namespace Deptorygen.Generator.Definition
 		}
 	}
 }
-
-/*
- * 解決の優先度
- * - Parameter
- * - this
- * - Capture
- * - Dependency
- */

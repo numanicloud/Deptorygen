@@ -36,13 +36,6 @@ namespace Deptorygen.Generator.Definition
 			return Parameters.Select(x => x.Code).Join(", ");
 		}
 
-		public string GetArgListForSelf(InjectionContext context)
-		{
-			return Parameters
-				.Select(x => x.VarName)
-				.Join(", ");
-		}
-
 		public IEnumerable<string> GetRequiredNamespaces()
 		{
 			yield return ElementTypeInfo.FullNamespace;
