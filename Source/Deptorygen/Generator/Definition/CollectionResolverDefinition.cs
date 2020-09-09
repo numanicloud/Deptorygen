@@ -17,7 +17,6 @@ namespace Deptorygen.Generator.Definition
 		public VariableDefinition[] Parameters { get; }
 		public Accessibility MostStrictAccessibility { get; }
 		public string ElementTypeName => ElementTypeInfo.Name;
-		public InjectionContext Injection { get; }
 
 		public CollectionResolverDefinition(TypeName returnType,
 			string methodName,
@@ -30,13 +29,6 @@ namespace Deptorygen.Generator.Definition
 			ServiceTypes = serviceTypes;
 			Parameters = parameters;
 			MostStrictAccessibility = mostStrictAccessibility;
-
-			var store = new InjectionStore();
-			foreach (var parameter in Parameters)
-			{
-				store[parameter.TypeNameInfo] = parameter.VarName;
-			}
-			Injection = new InjectionContext(new []{store});
 		}
 
 		public string GetParameterList()
@@ -49,13 +41,6 @@ namespace Deptorygen.Generator.Definition
 			return Parameters
 				.Select(x => x.VarName)
 				.Join(", ");
-		}
-
-		public string GetElementList(InjectionContext context)
-		{
-			var merged = Injection.Merge(context);
-			return ServiceTypes.Select(x => merged.GetExpression(x) ?? x.LowerCamelCase)
-				.Join("," + Environment.NewLine + "\t\t\t\t");
 		}
 
 		public IEnumerable<string> GetRequiredNamespaces()

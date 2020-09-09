@@ -57,29 +57,5 @@ namespace Deptorygen.Generator.Definition
 				TargetType = typeName,
 			};
 		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="other">こちらの方が優先度が低くなる</param>
-		/// <returns></returns>
-		public InjectionContext Merge(InjectionContext other)
-		{
-			// _generators フィールドをカプセル化すれば、Mergeメソッドに対してインターフェースの抽出ができそう
-			var generators = _generators.Concat(other._generators);
-			var result = new InjectionContext(generators);
-
-			foreach (var g in other._generatorTable)
-			{
-				result._generatorTable[g.Key] = g.Value;
-			}
-
-			foreach (var g in _generatorTable)
-			{
-				result._generatorTable[g.Key] = g.Value;
-			}
-
-			return result;
-		}
 	}
 }
