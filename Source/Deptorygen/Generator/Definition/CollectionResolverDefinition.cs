@@ -63,14 +63,11 @@ namespace Deptorygen.Generator.Definition
 
 		public InjectionExpression? GetDelegations(TypeName typeName, FactoryDefinition factory)
 		{
-			if (typeName == ReturnType)
-			{
-				return new InjectionExpression(typeName,
-					InjectionMethod.Resolver,
-					$"{MethodName}()");
-			}
+			if (typeName != ReturnType) return null;
 
-			return null;
+			return new InjectionExpression(typeName,
+				InjectionMethod.Resolver,
+				$"{MethodName}()");
 		}
 		
 		public string GetElementList(FactoryDefinition factory)

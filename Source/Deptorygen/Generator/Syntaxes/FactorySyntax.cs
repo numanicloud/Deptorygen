@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Deptorygen.Generator.Definition;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
@@ -13,7 +12,7 @@ using IServiceProvider = Deptorygen.Generator.Interfaces.IServiceProvider;
 
 namespace Deptorygen.Generator.Syntaxes
 {
-	class FactorySyntax : IServiceProvider, IInjectionProvider
+	class FactorySyntax : IServiceProvider
 	{
 		public INamedTypeSymbol InterfaceSymbol { get; }
 		public ResolverSyntax[] Resolvers { get; }
@@ -64,55 +63,6 @@ namespace Deptorygen.Generator.Syntaxes
 			{
 				yield return capture.TypeName;
 			}
-		}
-
-		public IEnumerable<InjectionExpression> GetExpressions(ExpressionRouter? context)
-		{
-			var dependencies = GetDependencies()
-				.Select(x => new InjectionExpression(x,
-					InjectionMethod.Field,
-					$"_{x.LowerCamelCase}"));
-
-			var resolverExps = Resolvers.Where(x => !x.Parameters.Any())
-				.Select(x => new InjectionExpression(x.ReturnTypeName, InjectionMethod.Resolver, $"{x.MethodName}()"));
-			var collectionExps = CollectionResolvers.Where(x => !x.Parameters.Any())
-				.Select(x => new InjectionExpression(x.CollectionType, InjectionMethod.Resolver, $"{x.MethodName}()"));
-			var captureExps = Captures.SelectMany(x => x.Resolvers.Select(y => (capture: x, resolver: y)))
-				.Where(x => !x.resolver.Parameters.Any())
-				.Select(x => new InjectionExpression(
-					x.resolver.ReturnTypeName,
-					InjectionMethod.CapturedResolver,
-					$"{x.capture.PropertyName}.{x.resolver.MethodName}()"));
-			var captures = Captures.Select(x =>
-				new InjectionExpression(x.TypeName, InjectionMethod.CapturedFactory, $"{x.PropertyName}"));
-			var self = new InjectionExpression(TypeName.FromSymbol(InterfaceSymbol), InjectionMethod.This, "this");
-			
-			// TODO: パラメータ有りのものはどうする？
-			// 解決のためにパラメータ有りリゾルバーを呼び出さないといけない場合が厄介そう
-
-			var factoryContext = new ExpressionRouter(dependencies);
-
-			return resolverExps.Concat(collectionExps)
-				.Concat(captureExps)
-				.Concat(captures)
-				.Append(self);
-		}
-
-		private TypeName[] GetDependencies()
-		{
-			var consumed = Resolvers
-				.Cast<IServiceConsumer>()
-				.Concat(CollectionResolvers)
-				.SelectMany(x => x.GetRequiredServiceTypes());
-
-			var provided = Resolvers
-				.Cast<IServiceProvider>()
-				.Concat(CollectionResolvers)
-				.Concat(Captures)
-				.Append(this)
-				.SelectMany(x => x.GetCapableServiceTypes());
-
-			return consumed.Except(provided).ToArray();
 		}
 	}
 }

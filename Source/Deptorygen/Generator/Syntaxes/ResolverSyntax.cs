@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Deptorygen.Generator.Definition;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Syntaxes
 {
-	class ResolverSyntax : IServiceConsumer, IServiceProvider, IInjectionProvider
+	class ResolverSyntax : IServiceConsumer, IServiceProvider
 	{
 		public string MethodName { get; }
 		public TypeName ReturnTypeName { get; }
@@ -79,14 +78,6 @@ namespace Deptorygen.Generator.Syntaxes
 		public IEnumerable<TypeName> GetCapableServiceTypes()
 		{
 			yield return ReturnTypeName;
-		}
-
-		public IEnumerable<InjectionExpression> GetExpressions(ExpressionRouter? context)
-		{
-			foreach (var parameter in Parameters)
-			{
-				yield return new InjectionExpression(parameter.TypeName, InjectionMethod.Parameter, $"{parameter.ParameterName}");
-			}
 		}
 	}
 }

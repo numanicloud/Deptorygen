@@ -125,33 +125,15 @@ namespace Deptorygen.Generator.Definition
 				yield return new InjectionExpression(typeName, InjectionMethod.This, "this");
 			}
 
-			var resolvers = Resolvers.Select(x => x.GetDelegation(typeName, this, caller))
-				.FilterNull();
+			var resolvers = Resolvers.Select(x => x.GetDelegation(typeName, this, caller)).FilterNull();
+			var collections = CollectionResolvers.Select(x => x.GetDelegations(typeName, this)).FilterNull();
+			var captures = Captures.SelectMany(x => x.GetDelegations(typeName, this, caller));
+			var fields = Dependencies.Where(x => x == typeName)
+				.Select(x => new InjectionExpression(typeName, InjectionMethod.Field, $"_{x.LowerCamelCase}"));
 
-			foreach (var capabilities in resolvers)
-			{
-				yield return capabilities;
-			}
-
-			foreach (var expression in CollectionResolvers.Select(x => x.GetDelegations(typeName, this)).FilterNull())
+			foreach (var expression in resolvers.Concat(collections).Concat(captures).Concat(fields))
 			{
 				yield return expression;
-			}
-
-			foreach (var capture in Captures.SelectMany(x => x.GetDelegations(typeName, this, caller)))
-			{
-				yield return capture;
-			}
-
-			foreach (var dependency in Dependencies)
-			{
-				if (dependency == typeName)
-				{
-					yield return new InjectionExpression(
-						typeName,
-						InjectionMethod.Field,
-						$"_{dependency.LowerCamelCase}");
-				}
 			}
 		}
 
