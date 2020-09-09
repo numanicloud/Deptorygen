@@ -15,7 +15,6 @@ namespace Deptorygen.Generator.Definition
 		public CollectionResolverDefinition[] CollectionResolvers { get; }
 		public CaptureDefinition[] Captures { get; }
 		public bool DoSupportGenericHost { get; }
-		public InjectionContext Injection { get; }
 
 		public string InterfaceName => InterfaceNameInfo.Name;
 		public string NameSpace => InterfaceNameInfo.FullNamespace;
@@ -35,20 +34,6 @@ namespace Deptorygen.Generator.Definition
 			CollectionResolvers = collectionResolvers;
 			Captures = captures;
 			DoSupportGenericHost = doSupportGenericHost;
-
-			var store = new InjectionStore();
-			foreach (var capture in Captures)
-			{
-				store[capture.InterfaceNameInfo] = capture.PropertyName;
-			}
-
-			store[interfaceNameInfo] = "this";
-			var generators = Captures.Cast<IInjectionGenerator>()
-				.Concat(Resolvers)
-				.Concat(CollectionResolvers)
-				.Append(this)
-				.ToArray();
-			Injection = store.ToContext().Merge(new InjectionContext(generators));
 		}
 
 		public string GetConstructorParameterList()
