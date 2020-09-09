@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Deptorygen.Generator.Injection;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
@@ -58,7 +59,8 @@ namespace Deptorygen.Generator.Definition
 
 		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, FactoryDefinition factory)
 		{
-			yield break;
+			var aggregation = new InjectionAggregator();
+			return aggregation.CapabilitiesFromResolver(typeName, factory, this);
 		}
 
 		public InjectionExpression? GetDelegations(TypeName typeName, FactoryDefinition factory)

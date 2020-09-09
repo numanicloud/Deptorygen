@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Deptorygen.Generator.Injection;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
@@ -72,18 +73,8 @@ namespace Deptorygen.Generator.Definition
 
 		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, FactoryDefinition factory)
 		{
-			foreach (var capability in factory.GetInjectionCapabilities(typeName, this))
-			{
-				yield return capability;
-			}
-
-			foreach (var parameter in Parameters)
-			{
-				if (parameter.TypeNameInfo == typeName)
-				{
-					yield return new InjectionExpression(typeName, InjectionMethod.Parameter, parameter.VarName);
-				}
-			}
+			var aggregator = new InjectionAggregator();
+			return aggregator.CapabilitiesFromResolver(typeName, factory, this);
 		}
 
 		public IEnumerable<Accessibility> Accessibilities
