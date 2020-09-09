@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Deptorygen.Generator.Injection;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
@@ -15,20 +14,17 @@ namespace Deptorygen.Generator.Definition
 		public string MethodName { get; }
 		public TypeName[] ServiceTypes { get; }
 		public VariableDefinition[] Parameters { get; }
-		public Accessibility MostStrictAccessibility { get; }
 		public string ElementTypeName => ElementTypeInfo.Name;
 
 		public CollectionResolverDefinition(TypeName returnType,
 			string methodName,
 			TypeName[] serviceTypes,
-			VariableDefinition[] parameters,
-			Accessibility mostStrictAccessibility)
+			VariableDefinition[] parameters)
 		{
 			ReturnType = returnType;
 			MethodName = methodName;
 			ServiceTypes = serviceTypes;
 			Parameters = parameters;
-			MostStrictAccessibility = mostStrictAccessibility;
 		}
 
 		public string GetParameterList()
@@ -55,12 +51,6 @@ namespace Deptorygen.Generator.Definition
 					yield return parameter.TypeNameInfo.Accessibility;
 				}
 			}
-		}
-
-		public string GetElementList(FactoryDefinition factory)
-		{
-			var aggregator = new InjectionAggregator(factory, this);
-			return aggregator.GetResolutionList(this);
 		}
 	}
 }

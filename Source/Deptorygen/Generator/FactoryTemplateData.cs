@@ -1,4 +1,5 @@
 ﻿using Deptorygen.Generator.Definition;
+using Deptorygen.Generator.Injection;
 
 namespace Deptorygen.Generator
 {
@@ -10,5 +11,17 @@ namespace Deptorygen.Generator
 		}
 
 		public FactoryDefinition Factory { get; }
+
+		public string GetResolution(ResolverDefinition resolver)
+		{
+			var aggregator = new InjectionAggregator(Factory, resolver);
+			return aggregator.GetResolution(resolver.Resolution);
+		}
+
+		public string GetResolutionList(CollectionResolverDefinition resolver)
+		{
+			var aggregator = new InjectionAggregator(Factory, resolver);
+			return aggregator.GetResolutionList(resolver);
+		}
 	}
 }

@@ -32,8 +32,7 @@ namespace Deptorygen.Generator.Analyzer
 				_syntax.CollectionType,
 				_syntax.MethodName,
 				resolutions,
-				parameters,
-				accessibility);
+				parameters);
 		}
 	}
 }

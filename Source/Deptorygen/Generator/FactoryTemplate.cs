@@ -363,7 +363,7 @@ namespace Deptorygen.Generator
             this.Write("\t\t\treturn ");
             
             #line 62 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.Resolution.GetInstantiation(resolver, Factory)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetResolution(resolver)));
             
             #line default
             #line hidden
@@ -384,7 +384,7 @@ namespace Deptorygen.Generator
             this.Write(" ??= ");
             
             #line 64 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.Resolution.GetInstantiation(resolver, Factory)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetResolution(resolver)));
             
             #line default
             #line hidden
@@ -471,7 +471,7 @@ namespace Deptorygen.Generator
             this.Write("[]\r\n\t\t\t{\r\n\t\t\t\t");
             
             #line 80 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetElementList(Factory)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(GetResolutionList(resolver)));
             
             #line default
             #line hidden

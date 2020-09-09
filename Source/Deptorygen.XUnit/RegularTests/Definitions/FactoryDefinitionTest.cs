@@ -48,8 +48,7 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 				ToEnumerableType(typeName),
 				$"Resolve{typeName.Name}s",
 				new TypeName[0],
-				variables ?? new VariableDefinition[0],
-				Accessibility.Public);
+				variables ?? new VariableDefinition[0]);
 		}
 
 		private FactoryDefinition GetFixtureFactoryDefinition(bool doCapture = false)

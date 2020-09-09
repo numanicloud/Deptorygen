@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Deptorygen.Generator.Injection;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 
@@ -18,12 +17,6 @@ namespace Deptorygen.Generator.Definition
 			TypeName = typeName;
 			Dependencies = dependencies;
 			IsDisposable = isDisposable;
-		}
-
-		public string GetInstantiation(ResolverDefinition resolver, FactoryDefinition factory)
-		{
-			var aggregator = new InjectionAggregator(factory, resolver);
-			return aggregator.GetResolution(this);
 		}
 	}
 }

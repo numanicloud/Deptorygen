@@ -59,9 +59,9 @@ namespace <#= Factory.NameSpace #>
 		public <#= resolver.ReturnType.Name #> <#= resolver.MethodName #>(<#= resolver.GetParameterList() #>)
 		{
 <#          if(resolver.IsTransient || resolver.IsAlternatedByCapture(Factory)) { #>
-			return <#= resolver.Resolution.GetInstantiation(resolver, Factory) #>;
+			return <#= GetResolution(resolver) #>;
 <#          } else { #>
-			return <#= resolver.CacheVarName #> ??= <#= resolver.Resolution.GetInstantiation(resolver, Factory) #>;
+			return <#= resolver.CacheVarName #> ??= <#= GetResolution(resolver) #>;
 <#          }  #>
 		}
 <#			if(!isLast) { #>
@@ -77,7 +77,7 @@ namespace <#= Factory.NameSpace #>
 		{
 			return new <#= resolver.ElementTypeName #>[]
 			{
-				<#= resolver.GetElementList(Factory) #>
+				<#= GetResolutionList(resolver) #>
 			};
 		}
 <#      }  #>
