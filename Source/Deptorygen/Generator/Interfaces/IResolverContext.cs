@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Linq;
-using Deptorygen.Generator.Definition;
+﻿using Deptorygen.Generator.Definition;
 using Deptorygen.Generator.Injection;
 using Deptorygen.Utilities;
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Deptorygen.Generator.Interfaces;
-using Deptorygen.Utilities;
+﻿using Deptorygen.Utilities;
 
 namespace Deptorygen.Generator.Definition
 {
