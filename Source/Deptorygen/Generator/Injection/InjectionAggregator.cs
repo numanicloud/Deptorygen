@@ -10,15 +10,29 @@ namespace Deptorygen.Generator.Injection
 {
 	public class InjectionAggregator
 	{
-		private readonly TypeName _targetType;
 		private readonly FactoryDefinition _factory;
 		private readonly IResolverContext _caller;
 
-		public InjectionAggregator(TypeName targetType, FactoryDefinition factory, IResolverContext caller)
+		public InjectionAggregator(FactoryDefinition factory, IResolverContext caller)
 		{
 			_factory = factory;
 			_caller = caller;
-			_targetType = targetType;
+		}
+		
+		public string GetResolution(ResolutionDefinition resolution)
+		{
+			if (GetPriorInjectionExpression(resolution.TargetType, InjectionMethod.Resolver) is {} selfCapacity)
+			{
+				return selfCapacity;
+			}
+
+			var args = new List<string>();
+			foreach (var dependency in resolution.Dependencies)
+			{
+				args.Add(GetPriorInjectionExpression(dependency) ?? "<error>");
+			}
+
+			return $"new {resolution.TypeName.Name}({args.Join(", ")})";
 		}
 
 		public string GetResolutionList(CollectionResolverDefinition resolver)
@@ -29,26 +43,26 @@ namespace Deptorygen.Generator.Injection
 				.Join("," + Environment.NewLine + "\t\t\t\t");
 		}
 
-		public string? GetPriorInjectionExpression(params InjectionMethod[] methodsToExclude)
+		public string? GetPriorInjectionExpression(TypeName typeName, params InjectionMethod[] methodsToExclude)
 		{
-			return CapabilitiesFromResolver()
+			return CapabilitiesFromResolver(typeName)
 				.Where(x => methodsToExclude.All(y => y != x.Method))
 				.OrderBy(x => x.Method)
 				.FirstOrDefault()?.Code;
 		}
 
-		private IEnumerable<InjectionExpression> CapabilitiesFromResolver()
+		private IEnumerable<InjectionExpression> CapabilitiesFromResolver(TypeName typeName)
 		{
-			foreach (var capability in CapabilitiesFromFactory(_targetType))
+			foreach (var capability in CapabilitiesFromFactory(typeName))
 			{
 				yield return capability;
 			}
 
 			foreach (var parameter in _caller.Parameters)
 			{
-				if (parameter.TypeNameInfo == _targetType)
+				if (parameter.TypeNameInfo == typeName)
 				{
-					yield return new InjectionExpression(_targetType, InjectionMethod.Parameter, parameter.VarName);
+					yield return new InjectionExpression(typeName, InjectionMethod.Parameter, parameter.VarName);
 				}
 			}
 		}

@@ -20,8 +20,8 @@ namespace Deptorygen.Generator.Interfaces
 			FactoryDefinition factory,
 			params InjectionMethod[] methodsToExclude)
 		{
-			var aggregator = new InjectionAggregator(typeName, factory, caller);
-			return aggregator.GetPriorInjectionExpression(methodsToExclude);
+			var aggregator = new InjectionAggregator(factory, caller);
+			return aggregator.GetPriorInjectionExpression(typeName, methodsToExclude);
 		}
 	}
 }

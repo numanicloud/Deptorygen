@@ -59,7 +59,7 @@ namespace Deptorygen.Generator.Definition
 
 		public string GetElementList(FactoryDefinition factory)
 		{
-			var aggregator = new InjectionAggregator(ElementTypeInfo, factory, this);
+			var aggregator = new InjectionAggregator(factory, this);
 			return aggregator.GetResolutionList(this);
 		}
 	}

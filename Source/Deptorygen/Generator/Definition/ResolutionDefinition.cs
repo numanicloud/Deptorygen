@@ -22,20 +22,8 @@ namespace Deptorygen.Generator.Definition
 
 		public string GetInstantiation(ResolverDefinition resolver, FactoryDefinition factory)
 		{
-			var aggregator = new InjectionAggregator(TargetType, factory, resolver);
-			if (aggregator.GetPriorInjectionExpression(InjectionMethod.Resolver) is {} selfCapacity)
-			{
-				return selfCapacity;
-			}
-
-			var args = new List<string>();
-			foreach (var dependency in Dependencies)
-			{
-				var aggregator1 = new InjectionAggregator(dependency, factory, resolver);
-				args.Add(aggregator1.GetPriorInjectionExpression() ?? "<error>");
-			}
-
-			return $"new {TypeName.Name}({args.Join(", ")})";
+			var aggregator = new InjectionAggregator(factory, resolver);
+			return aggregator.GetResolution(this);
 		}
 	}
 }
