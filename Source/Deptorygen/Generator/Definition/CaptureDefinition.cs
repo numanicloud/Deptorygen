@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
@@ -30,24 +31,6 @@ namespace Deptorygen.Generator.Definition
 		public IEnumerable<string> GetRequiredNamespaces()
 		{
 			yield return InterfaceNameInfo.FullNamespace;
-		}
-
-		public IEnumerable<InjectionExpression> GetDelegations(TypeName typeName, FactoryDefinition factory, IResolverContext caller)
-		{
-			if (typeName == InterfaceNameInfo)
-			{
-				yield return new InjectionExpression(typeName, InjectionMethod.CapturedFactory, PropertyName);
-			}
-
-			var capabilities1 = Resolvers.Select(x => x.GetDelegation(typeName, factory, caller));
-			var capabilities2 = CollectionResolvers.Select(x => x.GetDelegations(typeName, factory));
-			foreach (var expression in capabilities1.Concat(capabilities2).FilterNull())
-			{
-				yield return new InjectionExpression(
-					typeName,
-					InjectionMethod.CapturedResolver,
-					$"{PropertyName}.{expression.Code}");
-			}
 		}
 
 		public IEnumerable<Accessibility> Accessibilities

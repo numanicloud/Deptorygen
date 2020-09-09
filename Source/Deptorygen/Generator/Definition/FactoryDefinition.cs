@@ -3,7 +3,6 @@ using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
-using Deptorygen.Generator.Injection;
 
 namespace Deptorygen.Generator.Definition
 {
@@ -117,12 +116,6 @@ namespace Deptorygen.Generator.Definition
 			}
 
 			return result.ToArray();
-		}
-
-		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, IResolverContext caller)
-		{
-			var aggregator = new InjectionAggregator();
-			return aggregator.CapabilitiesFromFactory(typeName, this, caller);
 		}
 
 		public IEnumerable<Accessibility> Accessibilities

@@ -57,12 +57,6 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
-		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, FactoryDefinition factory)
-		{
-			var aggregation = new InjectionAggregator();
-			return aggregation.CapabilitiesFromResolver(typeName, factory, this);
-		}
-
 		public InjectionExpression? GetDelegations(TypeName typeName, FactoryDefinition factory)
 		{
 			if (typeName != ReturnType) return null;
@@ -74,9 +68,8 @@ namespace Deptorygen.Generator.Definition
 		
 		public string GetElementList(FactoryDefinition factory)
 		{
-			return ServiceTypes.Select(x =>
-				factory.GetInjectionCapabilities(x, this).OrderBy(y => y.Method).FirstOrDefault()?.Code ?? "<error>")
-				.Join("," + Environment.NewLine + "\t\t\t\t");
+			var aggregator = new InjectionAggregator();
+			return aggregator.GetResolutionList(factory, this);
 		}
 	}
 }

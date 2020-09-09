@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Deptorygen.Generator.Definition;
 using Deptorygen.Generator.Injection;
@@ -9,9 +8,7 @@ namespace Deptorygen.Generator.Interfaces
 {
 	public interface IResolverContext
 	{
-		TypeName ReturnType { get; }
 		VariableDefinition[] Parameters { get; }
-		IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, FactoryDefinition factory);
 	}
 
 	public static class ResolverContextExtensions
