@@ -36,6 +36,10 @@
 		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Expected\CaptureMixin.cs" />
 		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Source\CaptureFactory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\CaptureMixin2\Source\CaptureMixin.cs" />
+		<Compile Remove="DataSource\UnitTests\CleanSelfDependency\Expected\CleanSelfDependency.cs" />
+		<Compile Remove="DataSource\UnitTests\CleanSelfDependency\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\CleanSelfDependency\Source\CleanSelfDependency.cs" />
+		<Compile Remove="DataSource\UnitTests\CleanSelfDependency\Source\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\CollectionGenericHost\Expected\CollectionGenericHost.cs" />
 		<Compile Remove="DataSource\UnitTests\CollectionGenericHost\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\CollectionGenericHost\Source\CollectionGenericHost.cs" />
@@ -104,6 +108,10 @@
 	  <None Include="DataSource\UnitTests\AllPublic\Expected\AllPublic.cs" />
 	  <None Include="DataSource\UnitTests\AllPublic\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\AllPublic\Source\AllPublic.cs" />
+	  <None Include="DataSource\UnitTests\CleanSelfDependency\Expected\CleanSelfDependency.cs" />
+	  <None Include="DataSource\UnitTests\CleanSelfDependency\Expected\Factory.g.cs" />
+	  <None Include="DataSource\UnitTests\CleanSelfDependency\Source\CleanSelfDependency.cs" />
+	  <None Include="DataSource\UnitTests\CleanSelfDependency\Source\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\CollectionGenericHost\Expected\CollectionGenericHost.cs" />
 	  <None Include="DataSource\UnitTests\CollectionGenericHost\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\CollectionGenericHost\Source\CollectionGenericHost.cs" />

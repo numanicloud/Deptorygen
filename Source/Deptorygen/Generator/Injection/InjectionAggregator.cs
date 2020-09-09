@@ -9,6 +9,8 @@ namespace Deptorygen.Generator.Injection
 {
 	public class InjectionAggregator
 	{
+		private const string ErrorPlaceHolder = "<error>";
+
 		private readonly FactoryDefinition _factory;
 		private readonly IResolverContext _caller;
 
@@ -20,7 +22,13 @@ namespace Deptorygen.Generator.Injection
 		
 		public string GetResolution(ResolutionDefinition resolution)
 		{
-			if (GetPriorInjectionExpression(resolution.TargetType, InjectionMethod.Resolver) is {} selfCapacity)
+			var excluded = new[]
+			{
+				InjectionMethod.Resolver,
+				InjectionMethod.This,
+				InjectionMethod.CapturedFactory
+			};
+			if (GetPriorInjectionExpression(resolution.TargetType, excluded) is {} selfCapacity)
 			{
 				return selfCapacity;
 			}
@@ -28,7 +36,14 @@ namespace Deptorygen.Generator.Injection
 			var args = new List<string>();
 			foreach (var dependency in resolution.Dependencies)
 			{
-				args.Add(GetPriorInjectionExpression(dependency) ?? "<error>");
+				// 再生成で消えるようなパラメータには引数を与えない
+				if (resolution.TypeName.Name == _factory.TypeName
+					&& _factory.Dependencies.All(x => x != dependency)
+					&& _factory.Captures.All(x => x.InterfaceNameInfo != dependency))
+				{
+					continue;
+				}
+				args.Add(GetPriorInjectionExpression(dependency) ?? ErrorPlaceHolder);
 			}
 
 			return $"new {resolution.TypeName.Name}({args.Join(", ")})";
@@ -38,7 +53,7 @@ namespace Deptorygen.Generator.Injection
 		{
 			return resolver.ServiceTypes.Select(x => CapabilitiesFromFactory(x)
 					.OrderBy(y => y.Method)
-					.FirstOrDefault()?.Code ?? "<error>")
+					.FirstOrDefault()?.Code ?? ErrorPlaceHolder)
 				.Join("," + Environment.NewLine + "\t\t\t\t");
 		}
 
@@ -110,7 +125,7 @@ namespace Deptorygen.Generator.Injection
 			if (typeName != resolver.ReturnType) return null;
 
 			var args = resolver.Parameters
-				.Select(x => _caller.GetPriorInjectionExpression(x.TypeNameInfo, _factory) ?? "<error>")
+				.Select(x => _caller.GetPriorInjectionExpression(x.TypeNameInfo, _factory) ?? ErrorPlaceHolder)
 				.Join(", ");
 
 			return new InjectionExpression(typeName,

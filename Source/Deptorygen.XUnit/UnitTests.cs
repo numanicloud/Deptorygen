@@ -91,6 +91,9 @@ namespace Deptorygen.XUnit
 		[Fact]
 		public void CollectionGenericHost() => VerifyCSharpByConvention();
 
+		[Fact]
+		public void CleanSelfDependency() => VerifyCSharpByConvention();
+
 		protected override CodeFixProvider GetCSharpCodeFixProvider() => new DeptorygenCodeFixProvider();
 
 		protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new DeptorygenAnalyzer();

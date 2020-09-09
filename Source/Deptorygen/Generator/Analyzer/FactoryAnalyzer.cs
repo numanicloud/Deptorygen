@@ -16,12 +16,15 @@ namespace Deptorygen.Generator.Analyzer
 			_syntax = syntax;
 		}
 
-		public FactoryDefinition GetDefinition()
+		private string GetFactoryTypeName()
 		{
 			var interfaceName = _syntax.InterfaceSymbol.Name;
-			var typeName = interfaceName[0].ToString().Replace("I", "") +
-			               interfaceName.Substring(1);
+			return interfaceName[0].ToString().Replace("I", "") +
+				interfaceName.Substring(1);
+		}
 
+		public FactoryDefinition GetDefinition()
+		{
 			var genericHost = _syntax.InterfaceSymbol.HasAttribute(nameof(ConfigureGenericHostAttribute));
 
 			var resolvers = _syntax.Resolvers
@@ -37,7 +40,7 @@ namespace Deptorygen.Generator.Analyzer
 				.ToArray();
 
 			return new FactoryDefinition(
-				typeName,
+				GetFactoryTypeName(),
 				TypeName.FromSymbol(_syntax.InterfaceSymbol),
 				GetDependencies(),
 				resolvers,
@@ -49,6 +52,7 @@ namespace Deptorygen.Generator.Analyzer
 		private TypeName[] GetDependencies()
 		{
 			var consumed = _syntax.Resolvers
+				.Where(x => x.Resolutions.All(y => y.TypeName.Name != GetFactoryTypeName()))
 				.Cast<IServiceConsumer>()
 				.Concat(_syntax.CollectionResolvers)
 				.SelectMany(x => x.GetRequiredServiceTypes());
