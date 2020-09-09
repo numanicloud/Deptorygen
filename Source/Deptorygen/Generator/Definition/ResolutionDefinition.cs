@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 
 namespace Deptorygen.Generator.Definition
@@ -23,23 +24,15 @@ namespace Deptorygen.Generator.Definition
 
 		public string GetInstantiation(ResolverDefinition resolver, FactoryDefinition factory)
 		{
-			var selfCapability = factory.GetInjectionCapabilities(TargetType)
-				.Where(x => x.Method != InjectionMethod.Resolver)
-				.OrderBy(x => x.Method)
-				.FirstOrDefault();
-			if (selfCapability is {})
+			if (resolver.GetPriorInjectionExpression(TargetType, factory, InjectionMethod.Resolver) is {} selfCapacity)
 			{
-				return selfCapability.Code;
+				return selfCapacity;
 			}
 
 			var args = new List<string>();
 			foreach (var dependency in Dependencies)
 			{
-				var capabilities = resolver.GetInjectionCapabilities(dependency, factory)
-					.OrderBy(x => x.Method)
-					.FirstOrDefault();
-
-				args.Add(capabilities?.Code ?? "<error>");
+				args.Add(resolver.GetPriorInjectionExpression(dependency, factory) ?? "<error>");
 			}
 
 			return $"new {TypeName.Name}({args.Join(", ")})";

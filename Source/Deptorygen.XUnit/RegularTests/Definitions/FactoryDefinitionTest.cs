@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Deptorygen.Generator.Definition;
+using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 using Xunit;
@@ -115,6 +116,22 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 		}
 
 		[Fact]
+		public void 解決メソッドではthisよりパラメータのほうが優先_refactor()
+		{
+			var resolveServiceC = ResolverDefinition(ServiceCInfo,
+				variables: new[] {new VariableDefinition(FactoryInterfaceInfo, "subject")});
+			var caller = ResolverDefinition(ServiceAInfo,
+				variables: new[] {new VariableDefinition(FactoryInterfaceInfo, "subject")});
+			var factory = FactoryDefinition("Subject", FactoryInterfaceInfo,
+				resolvers: new[] {resolveServiceC});
+
+			//var generated = factory.Injection.GetExpression(ServiceCInfo);
+			var generated = resolveServiceC.GetDelegation(ServiceCInfo, factory, caller)?.Code;
+
+			Assert.Equal("ResolveServiceC(subject)", generated);
+		}
+
+		[Fact]
 		public void 解決メソッドでthisよりパラメータのほうが優先()
 		{
 			// パラメータはResolverDefinitionに属するので、このテストがあること自体が怪しいかも
@@ -129,6 +146,23 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 		}
 
 		[Fact]
+		public void キャプチャしたファクトリーよりthisのほうが優先_refactor()
+		{
+			var capturedResolver = ResolverDefinition(FactoryInterfaceInfo);
+			var capture = new CaptureDefinition(FactoryInterfaceInfo2,
+				"Capture",
+				new [] { capturedResolver },
+				new CollectionResolverDefinition[0]);
+			var resolver = ResolverDefinition(FactoryInterfaceInfo);
+			var factory = FactoryDefinition("Subject", FactoryInterfaceInfo,
+				captures: new []{capture});
+
+			var generated = resolver.GetPriorInjectionExpression(FactoryInterfaceInfo, factory);
+
+			Assert.Equal("this", generated);
+		}
+
+		[Fact]
 		public void キャプチャしたファクトリーよりthisのほうが優先()
 		{
 			var definition = GetFixtureFactoryDefinition(true);
@@ -136,6 +170,22 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 			var generated = definition.Injection.GetExpression(FactoryInterfaceInfo);
 
 			Assert.Equal("this", generated);
+		}
+		
+		[Fact]
+		public void 解決メソッドよりもキャプチャしたファクトリープロパティのほうが優先_refactor()
+		{
+			var capture = new CaptureDefinition(FactoryInterfaceInfo2,
+				"Captured",
+				new ResolverDefinition[0], new CollectionResolverDefinition[0]);
+			var resolver = ResolverDefinition(FactoryInterfaceInfo2);
+			var factory = FactoryDefinition("Subject", FactoryInterfaceInfo,
+				new[] {resolver},
+				captures: new[] {capture});
+
+			var generated = resolver.GetPriorInjectionExpression(FactoryInterfaceInfo2, factory);
+
+			Assert.Equal("Captured", generated);
 		}
 
 		[Fact]
@@ -147,6 +197,26 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 
 			Assert.Equal("Captured", generated);
 		}
+		
+		[Fact]
+		public void コレクション解決メソッドよりもキャプチャしたコレクション解決メソッドのほうが優先_refactor()
+		{
+			var resolver = GetCollectionResolverDefinition(ServiceAInfo);
+			var capture = new CaptureDefinition(FactoryInterfaceInfo2,
+				"Captured",
+				new ResolverDefinition[0], new CollectionResolverDefinition[]{resolver});
+			var factory = FactoryDefinition("Subject", FactoryInterfaceInfo,
+				new ResolverDefinition[0],
+				new CollectionResolverDefinition[]{resolver},
+				captures: new[] {capture});
+			var pivot = ResolverDefinition(ServiceBInfo);
+
+			// 基準としてのResolverを置かずに呼び出したい(パラメータの都合で難しそう)
+			var generated = pivot.GetPriorInjectionExpression(ToEnumerableType(ServiceAInfo), factory);
+
+			Assert.Equal("Captured.ResolveServiceAs()", generated);
+		}
+		
 		[Fact]
 		public void コレクション解決メソッドよりもキャプチャしたコレクション解決メソッドのほうが優先()
 		{
@@ -158,6 +228,22 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 		}
 
 		[Fact]
+		public void 解決メソッドよりもキャプチャした解決メソッドのほうが優先_refactor()
+		{
+			var resolver = ResolverDefinition(ServiceBInfo);
+			var capture = new CaptureDefinition(FactoryInterfaceInfo2, "Captured",
+				new []{resolver}, new CollectionResolverDefinition[0]);
+			var factory = FactoryDefinition("Subject", FactoryInterfaceInfo,
+				resolvers: new[] {resolver},
+				captures: new[] {capture});
+			var pivot = ResolverDefinition(ServiceCInfo);
+
+			var generated = pivot.GetPriorInjectionExpression(ServiceBInfo, factory);
+
+			Assert.Equal("Captured.ResolveServiceB()", generated);
+		}
+
+		[Fact]
 		public void 解決メソッドよりもキャプチャした解決メソッドのほうが優先()
 		{
 			var definition = GetFixtureFactoryDefinition(true);
@@ -165,6 +251,18 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 			var generated = definition.Injection.GetExpression(ServiceBInfo);
 
 			Assert.Equal("Captured.ResolveServiceB()", generated);
+		}
+
+		[Fact]
+		public void 式として解決メソッドが使用される_refactor()
+		{
+			var resolver = ResolverDefinition(ServiceBInfo);
+			var factory = FactoryDefinition("Subject", FactoryInterfaceInfo, new[] {resolver});
+			var pivot = ResolverDefinition(ServiceCInfo);
+
+			var generated = pivot.GetPriorInjectionExpression(ServiceBInfo, factory);
+
+			Assert.Equal("ResolveServiceB()", generated);
 		}
 
 		[Fact]

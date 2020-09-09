@@ -186,16 +186,19 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
-		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName)
+		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, IResolverContext caller)
 		{
 			if (typeName == InterfaceNameInfo)
 			{
 				yield return new InjectionExpression(typeName, InjectionMethod.This, "this");
 			}
 
-			foreach (var resolver in Resolvers.Select(x => x.GetDelegation(typeName, this)).FilterNull())
+			var resolvers = Resolvers.Select(x => x.GetDelegation(typeName, this, caller))
+				.FilterNull();
+
+			foreach (var capabilities in resolvers)
 			{
-				yield return resolver;
+				yield return capabilities;
 			}
 
 			foreach (var expression in CollectionResolvers.Select(x => x.GetDelegations(typeName, this)).FilterNull())
@@ -203,7 +206,7 @@ namespace Deptorygen.Generator.Definition
 				yield return expression;
 			}
 
-			foreach (var capture in Captures.SelectMany(x => x.GetDelegations(typeName, this)))
+			foreach (var capture in Captures.SelectMany(x => x.GetDelegations(typeName, this, caller)))
 			{
 				yield return capture;
 			}

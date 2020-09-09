@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class CollectionResolverDefinition : IDefinitionRequiringNamespace, IInjectionGenerator, IAccessibilityClaimer
+	public class CollectionResolverDefinition : IDefinitionRequiringNamespace, IInjectionGenerator, IAccessibilityClaimer, IResolverContext
 	{
 		public TypeName ReturnType { get; }
 		public TypeName ElementTypeInfo => ReturnType.TypeArguments[0];
@@ -109,6 +109,13 @@ namespace Deptorygen.Generator.Definition
 			}
 
 			return null;
+		}
+		
+		public string GetElementList(FactoryDefinition factory)
+		{
+			return ServiceTypes.Select(x =>
+				factory.GetInjectionCapabilities(x, this).OrderBy(y => y.Method).FirstOrDefault()?.Code ?? "<error>")
+				.Join("," + Environment.NewLine + "\t\t\t\t");
 		}
 	}
 }

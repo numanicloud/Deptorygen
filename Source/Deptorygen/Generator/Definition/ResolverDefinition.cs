@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class ResolverDefinition : IDefinitionRequiringNamespace, IInjectionGenerator, IAccessibilityClaimer
+	public class ResolverDefinition : IDefinitionRequiringNamespace, IInjectionGenerator, IAccessibilityClaimer, IResolverContext
 	{
 		public string MethodName { get; }
 		public TypeName ReturnType { get; }
@@ -35,7 +35,7 @@ namespace Deptorygen.Generator.Definition
 		{
 			return Resolution.IsDisposable
 			       && !IsTransient
-			       && !TryGetDelegation(factory, out _);
+			       && !IsAlternatedByCapture(factory);
 		}
 
 		public string GetParameterList()
@@ -55,21 +55,6 @@ namespace Deptorygen.Generator.Definition
 		public bool IsAlternatedByCapture(FactoryDefinition definition)
 		{
 			return definition.Captures.Any(x => x.Resolvers.Any(y => y.ReturnType == ReturnType));
-		}
-
-		public bool TryGetDelegation(FactoryDefinition factory, out string code)
-		{
-			foreach (var capture in factory.Captures)
-			{
-				if (capture.GetInjectionExpression(this, factory.Injection) is {} injection)
-				{
-					code = injection;
-					return true;
-				}
-			}
-
-			code = "";
-			return false;
 		}
 
 		public IEnumerable<string> GetRequiredNamespaces()
@@ -97,14 +82,11 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
-		public InjectionExpression? GetDelegation(TypeName typeName, FactoryDefinition factory)
+		public InjectionExpression? GetDelegation(TypeName typeName, FactoryDefinition factory, IResolverContext caller)
 		{
 			if (typeName != ReturnType) return null;
 
-			var args = Parameters
-				.Select(x => factory.GetInjectionCapabilities(x.TypeNameInfo))
-				.Where(x => x.Any())
-				.Select(x => x.OrderBy(y => y.Method).First().Code)
+			var args = Parameters.Select(x => caller.GetPriorInjectionExpression(x.TypeNameInfo, factory) ?? "<error>")
 				.Join(", ");
 
 			return new InjectionExpression(typeName,
@@ -114,7 +96,7 @@ namespace Deptorygen.Generator.Definition
 
 		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, FactoryDefinition factory)
 		{
-			foreach (var capability in factory.GetInjectionCapabilities(typeName))
+			foreach (var capability in factory.GetInjectionCapabilities(typeName, this))
 			{
 				yield return capability;
 			}

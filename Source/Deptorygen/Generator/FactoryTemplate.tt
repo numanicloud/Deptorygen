@@ -36,7 +36,7 @@ namespace <#= Factory.NameSpace #>
 <#  // キャッシュ #>
 <#  if(Factory.Resolvers.Any()) { #>
 <#      foreach(var resolver in Factory.Resolvers) {
-			if(!resolver.IsTransient && !resolver.TryGetDelegation(Factory, out var dummy)) { #>
+			if(!resolver.IsTransient && !resolver.IsAlternatedByCapture(Factory)) { #>
 		private <#= resolver.ResolutionName #>? <#= resolver.CacheVarName #>;
 <#          } #>
 <#      } #>
@@ -77,7 +77,7 @@ namespace <#= Factory.NameSpace #>
 		{
 			return new <#= resolver.ElementTypeName #>[]
 			{
-				<#= resolver.GetElementList(Factory.Injection) #>
+				<#= resolver.GetElementList(Factory) #>
 			};
 		}
 <#      }  #>

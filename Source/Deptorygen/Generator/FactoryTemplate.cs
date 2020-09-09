@@ -200,7 +200,7 @@ namespace Deptorygen.Generator
             
             #line 38 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
       foreach(var resolver in Factory.Resolvers) {
-			if(!resolver.IsTransient && !resolver.TryGetDelegation(Factory, out var dummy)) { 
+			if(!resolver.IsTransient && !resolver.IsAlternatedByCapture(Factory)) { 
             
             #line default
             #line hidden
@@ -471,7 +471,7 @@ namespace Deptorygen.Generator
             this.Write("[]\r\n\t\t\t{\r\n\t\t\t\t");
             
             #line 80 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetElementList(Factory.Injection)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(resolver.GetElementList(Factory)));
             
             #line default
             #line hidden

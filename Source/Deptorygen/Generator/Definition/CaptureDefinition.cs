@@ -76,14 +76,14 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
-		public IEnumerable<InjectionExpression> GetDelegations(TypeName typeName, FactoryDefinition factory)
+		public IEnumerable<InjectionExpression> GetDelegations(TypeName typeName, FactoryDefinition factory, IResolverContext caller)
 		{
 			if (typeName == InterfaceNameInfo)
 			{
 				yield return new InjectionExpression(typeName, InjectionMethod.CapturedFactory, PropertyName);
 			}
 
-			var capabilities1 = Resolvers.Select(x => x.GetDelegation(typeName, factory));
+			var capabilities1 = Resolvers.Select(x => x.GetDelegation(typeName, factory, caller));
 			var capabilities2 = CollectionResolvers.Select(x => x.GetDelegations(typeName, factory));
 			foreach (var expression in capabilities1.Concat(capabilities2).FilterNull())
 			{
