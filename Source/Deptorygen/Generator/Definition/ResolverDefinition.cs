@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class ResolverDefinition : IDefinitionRequiringNamespace, IInjectionGenerator, IAccessibilityClaimer, IResolverContext
+	public class ResolverDefinition : IDefinitionRequiringNamespace, IAccessibilityClaimer, IResolverContext
 	{
 		public string MethodName { get; }
 		public TypeName ReturnType { get; }
@@ -43,15 +43,6 @@ namespace Deptorygen.Generator.Definition
 			return Parameters.Select(x => x.Code).Join(", ");
 		}
 
-		// TODO: このメソッドはResolutionDefinitionに移した方が自然かも
-
-		public string GetArgsListForSelf(InjectionContext context)
-		{
-			return Parameters
-				.Select(x => x.VarName ?? context.GetExpression(x.TypeNameInfo))
-				.Join(", ");
-		}
-
 		public bool IsAlternatedByCapture(FactoryDefinition definition)
 		{
 			return definition.Captures.Any(x => x.Resolvers.Any(y => y.ReturnType == ReturnType));
@@ -64,21 +55,6 @@ namespace Deptorygen.Generator.Definition
 			foreach (var p in Parameters)
 			{
 				yield return p.TypeNamespace;
-			}
-		}
-
-		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
-		{
-			return typeName == ReturnType ? $"{MethodName}({GetArgsListForSelf(context)})" : null;
-		}
-
-		public IEnumerable<InjectionExpression> GetInjectionExpressions(TypeName typeName, InjectionContext context)
-		{
-			if (typeName == ReturnType)
-			{
-				yield return new InjectionExpression(typeName,
-					InjectionMethod.Resolver,
-					$"{MethodName}({GetArgsListForSelf(context)})");
 			}
 		}
 

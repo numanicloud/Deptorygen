@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis;
 
 namespace Deptorygen.Generator.Definition
 {
-	public class CollectionResolverDefinition : IDefinitionRequiringNamespace, IInjectionGenerator, IAccessibilityClaimer, IResolverContext
+	public class CollectionResolverDefinition : IDefinitionRequiringNamespace, IAccessibilityClaimer, IResolverContext
 	{
 		public TypeName ReturnType { get; }
 		public TypeName ElementTypeInfo => ReturnType.TypeArguments[0];
@@ -49,21 +49,6 @@ namespace Deptorygen.Generator.Definition
 			foreach (var p in Parameters)
 			{
 				yield return p.TypeNamespace;
-			}
-		}
-
-		public string? GetInjectionExpression(TypeName typeName, InjectionContext context)
-		{
-			return typeName == ReturnType ? $"{MethodName}({GetArgListForSelf(context)})" : null;
-		}
-
-		public IEnumerable<InjectionExpression> GetInjectionExpressions(TypeName typeName, InjectionContext context)
-		{
-			if (typeName == ReturnType)
-			{
-				yield return new InjectionExpression(typeName,
-					InjectionMethod.Resolver,
-					$"{MethodName}({GetArgListForSelf(context)})");
 			}
 		}
 
