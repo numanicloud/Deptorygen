@@ -22,11 +22,7 @@ namespace Deptorygen.Generator.Interfaces
 			params InjectionMethod[] methodsToExclude)
 		{
 			var aggregator = new InjectionAggregator();
-
-			return aggregator.CapabilitiesFromResolver(typeName, factory, resolver)
-				.Where(x => methodsToExclude.All(y => y != x.Method))
-				.OrderBy(x => x.Method)
-				.FirstOrDefault()?.Code;
+			return aggregator.GetPriorInjectionExpression(typeName, factory, resolver, methodsToExclude);
 		}
 	}
 }

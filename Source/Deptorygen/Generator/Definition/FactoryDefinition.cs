@@ -3,6 +3,7 @@ using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
 using System.Collections.Generic;
 using System.Linq;
+using Deptorygen.Generator.Injection;
 
 namespace Deptorygen.Generator.Definition
 {
@@ -120,21 +121,8 @@ namespace Deptorygen.Generator.Definition
 
 		public IEnumerable<InjectionExpression> GetInjectionCapabilities(TypeName typeName, IResolverContext caller)
 		{
-			if (typeName == InterfaceNameInfo)
-			{
-				yield return new InjectionExpression(typeName, InjectionMethod.This, "this");
-			}
-
-			var resolvers = Resolvers.Select(x => x.GetDelegation(typeName, this, caller)).FilterNull();
-			var collections = CollectionResolvers.Select(x => x.GetDelegations(typeName, this)).FilterNull();
-			var captures = Captures.SelectMany(x => x.GetDelegations(typeName, this, caller));
-			var fields = Dependencies.Where(x => x == typeName)
-				.Select(x => new InjectionExpression(typeName, InjectionMethod.Field, $"_{x.LowerCamelCase}"));
-
-			foreach (var expression in resolvers.Concat(collections).Concat(captures).Concat(fields))
-			{
-				yield return expression;
-			}
+			var aggregator = new InjectionAggregator();
+			return aggregator.CapabilitiesFromFactory(typeName, this, caller);
 		}
 
 		public IEnumerable<Accessibility> Accessibilities
