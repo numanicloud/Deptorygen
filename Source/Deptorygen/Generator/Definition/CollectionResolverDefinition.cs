@@ -57,19 +57,10 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
-		public InjectionExpression? GetDelegations(TypeName typeName, FactoryDefinition factory)
-		{
-			if (typeName != ReturnType) return null;
-
-			return new InjectionExpression(typeName,
-				InjectionMethod.Resolver,
-				$"{MethodName}()");
-		}
-		
 		public string GetElementList(FactoryDefinition factory)
 		{
-			var aggregator = new InjectionAggregator();
-			return aggregator.GetResolutionList(factory, this);
+			var aggregator = new InjectionAggregator(ElementTypeInfo, factory, this);
+			return aggregator.GetResolutionList(this);
 		}
 	}
 }

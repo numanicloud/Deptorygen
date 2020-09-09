@@ -58,18 +58,6 @@ namespace Deptorygen.Generator.Definition
 			}
 		}
 
-		public InjectionExpression? GetDelegation(TypeName typeName, FactoryDefinition factory, IResolverContext caller)
-		{
-			if (typeName != ReturnType) return null;
-
-			var args = Parameters.Select(x => caller.GetPriorInjectionExpression(x.TypeNameInfo, factory) ?? "<error>")
-				.Join(", ");
-
-			return new InjectionExpression(typeName,
-				InjectionMethod.Resolver,
-				$"{MethodName}({args})");
-		}
-
 		public IEnumerable<Accessibility> Accessibilities
 		{
 			get

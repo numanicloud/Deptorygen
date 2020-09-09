@@ -115,8 +115,7 @@ namespace Deptorygen.XUnit.RegularTests.Definitions
 			var factory = FactoryDefinition("Subject", FactoryInterfaceInfo,
 				resolvers: new[] {resolveServiceC});
 
-			//var generated = factory.Injection.GetExpression(ServiceCInfo);
-			var generated = resolveServiceC.GetDelegation(ServiceCInfo, factory, caller)?.Code;
+			var generated = caller.GetPriorInjectionExpression(ServiceCInfo, factory);
 
 			Assert.Equal("ResolveServiceC(subject)", generated);
 		}

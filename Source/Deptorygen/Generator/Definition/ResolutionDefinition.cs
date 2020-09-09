@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Deptorygen.Generator.Injection;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 
@@ -21,7 +22,8 @@ namespace Deptorygen.Generator.Definition
 
 		public string GetInstantiation(ResolverDefinition resolver, FactoryDefinition factory)
 		{
-			if (resolver.GetPriorInjectionExpression(TargetType, factory, InjectionMethod.Resolver) is {} selfCapacity)
+			var aggregator = new InjectionAggregator(TargetType, factory, resolver);
+			if (aggregator.GetPriorInjectionExpression(InjectionMethod.Resolver) is {} selfCapacity)
 			{
 				return selfCapacity;
 			}
@@ -29,7 +31,8 @@ namespace Deptorygen.Generator.Definition
 			var args = new List<string>();
 			foreach (var dependency in Dependencies)
 			{
-				args.Add(resolver.GetPriorInjectionExpression(dependency, factory) ?? "<error>");
+				var aggregator1 = new InjectionAggregator(dependency, factory, resolver);
+				args.Add(aggregator1.GetPriorInjectionExpression() ?? "<error>");
 			}
 
 			return $"new {TypeName.Name}({args.Join(", ")})";

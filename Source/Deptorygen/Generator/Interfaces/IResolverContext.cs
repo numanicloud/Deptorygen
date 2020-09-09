@@ -9,17 +9,19 @@ namespace Deptorygen.Generator.Interfaces
 	public interface IResolverContext
 	{
 		VariableDefinition[] Parameters { get; }
+		string MethodName { get; }
+		TypeName ReturnType { get; }
 	}
 
 	public static class ResolverContextExtensions
 	{
-		public static string? GetPriorInjectionExpression(this IResolverContext resolver,
+		public static string? GetPriorInjectionExpression(this IResolverContext caller,
 			TypeName typeName,
 			FactoryDefinition factory,
 			params InjectionMethod[] methodsToExclude)
 		{
-			var aggregator = new InjectionAggregator();
-			return aggregator.GetPriorInjectionExpression(typeName, factory, resolver, methodsToExclude);
+			var aggregator = new InjectionAggregator(typeName, factory, caller);
+			return aggregator.GetPriorInjectionExpression(methodsToExclude);
 		}
 	}
 }

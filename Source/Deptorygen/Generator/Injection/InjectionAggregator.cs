@@ -10,52 +10,62 @@ namespace Deptorygen.Generator.Injection
 {
 	public class InjectionAggregator
 	{
-		public string GetResolutionList(FactoryDefinition factory, CollectionResolverDefinition resolver)
+		private readonly TypeName _targetType;
+		private readonly FactoryDefinition _factory;
+		private readonly IResolverContext _caller;
+
+		public InjectionAggregator(TypeName targetType, FactoryDefinition factory, IResolverContext caller)
 		{
-			return resolver.ServiceTypes.Select(x => CapabilitiesFromFactory(x, factory, resolver)
+			_factory = factory;
+			_caller = caller;
+			_targetType = targetType;
+		}
+
+		public string GetResolutionList(CollectionResolverDefinition resolver)
+		{
+			return resolver.ServiceTypes.Select(x => CapabilitiesFromFactory(x)
 					.OrderBy(y => y.Method)
 					.FirstOrDefault()?.Code ?? "<error>")
 				.Join("," + Environment.NewLine + "\t\t\t\t");
 		}
 
-		public string? GetPriorInjectionExpression(TypeName typeName,
-			FactoryDefinition factory,
-			IResolverContext resolver,
-			params InjectionMethod[] methodsToExclude)
+		public string? GetPriorInjectionExpression(params InjectionMethod[] methodsToExclude)
 		{
-			return CapabilitiesFromResolver(typeName, factory, resolver)
+			return CapabilitiesFromResolver()
 				.Where(x => methodsToExclude.All(y => y != x.Method))
 				.OrderBy(x => x.Method)
 				.FirstOrDefault()?.Code;
 		}
 
-		private IEnumerable<InjectionExpression> CapabilitiesFromResolver(TypeName typeName, FactoryDefinition factory, IResolverContext caller)
+		private IEnumerable<InjectionExpression> CapabilitiesFromResolver()
 		{
-			foreach (var capability in CapabilitiesFromFactory(typeName, factory, caller))
+			foreach (var capability in CapabilitiesFromFactory(_targetType))
 			{
 				yield return capability;
 			}
 
-			foreach (var parameter in caller.Parameters)
+			foreach (var parameter in _caller.Parameters)
 			{
-				if (parameter.TypeNameInfo == typeName)
+				if (parameter.TypeNameInfo == _targetType)
 				{
-					yield return new InjectionExpression(typeName, InjectionMethod.Parameter, parameter.VarName);
+					yield return new InjectionExpression(_targetType, InjectionMethod.Parameter, parameter.VarName);
 				}
 			}
 		}
 
-		private IEnumerable<InjectionExpression> CapabilitiesFromFactory(TypeName typeName, FactoryDefinition factory, IResolverContext caller)
+		private IEnumerable<InjectionExpression> CapabilitiesFromFactory(TypeName typeName)
 		{
-			if (typeName == factory.InterfaceNameInfo)
+			if (typeName == _factory.InterfaceNameInfo)
 			{
 				yield return new InjectionExpression(typeName, InjectionMethod.This, "this");
 			}
 
-			var resolvers = factory.Resolvers.Select(x => x.GetDelegation(typeName, factory, caller)).FilterNull();
-			var collections = factory.CollectionResolvers.Select(x => x.GetDelegations(typeName, factory)).FilterNull();
-			var captures = factory.Captures.SelectMany(x => DelegationsFromCapture(typeName, factory, x, caller));
-			var fields = factory.Dependencies.Where(x => x == typeName)
+			var resolvers = _factory.Resolvers.Select(x => DelegationFromResolver(typeName, x))
+				.FilterNull();
+			var collections = _factory.CollectionResolvers.Select(x => DelegationFromResolver(typeName, x))
+				.FilterNull();
+			var captures = _factory.Captures.SelectMany(x => DelegationsFromCapture(typeName, x));
+			var fields = _factory.Dependencies.Where(x => x == typeName)
 				.Select(x => new InjectionExpression(typeName, InjectionMethod.Field, $"_{x.LowerCamelCase}"));
 
 			foreach (var expression in resolvers.Concat(collections).Concat(captures).Concat(fields))
@@ -63,16 +73,16 @@ namespace Deptorygen.Generator.Injection
 				yield return expression;
 			}
 		}
-		
-		public IEnumerable<InjectionExpression> DelegationsFromCapture(TypeName typeName, FactoryDefinition factory, CaptureDefinition capture, IResolverContext caller)
+
+		private IEnumerable<InjectionExpression> DelegationsFromCapture(TypeName typeName, CaptureDefinition capture)
 		{
 			if (typeName == capture.InterfaceNameInfo)
 			{
 				yield return new InjectionExpression(typeName, InjectionMethod.CapturedFactory, capture.PropertyName);
 			}
 
-			var capabilities1 = capture.Resolvers.Select(x => x.GetDelegation(typeName, factory, caller));
-			var capabilities2 = capture.CollectionResolvers.Select(x => x.GetDelegations(typeName, factory));
+			var capabilities1 = capture.Resolvers.Select(x => DelegationFromResolver(typeName, x));
+			var capabilities2 = capture.CollectionResolvers.Select(x => DelegationFromResolver(typeName, x));
 			foreach (var expression in capabilities1.Concat(capabilities2).FilterNull())
 			{
 				yield return new InjectionExpression(
@@ -80,6 +90,19 @@ namespace Deptorygen.Generator.Injection
 					InjectionMethod.CapturedResolver,
 					$"{capture.PropertyName}.{expression.Code}");
 			}
+		}
+
+		private InjectionExpression? DelegationFromResolver(TypeName typeName, IResolverContext resolver)
+		{
+			if (typeName != resolver.ReturnType) return null;
+
+			var args = resolver.Parameters
+				.Select(x => _caller.GetPriorInjectionExpression(x.TypeNameInfo, _factory) ?? "<error>")
+				.Join(", ");
+
+			return new InjectionExpression(typeName,
+				InjectionMethod.Resolver,
+				$"{resolver.MethodName}({args})");
 		}
 	}
 }
