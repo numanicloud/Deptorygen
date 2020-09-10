@@ -56,6 +56,20 @@ namespace Deptorygen.Utilities
 			}
 		}
 
+		public static bool IsSuperSet<T>(this IEnumerable<T> container, IEnumerable<T> contained)
+		{
+			var array = container.ToArray();
+			foreach (var item in contained)
+			{
+				if (!array.Contains(item))
+				{
+					return false;
+				}
+			}
+
+			return true;
+		}
+
 		public static bool HasAttribute(this INamedTypeSymbol symbol, string attributeName)
 		{
 			return symbol.GetAttributes()

@@ -94,6 +94,9 @@ namespace Deptorygen.XUnit
 		[Fact]
 		public void CleanSelfDependency() => VerifyCSharpByConvention();
 
+		[Fact]
+		public void DependencyDelegation() => VerifyCSharpByConvention();
+
 		protected override CodeFixProvider GetCSharpCodeFixProvider() => new DeptorygenCodeFixProvider();
 
 		protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer() => new DeptorygenAnalyzer();

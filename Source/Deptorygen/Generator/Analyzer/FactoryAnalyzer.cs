@@ -51,8 +51,17 @@ namespace Deptorygen.Generator.Analyzer
 
 		private TypeName[] GetDependencies()
 		{
-			var consumed = _syntax.Resolvers
-				.Where(x => x.Resolutions.All(y => y.TypeName.Name != GetFactoryTypeName()))
+			var alternatives = _syntax.Captures
+				.Cast<IServiceProvider>()
+				.Append(_syntax)
+				.SelectMany(x => x.GetCapableServiceTypes())
+				.ToArray();
+
+			var unAlternatedResolvers = _syntax.Resolvers
+				.Where(x => !(x.Resolutions.Any() && alternatives.IsSuperSet(x.Resolutions.Select(y => y.TypeName))))
+				.Where(x => !alternatives.Contains(x.ReturnTypeName));
+
+			var consumed = unAlternatedResolvers
 				.Cast<IServiceConsumer>()
 				.Concat(_syntax.CollectionResolvers)
 				.SelectMany(x => x.GetRequiredServiceTypes());
@@ -62,7 +71,8 @@ namespace Deptorygen.Generator.Analyzer
 				.Concat(_syntax.CollectionResolvers)
 				.Concat(_syntax.Captures)
 				.Append(_syntax)
-				.SelectMany(x => x.GetCapableServiceTypes());
+				.SelectMany(x => x.GetCapableServiceTypes())
+				.ToArray();
 
 			return consumed.Except(provided).ToArray();
 		}

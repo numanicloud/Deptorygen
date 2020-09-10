@@ -46,6 +46,10 @@
 		<Compile Remove="DataSource\UnitTests\Collection\Expected\Collection.cs" />
 		<Compile Remove="DataSource\UnitTests\Collection\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Collection\Source\Collection.cs" />
+		<Compile Remove="DataSource\UnitTests\DependencyDelegation\Expected\DependencyDelegation.cs" />
+		<Compile Remove="DataSource\UnitTests\DependencyDelegation\Expected\MixinFactory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\DependencyDelegation\Source\DependencyDelegation.cs" />
+		<Compile Remove="DataSource\UnitTests\DependencyDelegation\Source\MixinFactory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Disposable\Expected\Dispose.cs" />
 		<Compile Remove="DataSource\UnitTests\Disposable\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Disposable\Source\Dispose.cs" />
@@ -115,6 +119,9 @@
 	  <None Include="DataSource\UnitTests\CollectionGenericHost\Expected\CollectionGenericHost.cs" />
 	  <None Include="DataSource\UnitTests\CollectionGenericHost\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\CollectionGenericHost\Source\CollectionGenericHost.cs" />
+	  <None Include="DataSource\UnitTests\DependencyDelegation\Expected\DependencyDelegation.cs" />
+	  <None Include="DataSource\UnitTests\DependencyDelegation\Expected\MixinFactory.g.cs" />
+	  <None Include="DataSource\UnitTests\DependencyDelegation\Source\DependencyDelegation.cs" />
 	  <None Include="DataSource\UnitTests\InternalCapture\Expected\InternalCapture.cs" />
 	  <None Include="DataSource\UnitTests\InternalCapture\Expected\Factory.g.cs" />
 	  <None Include="DataSource\UnitTests\InternalCapture\Source\InternalCapture.cs" />
