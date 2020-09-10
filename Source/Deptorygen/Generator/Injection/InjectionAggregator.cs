@@ -67,6 +67,16 @@ namespace Deptorygen.Generator.Injection
 
 		private IEnumerable<InjectionExpression> CapabilitiesFromResolver(TypeName typeName)
 		{
+			if (_caller is ResolverDefinition resolver
+				&& resolver.DelegationKey is {} delegation)
+			{
+				var method = _factory.Resolvers.FirstOrDefault(x => x.MethodName == delegation);
+				if (DelegationFromResolver(method.ReturnType, method) is {} code)
+				{
+					yield return new InjectionExpression(typeName, InjectionMethod.Delegation, code.Code);
+				}
+			}
+
 			foreach (var capability in CapabilitiesFromFactory(typeName))
 			{
 				yield return capability;

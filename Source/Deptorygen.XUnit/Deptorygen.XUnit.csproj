@@ -94,6 +94,9 @@
 		<Compile Remove="DataSource\UnitTests\ResolveByCapture\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\ResolveByCapture\Expected\ResolveByCapture.cs" />
 		<Compile Remove="DataSource\UnitTests\ResolveByCapture\Source\ResolveByCapture.cs" />
+		<Compile Remove="DataSource\UnitTests\ResolverDelegation\Expected\Factory.g.cs" />
+		<Compile Remove="DataSource\UnitTests\ResolverDelegation\Expected\ResolverDelegation.cs" />
+		<Compile Remove="DataSource\UnitTests\ResolverDelegation\Source\ResolverDelegation.cs" />
 		<Compile Remove="DataSource\UnitTests\Transient\Expected\Factory.g.cs" />
 		<Compile Remove="DataSource\UnitTests\Transient\Expected\Transient.cs" />
 		<Compile Remove="DataSource\UnitTests\Transient\Source\Transient.cs" />
@@ -203,6 +206,9 @@
 		<None Include="DataSource\UnitTests\ResolveByCapture\Expected\Factory.g.cs" />
 		<None Include="DataSource\UnitTests\ResolveByCapture\Expected\ResolveByCapture.cs" />
 		<None Include="DataSource\UnitTests\ResolveByCapture\Source\ResolveByCapture.cs" />
+		<None Include="DataSource\UnitTests\ResolverDelegation\Expected\Factory.g.cs" />
+		<None Include="DataSource\UnitTests\ResolverDelegation\Expected\ResolverDelegation.cs" />
+		<None Include="DataSource\UnitTests\ResolverDelegation\Source\ResolverDelegation.cs" />
 		<None Include="DataSource\UnitTests\Transient\Expected\Factory.g.cs" />
 		<None Include="DataSource\UnitTests\Transient\Expected\Transient.cs" />
 		<None Include="DataSource\UnitTests\Transient\Source\Transient.cs" />

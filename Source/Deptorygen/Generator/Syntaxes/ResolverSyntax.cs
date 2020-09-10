@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Deptorygen.Annotations;
 using Deptorygen.Generator.Interfaces;
 using Deptorygen.Utilities;
 using Microsoft.CodeAnalysis;
@@ -14,13 +15,14 @@ namespace Deptorygen.Generator.Syntaxes
 		public ResolutionSyntax[] Resolutions { get; }
 		public ParameterSyntax[] Parameters { get; }
 		public Accessibility Accessibility { get; }
+		public string? DelegationKey { get; }
 
 		public ResolverSyntax(string methodName,
 			TypeName returnTypeName,
 			ResolutionSyntax? returnTypeResolution,
 			ResolutionSyntax[] resolutions,
 			ParameterSyntax[] parameters,
-			Accessibility accessibility)
+			Accessibility accessibility, string? delegationKey)
 		{
 			MethodName = methodName;
 			ReturnTypeName = returnTypeName;
@@ -28,6 +30,7 @@ namespace Deptorygen.Generator.Syntaxes
 			Resolutions = resolutions;
 			Parameters = parameters;
 			Accessibility = accessibility;
+			DelegationKey = delegationKey;
 		}
 
 		public static (ResolverSyntax[], CollectionResolverSyntax[]) FromParent(INamedTypeSymbol factory)
@@ -53,13 +56,18 @@ namespace Deptorygen.Generator.Syntaxes
 				}
 				else if(item.ReturnType is INamedTypeSymbol returnType)
 				{
+					var delegation = item.GetAttributes()
+						.FirstOrDefault(x => x.AttributeClass.Name == nameof(DelegationAttribute))
+						?.ConstructorArguments.First().Value;
+
 					var r = new ResolverSyntax(
 						item.Name,
 						TypeName.FromSymbol(returnType),
 						ResolutionSyntax.FromType(returnType),
 						ResolutionSyntax.FromResolversAttribute(item),
 						ParameterSyntax.FromResolver(item),
-						item.DeclaredAccessibility);
+						item.DeclaredAccessibility,
+						delegation as string);
 					resolverResult.Add(r);
 				}
 			}

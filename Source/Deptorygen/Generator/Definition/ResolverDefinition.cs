@@ -14,6 +14,7 @@ namespace Deptorygen.Generator.Definition
 		public VariableDefinition[] Parameters { get; }
 		public bool IsTransient { get; }
 		public string CacheVarName { get; }
+		public string? DelegationKey { get; }
 		public string ResolutionName => Resolution.TypeName.Name;
 
 		public ResolverDefinition(string methodName,
@@ -21,7 +22,7 @@ namespace Deptorygen.Generator.Definition
 			ResolutionDefinition resolution,
 			VariableDefinition[] parameters,
 			bool isTransient,
-			string cacheVarName)
+			string cacheVarName, string? delegationKey = null)
 		{
 			MethodName = methodName;
 			ReturnType = returnType;
@@ -29,19 +30,27 @@ namespace Deptorygen.Generator.Definition
 			Parameters = parameters;
 			IsTransient = isTransient;
 			CacheVarName = cacheVarName;
+			DelegationKey = delegationKey;
 		}
 
 		public bool GetRequireDispose(FactoryDefinition factory)
 		{
-			return Resolution.IsDisposable
-			       && !IsTransient
-			       && !IsAlternatedByCapture(factory);
+			return Resolution.IsDisposable && GetIsRequireCache(factory);
+		}
+
+		public bool GetIsRequireCache(FactoryDefinition factory)
+		{
+			return !IsTransient
+				&& !IsAlternatedByCapture(factory)
+				&& !IsAlternatedByDelegation();
 		}
 
 		public string GetParameterList()
 		{
 			return Parameters.Select(x => x.Code).Join(", ");
 		}
+
+		public bool IsAlternatedByDelegation() => !(DelegationKey is null);
 
 		public bool IsAlternatedByCapture(FactoryDefinition definition)
 		{

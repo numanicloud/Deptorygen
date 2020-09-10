@@ -200,7 +200,7 @@ namespace Deptorygen.Generator
             
             #line 38 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
       foreach(var resolver in Factory.Resolvers) {
-			if(!resolver.IsTransient && !resolver.IsAlternatedByCapture(Factory)) { 
+			if(resolver.GetIsRequireCache(Factory)) { 
             
             #line default
             #line hidden
@@ -356,7 +356,7 @@ namespace Deptorygen.Generator
             this.Write(")\r\n\t\t{\r\n");
             
             #line 61 "D:\Naohiro\Documents\Repos2\Tools\Deptorygen\Source\Deptorygen\Generator\FactoryTemplate.tt"
-          if(resolver.IsTransient || resolver.IsAlternatedByCapture(Factory)) { 
+          if(!resolver.GetIsRequireCache(Factory)) { 
             
             #line default
             #line hidden

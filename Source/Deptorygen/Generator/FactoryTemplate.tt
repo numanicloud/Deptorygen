@@ -36,7 +36,7 @@ namespace <#= Factory.NameSpace #>
 <#  // キャッシュ #>
 <#  if(Factory.Resolvers.Any()) { #>
 <#      foreach(var resolver in Factory.Resolvers) {
-			if(!resolver.IsTransient && !resolver.IsAlternatedByCapture(Factory)) { #>
+			if(resolver.GetIsRequireCache(Factory)) { #>
 		private <#= resolver.ResolutionName #>? <#= resolver.CacheVarName #>;
 <#          } #>
 <#      } #>
@@ -58,7 +58,7 @@ namespace <#= Factory.NameSpace #>
 <#      foreach(var (resolver, isLast) in Factory.Resolvers.WithFooterFlag()) { #>
 		public <#= resolver.ReturnType.Name #> <#= resolver.MethodName #>(<#= resolver.GetParameterList() #>)
 		{
-<#          if(resolver.IsTransient || resolver.IsAlternatedByCapture(Factory)) { #>
+<#          if(!resolver.GetIsRequireCache(Factory)) { #>
 			return <#= GetResolution(resolver) #>;
 <#          } else { #>
 			return <#= resolver.CacheVarName #> ??= <#= GetResolution(resolver) #>;

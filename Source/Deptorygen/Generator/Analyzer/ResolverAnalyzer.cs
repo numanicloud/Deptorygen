@@ -50,7 +50,8 @@ namespace Deptorygen.Generator.Analyzer
 				resolution,
 				parameters,
 				_syntax.MethodName.EndsWith("AsTransient"),
-				"_" + _syntax.MethodName + "Cache");
+				"_" + _syntax.MethodName + "Cache",
+				_syntax.DelegationKey);
 		}
 	}
 }

@@ -2,6 +2,6 @@
 {
 	public enum InjectionMethod
 	{
-		Parameter, This, CapturedFactory, CapturedResolver, Resolver, Field
+		Delegation, Parameter, This, CapturedFactory, CapturedResolver, Resolver, Field
 	}
 }
